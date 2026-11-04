@@ -17,13 +17,13 @@
     "mcp",
     "pulse"
   ],
-  "homepage": "https://zmstudio.dev#readme",
+  "homepage": "https://github.com/zarzmra/ZM-Studio#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zmstudio/app.git"
+    "url": "git+https://github.com/zarzmra/ZM-Studio.git"
   },
   "bugs": {
-    "url": "https://github.com/zmstudio/app/issues"
+    "url": "https://github.com/zarzmra/ZM-Studio/issues"
   },
   "author": {
     "name": "ZM Studio",
