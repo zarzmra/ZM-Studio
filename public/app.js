@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BUSL-1.1
-// MADRE · © 2026 Jossue Alcalá · Business Source License 1.1: LICENSE
+// ZM · © 2026 Jossue Alcalá · Business Source License 1.1: LICENSE
 import { archiveQuestion, modeAskedWithTime, MODE_WINDOWS, windowFor } from './routing.js';
 import { calledByName, abduct } from './abduction.js';
 import { brandOf, monogram } from './brands.js';
@@ -36,10 +36,10 @@ import { tellFailures } from './page-errors.js';
 import { mountActivity } from './activity.js';
 import { ensureTerms } from './terms.js';
 
-// Nothing of MADRE starts before its license and privacy notice are accepted on this computer
+// Nothing of ZM starts before its license and privacy notice are accepted on this computer
 // (public/terms.js, src/terms.mjs): the page waits here.
 await ensureTerms();
-// A failure of this page is told to MADRE's anonymous diagnostics (src/telemetry.mjs).
+// A failure of this page is told to ZM's anonymous diagnostics (src/telemetry.mjs).
 tellFailures('room');
 
 // The window split in two. The right half is this same page loaded with `?pane=split&chat=<id>`:
@@ -70,7 +70,7 @@ const CHAT_SCOPED = /^\/api\/(state|events|messages|messages\/rate|stop-turn|att
 // One road for every request the half on the right makes: the ones about a conversation name it.
 function chatScoped(input) {
   if (!SCOPED_CHAT || typeof input !== 'string' || !input.startsWith('/api/')) return input;
-  const url = new URL(input, 'http://madre.local');
+  const url = new URL(input, 'http://zm.local');
   if (!CHAT_SCOPED.test(url.pathname)) return input;
   url.searchParams.set('chat', SCOPED_CHAT);
   return `${url.pathname}${url.search}`;
@@ -140,7 +140,7 @@ async function adoptLanguage(fromMachine, chosenOnMachine = true) {
   if (SPLIT_CHAT) return;
   // What this browser kept is kept per address, and every project has its own port: a language
   // changed in Settings never reached a project opened before on another port, and a port reused by
-  // another MADRE kept that one's language (QA 1.1.0). What the machine chose wins; what the
+  // another ZM kept that one's language (QA 1.1.0). What the machine chose wins; what the
   // browser kept only stands while the machine has chosen nothing.
   if (chosenLanguage && !(chosenOnMachine !== false && isLanguage(fromMachine) && fromMachine !== chosenLanguage)) return;
   if (chosenOnMachine === false && !state.device) {
@@ -209,7 +209,7 @@ function spokenCommand(item) {
 }
 const CLIENT_COMMANDS = [
   // /create went away (2026-10-27): choosing #2 on the mode chip is the same thing, said once.
-  { name: 'module', title: 'MODULE', usage: `/module ${t('<what it should do>')}`, summary: t('Build one MADRE module with the guided SDK flow: the agent writes it, then you review and install it.'), available: true, client: true },
+  { name: 'module', title: 'MODULE', usage: `/module ${t('<what it should do>')}`, summary: t('Build one ZM module with the guided SDK flow: the agent writes it, then you review and install it.'), available: true, client: true },
   { name: 'image', title: t('Image'), usage: `/image ${t('<what to draw>')}`, summary: t('Ask for an image: arms CREATE with the image scope and routes to an agent that can generate images.'), available: true, client: true },
   { name: 'stopall', title: t('STOP ALL'), usage: '/stopall', summary: t('Master brake: halt every plan and turn in flight. Never reaches an agent.'), available: true, client: true },
   // Notes and Reminders through an agent (2026-10-20): the message goes to the agent chosen, and
@@ -217,9 +217,9 @@ const CLIENT_COMMANDS = [
   // the other language's name works too (ASKING_FOR).
   ...(language() === 'en'
     ? [{ name: 'notes', module: 'notes', title: t('Notes'), usage: `/notes ${t('<what to note>')}`, summary: t('Ask the agent for a note: it writes it and it opens as a colored note.'), available: true, client: true },
-      { name: 'reminders', module: 'reminders', title: t('Reminders'), usage: `/reminders ${t('<what and when>')}`, summary: t('Ask the agent for a reminder: MADRE tells you when it is due.'), available: true, client: true }]
+      { name: 'reminders', module: 'reminders', title: t('Reminders'), usage: `/reminders ${t('<what and when>')}`, summary: t('Ask the agent for a reminder: ZM tells you when it is due.'), available: true, client: true }]
     : [{ name: 'notas', module: 'notes', title: t('Notes'), usage: `/notas ${t('<what to note>')}`, summary: t('Ask the agent for a note: it writes it and it opens as a colored note.'), available: true, client: true },
-      { name: 'recordatorios', module: 'reminders', title: t('Reminders'), usage: `/recordatorios ${t('<what and when>')}`, summary: t('Ask the agent for a reminder: MADRE tells you when it is due.'), available: true, client: true }]),
+      { name: 'recordatorios', module: 'reminders', title: t('Reminders'), usage: `/recordatorios ${t('<what and when>')}`, summary: t('Ask the agent for a reminder: ZM tells you when it is due.'), available: true, client: true }]),
 ];
 // Every name a note or a reminder may be asked for by, in either language.
 const ASKING_FOR = { notas: 'notes', nota: 'notes', notes: 'notes', note: 'notes', recordatorios: 'reminders', recordatorio: 'reminders', reminders: 'reminders', reminder: 'reminders' };
@@ -232,8 +232,8 @@ const PLACEHOLDERS = {
   control: t('EDIT unlocked. Say what to change in the project; every action runs without asking.'),
   copilot: t('Copilot on. Say what you want done; it edits, plans and checks on its own.'),
   airlock: t('#4 FULL ACCESS unlocked. Commands run here, and changes are pushed or deployed outside your computer. Say exactly what should go out.'),
-  expendable: t('Type here, human. MADRE is listening.'),
-  memory: t('Ask what the project remembers. @madre answers from memory with citations; it does not act.'),
+  expendable: t('Type here, human. ZM is listening.'),
+  memory: t('Ask what the project remembers. @zm answers from memory with citations; it does not act.'),
 };
 let winkTimer = null;
 const LINE_PX = 21;
@@ -275,7 +275,7 @@ const state = {
   replyTo: null,            // the message being answered, shown above the field and sent at its head
   tourArmed: false,         // the tour fires once, and only when the room can be used
   ollama: null,             // the local brain's state, for the bridge
-  localModel: null,         // @madre's model, and whether it has been measured against this room
+  localModel: null,         // @zm's model, and whether it has been measured against this room
   ollamaAsked: false,
   ollamaRecommended: null,
   ratings: new Map(),        // messageId → good | bad, from the ledger
@@ -334,7 +334,7 @@ const failureKey = (failure) => `${failure.time ?? ''}|${failure.agent ?? ''}|${
 const saveDismissed = () => { try { localStorage.setItem('pulse.mother.dismissed', JSON.stringify([...dismissed].slice(-400))); } catch { /* no storage */ } };
 const openFailures = () => state.failures.filter((failure) => !failure.recovered && !dismissed.has(failureKey(failure)));
 
-// Every other vendor is a company and a company is called the same everywhere. @madre's is a
+// Every other vendor is a company and a company is called the same everywhere. @zm's is a
 // sentence, so it is said in the room's language — declared, not computed, so both guards see it.
 const VENDOR_WORDS = { 'the project · local': t('the project · local'), local: t('local') };
 const vendorWord = (id) => { const said = brandOf(id).vendor ?? ''; return VENDOR_WORDS[said] ?? said; };
@@ -372,7 +372,7 @@ const modules = {
 
 // Which agent last wrote to a path, taken from what the room already recorded: the artifacts a
 // creation lease produced, and the files a CONTROL turn changed. Nothing new is stored and nothing
-// is inferred from the filesystem — if MADRE did not see it happen, the file carries no mark.
+// is inferred from the filesystem — if ZM did not see it happen, the file carries no mark.
 // Each path keeps who touched it last and when (2026-10-14), so a folder can say that something
 // under it changed and the Finder can lead from the top of the project down to the file.
 const touched = new Map();   // path -> { agent, at }
@@ -470,7 +470,7 @@ const formatTokens = (value) => {
 // nobody was charged for, kept here because the page cannot import from the server:
 // src/room/economy.mjs holds the other copy and a test keeps the two equal.
 //
-// It is an estimate and it is labelled as one. What this room MEASURES — what MADRE wrote
+// It is an estimate and it is labelled as one. What this room MEASURES — what ZM wrote
 // against what the CLI was charged for reading — is a different quantity: the CLIs bill their
 // own system prompt, their own tools and every file they open, so in this room that ratio was
 // 0.62 and called a 14,356-character briefing 23,155 tokens.
@@ -520,7 +520,7 @@ const formatTime = (iso) => {
 
 const label = (id) => state.agents.get(id)?.label ?? t(brandOf(id).label ?? id);
 // The ground the room is drawn on: the theme chosen in the bar, or the system's when it follows it.
-// Asking only the system painted every agent in its dark-ground colour on a light room — MADRE's
+// Asking only the system painted every agent in its dark-ground colour on a light room — ZM's
 // green and the archivist's grey all but vanished against white.
 const isLight = () => {
   const scheme = document.documentElement?.dataset?.scheme;
@@ -532,7 +532,7 @@ const agentColor = (id) => {
 };
 // An agent's colour set inline on a line of the room, remembered by whose it is: the ground can
 // change under it (the theme), and a colour picked for the dark ground all but vanished on the
-// light one — @MADRE's green on white, in a handoff drawn before the switch.
+// light one — @ZM's green on white, in a handoff drawn before the switch.
 function tint(node, id, prop = '--agent') {
   node.dataset[{ '--agent': 'tint', '--from': 'tintFrom', '--to': 'tintTo' }[prop]] = id;
   node.style.setProperty(prop, agentColor(id));
@@ -751,7 +751,7 @@ function markFinishedBelow(agent, plan = false) {
   if (!button || pinnedToEnd) return;
   if (agent) tint(button, agent);
   finishedBelow.who = agent;
-  button.setAttribute('aria-label', plan ? t('The plan finished below · go to the end') : t('@{agent} answered below · go to the end', { agent: agent ?? 'madre' }));
+  button.setAttribute('aria-label', plan ? t('The plan finished below · go to the end') : t('@{agent} answered below · go to the end', { agent: agent ?? 'zm' }));
   placeToast();
   if (button.hidden) { button.hidden = false; button.classList.remove('leaving'); }
 }
@@ -769,7 +769,7 @@ const SAFE_URL = /^https?:\/\//i;
 const FILE_PATH = /(?<![\w/@.-])((?:\.{1,2}\/)?(?:[\w.-]+\/)+[\w.-]+\.[A-Za-z0-9]{1,8}|\/Users\/[\w.-]+(?:\/[\w.-]+)+\.[A-Za-z0-9]{1,8}|~\/(?:[\w.-]+\/)+[\w.-]+\.[A-Za-z0-9]{1,8})(?::(\d+))?(?![\w/])/g;
 
 // A path an agent wrote, as a path inside this project, or null. Agents read the home folder as ~
-// (MADRE's privacy guard writes it so), and that is how their links come back.
+// (ZM's privacy guard writes it so), and that is how their links come back.
 function projectRelative(path) {
   const clean = String(path ?? '').replace(/^file:\/\//, '').replace(/[?#].*$/, '').replace(/:\d+(?::\d+)?$/, '');
   const root = state.projectRoot;
@@ -1096,7 +1096,7 @@ const askSheet = (() => {
 })();
 // The room's alerts speak in sentences: a question written in capitals is read in sentence case,
 // with the ship's own names, @agents, #modes and paths left as they are.
-const ASK_KEEP = /^(MADRE|MOTHER|MU\/TH\/UR|CONTROL|AIRLOCK|CREATE|GHOST|EXCHANGE|NOSTROMO|ASH|MCP|SDK|URL|API|UNDO|#\d.*|@.*|.*[\/\d].*)$/;
+const ASK_KEEP = /^(ZM|MOTHER|MU\/TH\/UR|CONTROL|AIRLOCK|CREATE|GHOST|EXCHANGE|NOSTROMO|ASH|MCP|SDK|URL|API|UNDO|#\d.*|@.*|.*[\/\d].*)$/;
 function askWords(text) {
   const words = String(text ?? '');
   const letters = words.replace(/[^\p{L}]/gu, '');
@@ -2302,15 +2302,15 @@ const ripley = {
 // A project file and a running server are different things to put behind glass, and RIPLEY
 // treats them differently on purpose:
 //
-//   · a file is served from MADRE's own origin, so a script inside it would be same-origin with
+//   · a file is served from ZM's own origin, so a script inside it would be same-origin with
 //     the room. That frame keeps `allow-scripts` alone and no origin of its own, as it always has.
 //   · a server answers on another port, which is another origin. The same-origin policy already
-//     separates it from the room — and MADRE sets no cookies, so there is nothing of the room's
+//     separates it from the room — and ZM sets no cookies, so there is nothing of the room's
 //     for it to reach. Denying it its own origin would only break it: no storage, no session,
 //     a blank page where the human expected their app. So it keeps its origin and its forms,
 //     and still cannot navigate the room away or open the ship.
 //
-// What is lost cross-origin is the bridge: MADRE cannot inject its error reporter into somebody
+// What is lost cross-origin is the bridge: ZM cannot inject its error reporter into somebody
 // else's page, so the error strip stays quiet here. The viewer says so rather than looking broken.
 function ripleyGripOn(grip, side, owner) {
   grip.addEventListener('pointerdown', (event) => ripleyStageDrag(event, grip, side, owner));
@@ -2448,7 +2448,7 @@ async function browserOpen(url, { tab = null } = {}) {
   const target = tab ?? browserTab();
   if (!target) { browserNewTab(url); return; }
   // A page is entitled to refuse the glass, and most serious ones do. Asking first turns the
-  // browser's bare "refused to connect" into MADRE's own sentence and a real tab — the same
+  // browser's bare "refused to connect" into ZM's own sentence and a real tab — the same
   // answer the servers menu already gives for a local port that refuses.
   if (!allowed.local) {
     const verdict = await fetch(`/api/can-frame?url=${encodeURIComponent(url)}`).then((r) => r.json()).catch(() => null);
@@ -2510,7 +2510,7 @@ function browserCloseTab(id) {
 function browserRefused(url, { why } = {}) {
   if (!browser.body) return;
   const box = el('div', 'browser-refused');
-  box.append(el('h4', null, t('{host} does not allow being shown inside MADRE', { host: browserTitleFor(url) })));
+  box.append(el('h4', null, t('{host} does not allow being shown inside ZM', { host: browserTitleFor(url) })));
   box.append(el('p', null, why ?? t('The site answers with a rule that forbids any page from putting it inside a frame. It is the standard defence against clickjacking, and PREVIEW neither can nor should override it.')));
   const open = el('button', 'browser-go', t('OPEN IN A TAB'));
   open.type = 'button';
@@ -2534,7 +2534,7 @@ function browserSetStage(width) {
 }
 
 // The single frame, built when the window opens. A page keeps its own origin, which is what makes
-// an app work, and still cannot steer the room or reach anything of the room's — MADRE sets no
+// an app work, and still cannot steer the room or reach anything of the room's — ZM sets no
 // cookies, and every address here is a different origin from the room's own.
 function browserMountFrame() {
   if (!browser.body || browser.frame) return;
@@ -2943,7 +2943,7 @@ async function pointCapture(port) {
     canvas.height = Math.max(1, Math.round(part.height * sy));
     canvas.getContext('2d')?.drawImage(video, (box.left + part.left) * sx, (box.top + part.top) * sy, part.width * sx, part.height * sy, 0, 0, canvas.width, canvas.height);
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
-    return blob ? new File([blob], `madre-${port ?? 'page'}-${Date.now()}.png`, { type: 'image/png' }) : null;
+    return blob ? new File([blob], `zm-${port ?? 'page'}-${Date.now()}.png`, { type: 'image/png' }) : null;
   } catch { return null; }
   finally {
     for (const one of stream?.getTracks() ?? []) one.stop();
@@ -3185,7 +3185,7 @@ function showViewerPreview() {
     viewer.body.replaceChildren(doc);
     return;
   }
-  // Scripts may run; the frame has no origin of its own, no network, no forms, no way up to MADRE.
+  // Scripts may run; the frame has no origin of its own, no network, no forms, no way up to ZM.
   const frame = el('iframe', 'ripley');
   frame.setAttribute('sandbox', 'allow-scripts');
   frame.setAttribute('referrerpolicy', 'no-referrer');
@@ -3466,7 +3466,7 @@ function ringPercent(agent) {
 // it, and a row is that agent's own card — the same one a sphere opens, with a way back.
 const agentsCompact = document.querySelector('#agents-compact');
 const agentsCount = document.querySelector('#agents-count');
-// Whether an agent can answer now: an adapter MADRE can use, and a session. One that cannot is
+// Whether an agent can answer now: an adapter ZM can use, and a session. One that cannot is
 // switched off everywhere: grey in the bar, out of the picker, and a message to it is not sent.
 function canAnswer(agent) {
   return Boolean(agent?.ready) && state.sessions?.[agent.id]?.state !== 'signed-out';
@@ -3506,7 +3506,7 @@ function renderAgents() {
     if (!agent.ready || signedOut) node.classList.add('off');
     node.title = [
       `${agent.label}${vendorWord(agent.id) ? ` · ${vendorWord(agent.id)}` : ''}`,
-      signedOut ? t('Not signed in') : agent.ready ? t('Ready') : agent.detected ? t('Detected, but MADRE cannot use it yet') : t('Not installed'),
+      signedOut ? t('Not signed in') : agent.ready ? t('Ready') : agent.detected ? t('Detected, but ZM cannot use it yet') : t('Not installed'),
       agent.version ? agent.version : null,
       official === null
         ? (agent.tokens ? t('Usage: local 5h window · {pct}% of {total} budget tokens', { pct: Math.round(percent), total: formatTokens(state.budget ?? 0) }) : t('Usage: local window · nothing used yet'))
@@ -3525,7 +3525,7 @@ function renderAgents() {
 // What agents may write and where what they read can go used to sit under the composer on two
 // lines, on every screen, forever. It is said once now, on one line, on the first visit, and goes
 // after a while or with the first message.
-const SAFETY_SEEN = 'madre.safety.seen';
+const SAFETY_SEEN = 'zm.safety.seen';
 const safetyLine = document.querySelector('#safety');
 function foldSafety() {
   if (!safetyLine || safetyLine.hidden || safetyLine.classList.contains('folding')) return;
@@ -3592,7 +3592,7 @@ function renderPicker() {
     if (current.local) {
       const note = el('span', 'pick-note', t('memory · never writes'));
       const measured = state.localModel?.checked;
-      note.title = `${t('@madre runs on this machine and speaks for what the project remembers. "@madre, ask the agents …" opens a round with every agent online. To change files, write to one of the coding agents.')}${
+      note.title = `${t('@zm runs on this machine and speaks for what the project remembers. "@zm, ask the agents …" opens a round with every agent online. To change files, write to one of the coding agents.')}${
         measured ? `\n\n${t('Measured against this project {when}: it landed where the agents landed on {matched} of {n} real questions{verdict}', { when: agoWords(measured.at), matched: measured.matched, n: measured.n, verdict: measured.passed ? t('. Ready to be worked in.') : t(' — not yet.') })}` : `\n\n${t('Nobody has measured it against this project yet: Diagnostics → Memory review, or the line in the project when it joined.')}`}`;
       text.append(note);
     }
@@ -3621,7 +3621,7 @@ function renderPicker() {
       text.append(grace);
       break;
     }
-    // An agent with no models to choose from gets no chooser. @madre answers on whatever chat
+    // An agent with no models to choose from gets no chooser. @zm answers on whatever chat
     // model Ollama holds, which is decided on Ollama's card and not here, so the chip only opened
     // an empty menu — and it was the piece that pushed this row onto a second line.
     const chosen = state.chosenModel[current.id];
@@ -3858,7 +3858,7 @@ document.addEventListener('keydown', (event) => { if (event.key === 'Escape') cl
 // the levels come from the server so the chip never offers a flag the CLI would refuse.
 //
 // "Default" sends nothing, and the CLI does what its own config says. The chip shows that level
-// dimmed when MADRE can read it (Codex's config.toml), so the human sees what they will get
+// dimmed when ZM can read it (Codex's config.toml), so the human sees what they will get
 // without having chosen it.
 const EFFORT_WORDS = {
   none: { label: 'None', hint: 'No reasoning: it answers straight away. For the simplest requests.', brief: 'Answers at once.' },
@@ -4251,14 +4251,14 @@ function toggleCopilotMenu(anchor, { keep = false } = {}) {
   box.setAttribute('aria-label', t('Copilot'));
   box.addEventListener('change', async () => {
     if (box.checked) { box.checked = false; openCopilotKey(copilotUI.chosen); return; }
-    try { applyCopilot(await (await fetch('/api/copilot/off', { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' })).json()); toast(t('Copilot off. Each #3 message asks you to confirm again.'), { tone: 'done' }); } catch (error) { toast(t('Could not reach MADRE: {error}', { error: error.message })); }
+    try { applyCopilot(await (await fetch('/api/copilot/off', { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' })).json()); toast(t('Copilot off. Each #3 message asks you to confirm again.'), { tone: 'done' }); } catch (error) { toast(t('Could not reach ZM: {error}', { error: error.message })); }
   });
   toggle.append(box, el('i'));
   title.append(toggle);
   const body = el('div', 'copilot-body');
   body.append(
     el('p', 'copilot-lead', t('The agent you write to drives the project: it edits and makes plans with the other agents (each step can go up to #3 EDIT). It runs on its own only the commands that read; tests, builds and commits wait for your click.')),
-    el('p', 'copilot-never', t('It never deletes, never touches MADRE\'s folders or your secrets, and never pushes, publishes or sends anything off this computer: that stays with you.')),
+    el('p', 'copilot-never', t('It never deletes, never touches ZM\'s folders or your secrets, and never pushes, publishes or sends anything off this computer: that stays with you.')),
   );
   if (on) {
     body.append(el('p', 'copilot-state', t('On until {time} · {left} left', { time: new Date(copilotUI.until).toLocaleTimeString(language(), { hour: '2-digit', minute: '2-digit' }), left: copilotLeftWords() })));
@@ -4384,7 +4384,7 @@ function resetModeAfterSend() {
 // What is typed shows before it is sent. A leading @agent moves the picker to it, with its model and
 // effort chips; a #0, #1 or #2 sets the mode; both are undone when the text is taken back. A #3 or
 // #4 shows on the chip as pending, because those keys are asked for on sending. The report: «#2»
-// typed left the chip on #1 EXCHANGE, and «@madre…» typed left the row saying TO @CLAUDE.
+// typed left the chip on #1 EXCHANGE, and «@zm…» typed left the row saying TO @CLAUDE.
 const TYPED_MODE = /(^|\s)#([0-4])(?=\s|$)/;
 const TYPED_TO = /^\s*(?:#[0-4]\s+)?@([a-z0-9_-]+)\b/i;
 function followTyped() {
@@ -4524,7 +4524,7 @@ function askOverrideKey(stage, { again = false } = {}) {
 }
 // A module installed by hand runs with the person's permissions, as #4 does: the project asks for
 // the #4 key with the install (2026-11-02). Answers what was typed, or null if they walked away.
-function askModuleKey({ title, what, safe = t('MADRE checks that it loads and keeps to the house rules; what it intends, only you can judge.') }) {
+function askModuleKey({ title, what, safe = t('ZM checks that it loads and keeps to the house rules; what it intends, only you can judge.') }) {
   return new Promise((resolve) => {
     if (!override.dialog) { resolve(null); return; }
     override.module = { title, what, safe, resolve };
@@ -4634,7 +4634,7 @@ override.form?.addEventListener('submit', async (event) => {
       : await fetch('/api/override/arm', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ agent: override.agent, mode: override.mode, words: override.words, minutes: override.minutes || undefined }) });
     answer = { ok: response.ok, ...(await response.json().catch(() => ({}))) };
   } catch (error) {
-    answer = { ok: false, error: t('Could not reach MADRE: {error}', { error: error.message }) };
+    answer = { ok: false, error: t('Could not reach ZM: {error}', { error: error.message }) };
   }
   override.arm.disabled = false;
   if (!answer.ok) {
@@ -4715,7 +4715,7 @@ const sessionOf = (agent) => state.sessions?.[agent.id]?.state ?? 'unknown';
 function renderEmptyStarts() {
   const box = els.emptyStarts;
   if (!box) return;
-  const ready = [...state.agents.values()].filter((agent) => agent.ready && agent.id !== 'madre');
+  const ready = [...state.agents.values()].filter((agent) => agent.ready && agent.id !== 'zm');
   box.replaceChildren();
   if (!ready.length) return;
   // The Coordinator's own project is a folder with nothing to explain: what it is for is the rest
@@ -4782,7 +4782,7 @@ function renderAhpSuggestion() {
       // Said as what the person gains (2026-10-30), not as what it stores.
       t('Your project remembers where it left off: what was decided, what is pending and what was already tried, kept beside your code.'),
       t('Change agent, editor or computer, and the next one picks up the thread on its own, without you explaining everything again.'),
-      t('It works in MADRE and outside it: Claude Code, Codex and OpenCode read it on their own.'),
+      t('It works in ZM and outside it: Claude Code, Codex and OpenCode read it on their own.'),
     ]) gains.append(el('li', null, words));
     const note = el('p', 'empty-suggest-note', t('It needs a project with git and at least one saved version. Before you install it, Modules shows you everything it writes.'));
     const acts = el('div', 'empty-suggest-acts');
@@ -4820,7 +4820,7 @@ function bridgeCard(agent) {
   head.append(el('span', `state ${stage}`, stage === 'missing' ? sentence(t('NOT INSTALLED')) : stage === 'inert' ? t('NO ADAPTER') : stage === 'route-blocked' ? t('ROUTE BLOCKED') : stage === 'ready' ? sentence(t('READY')) : sentence(t('SIGNED OUT'))));
   card.append(head);
   const detail = el('div', 'detail');
-  if (agent.id === 'madre') detail.append(ollamaDetail(agent));
+  if (agent.id === 'zm') detail.append(ollamaDetail(agent));
   else if (stage === 'missing') detail.append(t('Not on this computer.'));
   else detail.append(`${agent.version ?? t('version unknown')}${sessionDetail(session) ? ` · ${sessionDetail(session)}` : ''}${agent.route?.destination ? ` · ${t('route: {destination}', { destination: agent.route.destination })}` : ''}`);
   card.append(detail);
@@ -4832,11 +4832,11 @@ function bridgeCard(agent) {
     card.append(account);
   }
   const actions = el('div', 'actions');
-  if (agent.id === 'madre') for (const button of ollamaActions()) actions.append(button);
+  if (agent.id === 'zm') for (const button of ollamaActions()) actions.append(button);
   else if (stage === 'missing' && agent.install?.command) actions.append(bridgeInstallButton(agent));
   let reveal = null;
   if (stage === 'signed-out' || (stage === 'ready' && agent.login?.headless)) {
-    // Every door the CLI has, not just the first one. Claude sells two accounts and MADRE used
+    // Every door the CLI has, not just the first one. Claude sells two accounts and ZM used
     // to open only the subscription, which left whoever pays for the API with no way in.
     const keyFirst = Boolean(agent.key?.first);
     if (agent.key) {
@@ -4863,7 +4863,7 @@ function bridgeCard(agent) {
     card.append(slot);
   }
   if (stage !== 'missing') card.append(loginAskSlot(agent.id));
-  if (agent.id !== 'madre') {
+  if (agent.id !== 'zm') {
     const way = stage === 'missing' ? installTerminalWay(agent) : stage === 'signed-out' || stage === 'ready' ? signInTerminalWay(agent) : null;
     if (way) card.append(way);
   }
@@ -4875,7 +4875,7 @@ function bridgeCard(agent) {
   return card;
 }
 // Handing a key to a CLI that signs in from its own prompt. The field is a password field, the
-// value is sent once and never comes back, and MADRE says where it will be written before saving.
+// value is sent once and never comes back, and ZM says where it will be written before saving.
 function keyForm(agent, { onDone } = {}) {
   const plan = agent.key;
   const form = el('form', 'key-form');
@@ -4939,10 +4939,10 @@ document.querySelector('#bridge-close')?.addEventListener('click', () => { els.o
 function ollamaDetail(agent) {
   const info = state.ollama;
   if (agent.detected) return t('Local, through Ollama{version} · free, no account, no tokens', { version: agent.version ? ` · ${agent.version}` : '' });
-  if (!info) return t('Optional and free: Ollama on this computer gives the project a local memory and @madre.');
+  if (!info) return t('Optional and free: Ollama on this computer gives the project a local memory and @zm.');
   if (!info.binary) return `${t('Not on this computer.')} ${info.install?.note ?? ''}`.trim();
-  if (!info.running) return t('Installed but asleep. Wake it and the project gets a local memory and @madre.');
-  return t('Running, with no chat model yet. Pull one and @madre joins the project.');
+  if (!info.running) return t('Installed but asleep. Wake it and the project gets a local memory and @zm.');
+  return t('Running, with no chat model yet. Pull one and @zm joins the project.');
 }
 function ollamaActions() {
   const info = state.ollama;
@@ -4987,7 +4987,7 @@ async function loadOllama() {
 function bridgeInstallButton(agent) {
   const button = el('button', 'primary', `${t('INSTALL')} · ${agent.install.display}`);
   button.type = 'button';
-  button.title = `${t('MADRE runs this command on this computer and shows every line.')} ${agent.install.alternatives?.join(' · ') ?? ''}`.trim();
+  button.title = `${t('ZM runs this command on this computer and shows every line.')} ${agent.install.alternatives?.join(' · ') ?? ''}`.trim();
   button.addEventListener('click', async () => {
     button.disabled = true;
     button.textContent = t('INSTALLING…');
@@ -5247,7 +5247,7 @@ function renderUserMessage(event) {
   } else {
     who.append(el('b', null, reviewed ? t('YOU · AGENTS (EXPENDABLE)') : t('YOU · AGENTS')));
     if (event.payload.via) who.append(el('span', 'badge via', t('from your {device}', { device: deviceLabel(event.payload.via) })));
-    // Written by MADRE for the human: the commands an agent asked for ran, and their output goes back.
+    // Written by ZM for the human: the commands an agent asked for ran, and their output goes back.
     if (event.payload.auto === 'runs') {
       node.classList.add('auto');
       who.append(el('span', 'badge via', t('automatic · the commands ran')));
@@ -5278,7 +5278,7 @@ function renderUserMessage(event) {
 function renderAssistantMessage(event) {
   const { messageId, parentMessageId, sender, target, text, ash, status, step, totalSteps, model, effort, mode } = event.payload;
   const delegated = status === 'delegated';
-  // The plan's last step is MADRE asking its author to close it. What MADRE asked is an instruction
+  // The plan's last step is ZM asking its author to close it. What ZM asked is an instruction
   // to the agent, in English, not something the agent said: the room showed it word for word in the
   // agent's name (seen on Windows, 2026-10-31). The person reads what is happening instead.
   // A closing the agent wrote in its plan (a «closing:» line) is its own words and stays as written.
@@ -5425,7 +5425,7 @@ function bubbleActions({ text, sender, sequence, messageId = null }) {
     const rect = reply.getBoundingClientRect();
     showReplyMenu({ text, sender, sequence }, rect.left, rect.bottom + 6);
   });
-  if (messageId && sender !== 'madre') {
+  if (messageId && sender !== 'zm') {
     const rating = ratingButtons(messageId, sender);
     state.ratingNodes.set(messageId, rating);
     bar.append(rating.good, rating.prefer, rating.bad, rating.never);
@@ -5690,7 +5690,7 @@ function paintUncharged(cost) {
   if (total <= 0) return;
   const span = stamp.querySelector('.uncharged') ?? el('span', 'uncharged');
   span.textContent = t('{n} uncharged', { n: formatTokens(total) });
-  span.title = t('{cached} tokens this agent\'s app read back from its own cache, billed at a lower price than new input (measured). {unsent} tokens MADRE did not need to send the agent (estimated at {rate} characters per token). Neither is the Token saver: the Token saver shortens the answer, and its figure is above the bubble.', {
+  span.title = t('{cached} tokens this agent\'s app read back from its own cache, billed at a lower price than new input (measured). {unsent} tokens ZM did not need to send the agent (estimated at {rate} characters per token). Neither is the Token saver: the Token saver shortens the answer, and its figure is above the bubble.', {
     cached: cached.toLocaleString(), unsent: unsent.toLocaleString(), rate: CH_PER_TOKEN,
   });
   // Before the running total, after the turn's own bill: read left to right it is what this turn
@@ -5771,7 +5771,7 @@ function renderThinking(event) {
     if (elapsed.classList.contains('late') !== seconds >= limit * 0.6) elapsed.classList.toggle('late', seconds >= limit * 0.6);
     // Said to a screen reader, never as the browser's grey box: a title written every second came
     // back under a still pointer however many times it was taken off (adoptTitle).
-    bubble.setAttribute('aria-description', t('{label} is reading the project… {seconds}s so far; MADRE gives up at {limit}s.', { label: label(agent), seconds, limit }));
+    bubble.setAttribute('aria-description', t('{label} is reading the project… {seconds}s so far; ZM gives up at {limit}s.', { label: label(agent), seconds, limit }));
   };
   tick();
   timer = setInterval(tick, 1000);
@@ -5782,7 +5782,7 @@ function renderThinking(event) {
 
 function warnUnknownModuleFields(installed) {
   const unknown = installed?.unknown ?? [];
-  if (unknown.length) setTimeout(() => toast(t('Diagnostics › {name} declares {fields}, which this MADRE does not know. A typo, or a field from a newer version.', { name: installed.name, fields: unknown.join(', ') })), 2600);
+  if (unknown.length) setTimeout(() => toast(t('Diagnostics › {name} declares {fields}, which this ZM does not know. A typo, or a field from a newer version.', { name: installed.name, fields: unknown.join(', ') })), 2600);
 }
 
 // A claim the room makes about a turn, in three tiers: «KIND · @agent» as its title, what
@@ -5801,7 +5801,7 @@ function claimHead(node, kind, who) {
 // module · @codex
 // Wrote read-mail.module.mjs.
 // [INSTALL FOR EVERY ROOM] [INSTALL FOR THIS PROJECT]
-// Read it first: a module runs inside MADRE with your permissions.
+// Read it first: a module runs inside ZM with your permissions.
 function renderModuleProposed(event) {
   const { agent, path, name, responseMessageId } = event.payload;
   const node = el('div', 'system module-proposed');
@@ -5812,7 +5812,7 @@ function renderModuleProposed(event) {
   said.append(t('Wrote '), link);
   node.append(said);
   const install = async (scope, button) => {
-    const words = await askModuleKey({ title: t('Install {name}?', { name: String(name ?? path).split('/').pop() }), what: t('A module runs inside MADRE, with your permissions, on this computer. MADRE checks that it loads and keeps to the house rules before installing it — it cannot check what it intends. Install it only if you trust where it came from.') });
+    const words = await askModuleKey({ title: t('Install {name}?', { name: String(name ?? path).split('/').pop() }), what: t('A module runs inside ZM, with your permissions, on this computer. ZM checks that it loads and keeps to the house rules before installing it — it cannot check what it intends. Install it only if you trust where it came from.') });
     if (!words) return;
     button.disabled = true;
     try {
@@ -5828,7 +5828,7 @@ function renderModuleProposed(event) {
   const thisProject = el('button', 'claim-act', t('INSTALL FOR THIS PROJECT')); thisProject.type = 'button'; thisProject.addEventListener('click', () => install('project', thisProject));
   const acts = el('span', 'claim-acts');
   acts.append(everyRoom, thisProject);
-  node.append(acts, el('span', 'claim-note', t('Read it first: a module runs inside MADRE with your permissions.')));
+  node.append(acts, el('span', 'claim-note', t('Read it first: a module runs inside ZM with your permissions.')));
   // An agent asked to fix a module writes a new file beside the old one; the room keeps running
   // the copy that was installed until this one is. The card says so, or a fixed module looks
   // installed while the broken one keeps answering.
@@ -5879,15 +5879,15 @@ function renderModuleInstalledOrRemoved(event) {
 // exchanges, answered again by the local model, scored against a control so that talking about
 // the same project does not count. It takes minutes and spends nothing, and until now its answer
 // lived in a panel somebody had to go back to. So it is offered, and answered, here.
-// @madre's trial compares its answers with the crew's: with none yet, its button waits (QA 1.1.0,
+// @zm's trial compares its answers with the crew's: with none yet, its button waits (QA 1.1.0,
 // NUE-16), and the card's own line says why.
 let crewAnswers = 0;
-const madreTrials = new Set();
+const zmTrials = new Set();
 function renderLocalModel(payload, { asked = false } = {}) {
   const node = el('div', 'system local-model');
   // One line, held together: the card is a grid, and loose words in a grid each take a row.
   const head = el('span', 'head');
-  head.append('Local · ', el('b', 'who', t('@madre')));
+  head.append('Local · ', el('b', 'who', t('@zm')));
   if (payload.model) head.append(' · ', el('span', 'model', payload.model));
   node.append(head);
   const line = el('p', 'says');
@@ -5916,10 +5916,10 @@ function renderLocalModel(payload, { asked = false } = {}) {
       ? t('It answered like your agents on {matched} of {n} real questions from this project. You can give it work now.', { matched, n })
       : t('It answered like your agents on {matched} of {n} real questions from this project. Not yet: keep working with your agents here and try it again later.', { matched, n });
     if (passed) {
-      const use = el('button', 'primary', t('SEND THE NEXT TURN TO @MADRE'));
+      const use = el('button', 'primary', t('SEND THE NEXT TURN TO @ZM'));
       use.type = 'button';
       use.addEventListener('click', () => {
-        els.target.value = 'madre';
+        els.target.value = 'zm';
         renderPicker();
         els.input?.focus();
       });
@@ -5928,13 +5928,13 @@ function renderLocalModel(payload, { asked = false } = {}) {
     action.append(check(t('CHECK AGAIN')));
     if (checked?.at) action.append(el('span', 'note', t('MEASURED {when}', { when: agoWords(checked.at).toUpperCase() })));
   } else {
-    // Said plainly (2026-10-11): what @madre is, why it is worth trying before it is given work,
+    // Said plainly (2026-10-11): what @zm is, why it is worth trying before it is given work,
     // what the trial does, and what it needs to have anything to compare.
     line.textContent = payload.remote
-      ? t('@madre is MADRE\'s own model, and it runs on another computer of your network. Before you give it work from this project, try it: it answers again up to 12 real questions your agents already answered here, and MADRE compares the answers. It takes a few minutes.')
-      : t('@madre is MADRE\'s own model, and it runs on this Mac. Before you give it work from this project, try it: it answers again up to 12 real questions your agents already answered here, and MADRE compares the answers. It takes a few minutes.');
+      ? t('@zm is ZM\'s own model, and it runs on another computer of your network. Before you give it work from this project, try it: it answers again up to 12 real questions your agents already answered here, and ZM compares the answers. It takes a few minutes.')
+      : t('@zm is ZM\'s own model, and it runs on this Mac. Before you give it work from this project, try it: it answers again up to 12 real questions your agents already answered here, and ZM compares the answers. It takes a few minutes.');
     const trial = check(t('TRY IT ON THIS PROJECT'));
-    if (!crewAnswers) { trial.disabled = true; madreTrials.add(trial); }
+    if (!crewAnswers) { trial.disabled = true; zmTrials.add(trial); }
     action.append(trial);
     node.append(line, el('p', 'says small', t('It needs a few conversations with your agents in this project first: without them there is nothing to compare.')), action);
     return node;
@@ -6119,7 +6119,7 @@ async function sendPermission({ agent, mode, quoted }) {
     resetModeAfterSend();
     return true;
   } catch (error) {
-    toast(t('Could not reach MADRE: {error}', { error: error.message }));
+    toast(t('Could not reach ZM: {error}', { error: error.message }));
     return false;
   }
 }
@@ -6766,7 +6766,7 @@ function artifactTiles(files) {
 // carry something the room has since established is false.
 // What the room still has no answer to, offered while nobody is typing.
 //
-// These are not MADRE's ideas: `questionsFor` writes them from the archive itself, word for
+// These are not ZM's ideas: `questionsFor` writes them from the archive itself, word for
 // word, and never invents a subject the room has not raised. Pressing one writes it into the
 // composer — the same contract as a choice bubble, and for the same reason: a suggestion that
 // sends itself is a suggestion that decided.
@@ -7537,7 +7537,7 @@ function renderPlanEvent(event) {
     node.id = `plan-${planId}`;
     // One sentence for the catalogue, not three fragments: the agents are chips and cannot travel
     // inside a string, so the sentence is translated whole around a marker and the chips go back
-    // where the marker was. Built from literals, the Spanish room read «@MADRE PUTS @CODEX#1 TO
+    // where the marker was. Built from literals, the Spanish room read «@ZM PUTS @CODEX#1 TO
     // WORK, THEN CLOSES».
     const [before, after] = (closing
       ? t('@{who} puts {agents} to work, then closes', { who: orchestrator, agents: '\u0000' })
@@ -7575,7 +7575,7 @@ function renderFailure(event) {
   removeThinking(messageId);
   const node = el('div', `system fail${recovered ? ' recovered' : ''}${!recovered && state.userMessages.has(messageId) ? ' answers-person' : ''}`);
   node.append(el('span', 'label', recovered ? t('{label} · turn recovered after restart', { label: label(target) }) : t('{label} could not answer', { label: label(target) })));
-  // When MADRE knows the failure, the card says first, in the room's language, what it is and what
+  // When ZM knows the failure, the card says first, in the room's language, what it is and what
   // to do (troubleshooting.js), and what the CLI printed waits folded under «See detail» (QA 1.1.0,
   // NUE-12): a raw «401 Unauthorized: Missing bearer…» in English used to come first. Unknown, the
   // CLI's own words are all there is, and they stay in view.
@@ -7610,8 +7610,8 @@ function failWayOut({ messageId, target, connect }) {
     go.addEventListener('click', () => { go.disabled = true; openSettingsOn('agents', { agent: target }); });
     box.append(go);
   }
-  const other = [...state.agents.values()].find((agent) => agent.id !== target && canAnswer(agent) && agent.id !== 'madre')
-    ?? (state.agents.get('madre') && canAnswer(state.agents.get('madre')) && target !== 'madre' ? state.agents.get('madre') : null);
+  const other = [...state.agents.values()].find((agent) => agent.id !== target && canAnswer(agent) && agent.id !== 'zm')
+    ?? (state.agents.get('zm') && canAnswer(state.agents.get('zm')) && target !== 'zm' ? state.agents.get('zm') : null);
   if (other) {
     const ask = el('button', 'retry-longer quiet', t('ASK {agent}', { agent: label(other.id) }));
     ask.type = 'button';
@@ -7819,7 +7819,7 @@ function renderEvent(event) {
     renderEventNode(event);
   } catch (error) {
     // One malformed or unexpected event must never take the whole room down.
-    console.error(`MADRE could not render event ${event.sequence} (${event.type}):`, error);
+    console.error(`ZM could not render event ${event.sequence} (${event.type}):`, error);
   }
 }
 
@@ -7880,8 +7880,8 @@ function renderEventNode(event) {
       node = event.payload.role === 'user' ? renderUserMessage(event) : renderAssistantMessage(event);
       if (event.payload.role === 'user' && event.payload.sender === 'you') markChoiceAnswered(event.payload.text);
       if (event.payload.role !== 'user') attachCrossReads(event.payload.messageId, node);
-      // A first answer from the crew gives @madre's trial something to compare (NUE-16).
-      if (event.payload.role !== 'user' && event.payload.sender !== 'madre') { crewAnswers += 1; for (const button of madreTrials) button.disabled = false; }
+      // A first answer from the crew gives @zm's trial something to compare (NUE-16).
+      if (event.payload.role !== 'user' && event.payload.sender !== 'zm') { crewAnswers += 1; for (const button of zmTrials) button.disabled = false; }
       if (event.payload.role !== 'user') removeThinking(event.payload.parentMessageId);
       // The first thing said names a conversation; the tab and the list learn the name from the room.
       if (event.payload.role === 'user' && !replaying) setTimeout(() => void loadChats(), 600);
@@ -8073,7 +8073,7 @@ function renderEventNode(event) {
   // later pass over the children trips on.
   if (!node) return;
   // The blank page with its first messages goes when the conversation starts, not when the room
-  // says something about itself: in a new project @madre's arrival used to take it away before
+  // says something about itself: in a new project @zm's arrival used to take it away before
   // anyone had written a word.
   if (event.type.startsWith('message.') || event.type === 'command.output' || event.type === 'run.requested') removeEmpty();
   const stickToBottom = !drawingRecord && pinnedToEnd;
@@ -8323,7 +8323,7 @@ async function switchLanguage() {
 // Each choice is a data attribute on the root that styles.css reads under #messages only. The
 // first value of each list is the room as it always was, and is written as no attribute at all.
 const LOOKS = {
-  accent: { key: 'pulse.accent', values: ['madre', 'mountain', 'caribbean', 'phantom', 'malbec', 'dijon', 'pacific', 'love', 'sierra', 'pitahaya', 'papaya', 'agave', 'dinamo', 'marina', 'pulso', 'leal', 'dulce', 'marmol', 'durazno', 'pistache', 'petalo', 'negro', 'fortaleza'] },
+  accent: { key: 'pulse.accent', values: ['zm', 'mountain', 'caribbean', 'phantom', 'malbec', 'dijon', 'pacific', 'love', 'sierra', 'pitahaya', 'papaya', 'agave', 'dinamo', 'marina', 'pulso', 'leal', 'dulce', 'marmol', 'durazno', 'pistache', 'petalo', 'negro', 'fortaleza'] },
   bubbles: { key: 'pulse.bubbles', values: ['comfortable', 'large', 'compact', 'fitted'] },
   text: { key: 'pulse.text', values: ['comfortable', 'larger', 'smaller', 'visual'] },
   // Last, the person's own picture (public/wallpaper.js): a choice only once there is one.
@@ -8357,15 +8357,15 @@ function saveTune(name, value) {
   applyTune(name, value);  pushLooks();
 }
 const LOOK_WORDS = {
-  accent: { madre: () => t('Madre green'), mountain: () => t('Mountain green'), caribbean: () => t('Caribbean blue'), phantom: () => t('Phantom purple'), malbec: () => t('Malbec red'), dijon: () => t('Dijon yellow'), pacific: () => t('Pacific blue'), love: () => t('Love pink'), sierra: () => t('Sierra blue'), pitahaya: () => 'Pitahaya', papaya: () => 'Papaya', agave: () => 'Agave', dinamo: () => t('Dynamo black'), marina: () => t('Marina blue'), pulso: () => t('Pulse green'), leal: () => t('Loyal orange'), dulce: () => t('Sweet yellow'), marmol: () => t('Marble gray'), durazno: () => t('Peach orange'), pistache: () => t('Pistachio green'), petalo: () => t('Petal pink'), negro: () => t('Black'), fortaleza: () => t('Fortress blue') },
+  accent: { zm: () => t('Madre green'), mountain: () => t('Mountain green'), caribbean: () => t('Caribbean blue'), phantom: () => t('Phantom purple'), malbec: () => t('Malbec red'), dijon: () => t('Dijon yellow'), pacific: () => t('Pacific blue'), love: () => t('Love pink'), sierra: () => t('Sierra blue'), pitahaya: () => 'Pitahaya', papaya: () => 'Papaya', agave: () => 'Agave', dinamo: () => t('Dynamo black'), marina: () => t('Marina blue'), pulso: () => t('Pulse green'), leal: () => t('Loyal orange'), dulce: () => t('Sweet yellow'), marmol: () => t('Marble gray'), durazno: () => t('Peach orange'), pistache: () => t('Pistachio green'), petalo: () => t('Petal pink'), negro: () => t('Black'), fortaleza: () => t('Fortress blue') },
   bubbles: { comfortable: () => t('Comfortable'), large: () => t('Large'), compact: () => t('Compact'), fitted: () => t('Fitted') },
   text: { comfortable: () => t('Comfortable'), larger: () => t('Larger'), smaller: () => t('Smaller'), visual: () => t('Visual') },
   wallpaper: { default: () => t('Default'), jarrito: () => 'Jarrito', canela: () => 'Canela', paradise: () => t('Paradise'), ventura: () => 'Ventura', magna: () => 'Magna', biznaga: () => 'Biznaga', oceano: () => 'Oceano', quila: () => 'Quila', xico: () => 'Xico', tropical: () => 'Tropical', tradicion: () => 'Tradicion', urbania: () => 'Urbania', custom: () => t('Your picture') },
   wpStyle: { veil: () => t('Layer'), mesh: () => t('Mesh') },
 };
-// Jarrito took MADRE's place among the wallpapers and Canela took Autumn's: a choice saved under
+// Jarrito took ZM's place among the wallpapers and Canela took Autumn's: a choice saved under
 // the old name lands on the one that replaced it.
-const RENAMED_LOOKS = { madre: 'jarrito', autumn: 'canela' };
+const RENAMED_LOOKS = { zm: 'jarrito', autumn: 'canela' };
 function readLook(name) {
   let value = null;
   try { value = localStorage.getItem(LOOKS[name].key); } catch { /* no storage */ }
@@ -8891,7 +8891,7 @@ const SETTINGS_INDEX = [
   ['mcp', 'Outside tools (MCP)'], ['mcp', 'Add a tool'], ['mcp', 'Import from your apps'], ['mcp', 'Can act from'],
   ['permissions', 'How you unlock modes'], ['permissions', 'Your phrase'], ['permissions', 'Remember permission'], ['permissions', 'Memory access'], ['permissions', 'Who may do what'],
   ['privacy', 'Words to hide'], ['privacy', 'Replaced with'], ['privacy', 'Access keys and emails'], ['privacy', 'Your home folder'], ['privacy', 'Erase private data'],
-  ['release', 'Look for new versions'], ['release', 'Check now'], ['release', "What's new in this version"], ['release', 'The tour of MADRE 1.0'], ['release', 'Send reports automatically'], ['release', 'Tell the author'],
+  ['release', 'Look for new versions'], ['release', 'Check now'], ['release', "What's new in this version"], ['release', 'The tour of ZM 1.0'], ['release', 'Send reports automatically'], ['release', 'Tell the author'],
 ];
 const settingsWindow = { node: document.querySelector('#settings'), body: document.querySelector('#settings-body'), search: document.querySelector('#settings-search'), box: null, ready: false, open: null, query: '', mode: 'board', observer: null };
 try { settingsWindow.box = JSON.parse(localStorage.getItem('pulse.settingsWindow') ?? 'null'); } catch { /* no storage */ }
@@ -8903,7 +8903,7 @@ const settingsIcon = (id) => { const span = el('span', 'settings-icon'); span.in
 // figure that has not been read yet says so.
 // The user manual: its own page in the room's language, and the same manual in PDF.
 function openManual() { window.open(`/manual?lang=${language()}`, '_blank', 'noopener'); }
-const manualPdf = () => `/assets/manual/madre-manual-${language()}.pdf`;
+const manualPdf = () => `/assets/manual/zm-manual-${language()}.pdf`;
 // Each card's line is one short line (2026-10-27): what matters at a glance; the rest is one click in.
 function settingsStatus(id) {
   if (id === 'manual') return { line: t('With pictures, step by step. Also as a PDF.') };
@@ -8957,7 +8957,7 @@ function settingsStatus(id) {
     const info = updateUI.info;
     // Whether reports are sent is the switch on the card itself.
     if (!info) return { line: t('Reading…') };
-    return { line: `MADRE ${info.current} · ${info.available ? t('{version} available', { version: info.latest }) : info.enabled === false ? t('not checked') : t('up to date')}`, warn: info.available ? t('{version} is out', { version: info.latest }) : null };
+    return { line: `ZM ${info.current} · ${info.available ? t('{version} available', { version: info.latest }) : info.enabled === false ? t('not checked') : t('up to date')}`, warn: info.available ? t('{version} is out', { version: info.latest }) : null };
   }
   return { line: '' };
 }
@@ -9629,7 +9629,7 @@ function translateMarkup(node) {
       continue;
     }
     // CODE and PRE hold what a machine reads, so the walk leaves them alone. `data-say` is the
-    // exception, written by hand: an example of what to TYPE at MADRE is a sentence a person
+    // exception, written by hand: an example of what to TYPE at ZM is a sentence a person
     // says, and it belongs in the reader's language like any other sentence on the page.
     if (KEEP_MARKUP.test(kid.tagName ?? '')) {
       if (kid.getAttribute?.('data-say') != null) translateMarkup(kid);
@@ -9689,7 +9689,7 @@ async function loadTreeLevel(path, list) {
 //
 // Copy and move are the human's own hands in their own project, so there is no permission mode
 // here — but the zones the room guards from agents are guarded from slips too. Anything touching
-// .git, .pulse, .madre, a .env or the local settings asks for the project's designation first,
+// .git, .pulse, .zm, a .env or the local settings asks for the project's designation first,
 // the same word CONTROL asks for. Typing a folder name is a small ceremony; getting a key back
 // after it was moved somewhere is not.
 const finder = {
@@ -9700,7 +9700,7 @@ const finder = {
   held: null,      // { path, name, operation }
 };
 
-const GUARDED = /^\.git(\/|$)|^\.pulse(\/|$)|(^|\/)\.env(\.|$)|(^|\/)\.madre(\/|$)|(^|\/)\.claude\/settings\.local\.json$/;
+const GUARDED = /^\.git(\/|$)|^\.pulse(\/|$)|(^|\/)\.env(\.|$)|(^|\/)\.zm(\/|$)|(^|\/)\.claude\/settings\.local\.json$/;
 const finderGuarded = (...paths) => paths.filter(Boolean).some((path) => GUARDED.test(String(path).replace(/^\.\//, '')));
 
 function finderShowClip() {
@@ -9801,7 +9801,7 @@ function finderRefresh(landed) {
 async function finderRun(body, { say }) {
   const guarded = [body.from, body.to].filter(Boolean).find((path) => finderGuarded(path));
   if (guarded) {
-    const typed = await finderAsk({ label: t('CONFIRM WITH THE PROJECT NAME'), hint: t('{path} is a location MADRE protects. Type the project name to confirm.', { path: guarded }) });
+    const typed = await finderAsk({ label: t('CONFIRM WITH THE PROJECT NAME'), hint: t('{path} is a location ZM protects. Type the project name to confirm.', { path: guarded }) });
     if (!typed) return false;
     body.designation = typed;
   }
@@ -10161,7 +10161,7 @@ function besideNow() {
 // the notes it says once (the first-touch cards' store, HINTS_KEY, named here because the layout
 // runs before that line does).
 let dockedBefore = new Set();
-const LAYOUT_HINTS = 'madre.hints';
+const LAYOUT_HINTS = 'zm.hints';
 // One voice at a time: the first time the browser opens, its own card explains it, and a note about
 // the panels that moved for it waits until that card is closed instead of talking over it.
 function sayWhenQuiet(say) {
@@ -11286,8 +11286,8 @@ function morph(kind, change) {
   const held = [...document.querySelectorAll(`${WINDOW_SELECTOR}, .tree.floating, .tree.split, dialog.surface.split`)]
     .filter((node) => !node.hidden && node.getClientRects().length && getComputedStyle(node).viewTransitionName === 'none');
   held.forEach((node, index) => {
-    node.style.setProperty('view-transition-name', `madre-held-${index}`);
-    node.style.setProperty('view-transition-class', 'madre-held');
+    node.style.setProperty('view-transition-name', `zm-held-${index}`);
+    node.style.setProperty('view-transition-class', 'zm-held');
   });
   const transition = document.startViewTransition(change);
   // A transition that another one interrupts is skipped, and says so by rejecting: the change
@@ -11328,7 +11328,7 @@ function setTree(open) {
   try { localStorage.setItem('pulse.tree', open ? 'open' : 'closed'); } catch { /* no storage */ }
   if (open) fillTree();
 }
-// By hand, for anything written from outside MADRE: an editor, a terminal, another app.
+// By hand, for anything written from outside ZM: an editor, a terminal, another app.
 document.querySelector('#tree-refresh')?.addEventListener('click', (event) => {
   const button = event.currentTarget;
   button.classList.remove('spin'); void button.offsetWidth; button.classList.add('spin');
@@ -11639,7 +11639,7 @@ window.addEventListener?.('resize', placeNotices);
 if (typeof ResizeObserver === 'function' && els.chats) new ResizeObserver(() => { if (noticesBox.children.length) placeNotices(); }).observe(els.chats);
 function showNotice({ agent, ok, chatId, chat }) {
   placeNotices();
-  const who = agent ?? 'madre';
+  const who = agent ?? 'zm';
   const card = paint(el('div', `notice${ok ? '' : ' failed'}`), who);
   const top = el('div', 'notice-top');
   top.append(el('span', 'notice-state', ok ? t('FINISHED') : t('COULD NOT FINISH')), el('span', 'notice-time', formatTime(new Date().toISOString())));
@@ -11685,17 +11685,17 @@ async function askForNotifications() {
 function notifyFinished(body, chatId) {
   if (notificationsState() !== 'granted') return;
   try {
-    const note = new Notification('MADRE', { body, tag: `chat-${chatId}`, icon: '/assets/brand/madre-favicon.svg' });
+    const note = new Notification('ZM', { body, tag: `chat-${chatId}`, icon: '/assets/brand/zm-favicon.svg' });
     note.onclick = () => { window.focus(); note.close(); if (chatId !== chats.active) void openChat(chatId); };
   } catch { /* not offered here */ }
 }
 
-// The tab says which conversation it is, so a row of MADRE tabs can be told apart.
+// The tab says which conversation it is, so a row of ZM tabs can be told apart.
 function paintTitle() {
   const here = chats.list.find((chat) => chat.id === chats.active);
   const name = here?.title && ![t('Untitled'), t('First conversation'), 'Untitled', 'First conversation'].includes(here.title) ? here.title : (document.querySelector('#project')?.textContent?.replace(/^\/\s*/, '').trim() || '');
   const clipped = name.length > 48 ? `${name.slice(0, 47)}…` : name;
-  document.title = clipped ? `MADRE · ${clipped}` : 'MADRE';
+  document.title = clipped ? `ZM · ${clipped}` : 'ZM';
   paintShellTitle();
 }
 
@@ -12505,7 +12505,7 @@ function stepDone(id) {
     // The last one: the ring closes, the room says so once, and the pill goes a moment later.
     clearTimeout(steps.finishing);
     steps.finishing = setTimeout(() => { steps.finishing = 0; stepsClose(); stepsPaint(); }, 2400);
-    toast(t('First steps done: you know your way around MADRE.'));
+    toast(t('First steps done: you know your way around ZM.'));
   }
   stepsPaint();
 }
@@ -12606,7 +12606,7 @@ globalThis.__pulse.steps = { done: (id) => stepDone(id), resume: () => stepsResu
 
 // Arriving from RELOAD (index.html put the curtain back): its loader goes on from the share the
 // page that left had reached, and climbs with the boot — the state read, the conversation drawn.
-const arrival = document.getElementById?.('reload-curtain')?.querySelector?.('.madre-loader') ?? null;
+const arrival = document.getElementById?.('reload-curtain')?.querySelector?.('.zm-loader') ?? null;
 const arrivalCreep = arrival ? creep(arrival, { to: 0.62 }) : null;
 const initial = await fetch('/api/state').then((response) => response.json());
 setLoader(arrival, 0.7);
@@ -12617,12 +12617,12 @@ if (SPLIT_CHAT && !Array.isArray(initial.events)) {
   bootDone();
   await new Promise(() => {});
 }
-// The corner of the room: which MADRE this is, and whose it is, readable on any wallpaper, and a
+// The corner of the room: which ZM this is, and whose it is, readable on any wallpaper, and a
 // link to its author (public/attribution.js: NOTICE's attribution, the same on Home).
 if (initial.version) { drawAttribution(document.querySelector('#colophon'), initial.version); void drawColophonKeys(document.querySelector('#colophon')); }
 void adoptLanguage(initial.language, initial.languageChosen);
 // Whether the copilot is on for this project, so the robot and the mode say so from the start.
-// The cards of what 1.0.2 brought are news only to whoever used MADRE before it: someone new met all
+// The cards of what 1.0.2 brought are news only to whoever used ZM before it: someone new met all
 // of it at once in the welcome, and five «New:» cards in a row were noise to them (2026-10-19).
 void Promise.all([loadCopilot(), roomTour().loaded]).then(async () => {
   if (!state.device) await keptHints();
@@ -12631,11 +12631,11 @@ void Promise.all([loadCopilot(), roomTour().loaded]).then(async () => {
 // Behind the bridge this page is on a phone (docs/MOBILE.md): it says so, offers the way back to
 // the list of rooms, and leaves the Mac's keys to the Mac.
 state.device = initial.device ?? null;
-// MADRE on your phone is not in the public 1.0 (src/server.mjs, phonePreview): where it is not
+// ZM on your phone is not in the public 1.0 (src/server.mjs, phonePreview): where it is not
 // offered, nothing says it exists — no key on the bar, no place in Settings, no chapter.
 state.phonePreview = Boolean(initial.phonePreview);
 if (!state.phonePreview && !state.device) document.querySelector('#phone-button')?.remove();
-// The room of SALAS (docs/MACROVERSO.md, phase 3d): the one whose project is MADRE's own folder,
+// The room of SALAS (docs/MACROVERSO.md, phase 3d): the one whose project is ZM's own folder,
 // where the super agent lives and the Macroverso is a key of the bar.
 state.salas = Boolean(initial.salas);
 state.roomId = initial.room ?? null;
@@ -12696,7 +12696,7 @@ function boot() {
     window.dispatchEvent?.(new Event('resize'));
   }
   stepsPaint();
-  // The Coordinator's own project is a folder of MADRE's, named for the code («salas»): it says
+  // The Coordinator's own project is a folder of ZM's, named for the code («salas»): it says
   // who lives there instead. Its key (projectDesignation) is still the folder's name.
   els.project.textContent = state.salas ? t('Coordinator') : (initial.projectRoot.split('/').filter(Boolean).at(-1) || initial.projectRoot);
   els.project.title = initial.projectRoot;
@@ -12720,12 +12720,12 @@ function boot() {
     if (remembered && remembered !== chats.active && chats.list.some((chat) => chat.id === remembered)) openSplit(remembered);
     else if (remembered) rememberSplit();
   } catch { /* no storage */ }
-  // MADRE started since this tab last saw it: the logo draws itself again. A reload of the same
+  // ZM started since this tab last saw it: the logo draws itself again. A reload of the same
   // running room keeps it still (the class was set in the page's head before the first frame).
   try {
-    const seen = sessionStorage.getItem('madre.boot');
+    const seen = sessionStorage.getItem('zm.boot');
     if (initial.boot && seen !== initial.boot) {
-      sessionStorage.setItem('madre.boot', initial.boot);
+      sessionStorage.setItem('zm.boot', initial.boot);
       if (seen) {
         const logo = document.querySelector('.brand-logo');
         document.documentElement.classList.remove('logo-still');
@@ -12737,13 +12737,13 @@ function boot() {
   // A project's opening (loader.js, playProjectOpening), each time it opens again after it was closed: once per start
   // of its server, not on a reload nor in a second tab, nor in the half on the right or on a phone.
   try {
-    if (initial.boot && !SPLIT_CHAT && !state.device && localStorage.getItem('madre.opening') !== initial.boot) {
-      localStorage.setItem('madre.opening', initial.boot);
-      const stage = el('dialog', 'madre-opening');
-      stage.setAttribute('aria-label', 'MADRE');
+    if (initial.boot && !SPLIT_CHAT && !state.device && localStorage.getItem('zm.opening') !== initial.boot) {
+      localStorage.setItem('zm.opening', initial.boot);
+      const stage = el('dialog', 'zm-opening');
+      stage.setAttribute('aria-label', 'ZM');
       document.body.append(stage);
       stage.showModal();
-      // The project's own opening, shorter than the welcome's: its name where MADRE's would be.
+      // The project's own opening, shorter than the welcome's: its name where ZM's would be.
       const name = initial.projectName === 'salas' ? t('Coordinator') : initial.projectName ?? '';
       void playProjectOpening(stage, { name, skipLabel: t('Skip') }).then((played) => {
         setTimeout(() => { stage.close(); stage.remove(); }, played ? 520 : 0);
@@ -12768,7 +12768,7 @@ function boot() {
     };
     // The room is drawn under the curtain: the bar fills, holds a moment, and the curtain clears.
     arrivalCreep?.();
-    void finishLoader(curtain.querySelector('.madre-loader')).then(lift);
+    void finishLoader(curtain.querySelector('.zm-loader')).then(lift);
   })();
 
   // The windows, as they were left, within the same limit.
@@ -12796,11 +12796,11 @@ function boot() {
   // `/git` and every module command answered «unknown» in a room that had them enabled all along.
   void refreshCommands();
   // How long the record takes to be drawn, readable in the browser's Performance panel
-  // (performance.getEntriesByName('madre:history')).
-  performance.mark?.('madre:history-start');
+  // (performance.getEntriesByName('zm:history')).
+  performance.mark?.('zm:history-start');
   drawRecord(initial.events);
-  performance.mark?.('madre:history-end');
-  try { performance.measure?.('madre:history', 'madre:history-start', 'madre:history-end'); } catch { /* no timeline */ }
+  performance.mark?.('zm:history-end');
+  try { performance.measure?.('zm:history', 'zm:history-start', 'zm:history-end'); } catch { /* no timeline */ }
   setLoader(arrival, 0.9);
   scrollToEnd();
   measureRows();
@@ -12815,7 +12815,7 @@ function boot() {
 }
 
 // RELOAD, with grace (2026-10-10): the room softens behind a curtain of its own ground, and in the
-// middle MADRE's loader (loader.js) — the pulse beating, the bar starting to fill. The page goes
+// middle ZM's loader (loader.js) — the pulse beating, the bar starting to fill. The page goes
 // with the share it reached; the new one puts the same curtain back before its first frame at that
 // share, fills the bar as it boots, and clears; the bar's logo and live light pulse once.
 function reloadWithGrace() {
@@ -12827,12 +12827,12 @@ function reloadWithGrace() {
   document.documentElement.classList.add('reloading');
   creep(loader, { to: 0.34, rate: 0.09 });
   setTimeout(() => {
-    try { sessionStorage.setItem('madre.curtain', loader.dataset.p ?? '0.3'); } catch { /* the new page simply arrives */ }
+    try { sessionStorage.setItem('zm.curtain', loader.dataset.p ?? '0.3'); } catch { /* the new page simply arrives */ }
     window.location.reload();
   }, 900);
 }
 document.querySelector('#reload-button')?.addEventListener('click', reloadWithGrace);
-// A wait that takes the whole room (2026-10-10): the RELOAD curtain with MADRE's loader, saying what
+// A wait that takes the whole room (2026-10-10): the RELOAD curtain with ZM's loader, saying what
 // it waits for. Answers the loader and the way to clear it.
 function waitCurtain({ label = '', progress = 0.04 } = {}) {
   document.querySelector('.reload-curtain')?.remove();
@@ -12875,7 +12875,7 @@ async function refreshBudgetWindow() {
 if (!els.target.options.length) els.target.add(new Option(t('No agent ready'), ''));
 /* ---------- live stream ---------- */
 
-// MADRE's pulse says it too (2026-10-28): the dot at its end green while the room is live, red when
+// ZM's pulse says it too (2026-10-28): the dot at its end green while the room is live, red when
 // the connection is lost, amber in between — opening, before the stream is up (styles.css, data-link).
 document.documentElement.dataset.link = 'waiting';
 function setConnection(value) {
@@ -13016,12 +13016,12 @@ function syncModuleComposer() {
   updatePlaceholder();
 }
 // A question about what this room already said is a question the room can answer itself, on this
-// computer, for nothing. @madre reads the same archive every paid agent reads and bills no
+// computer, for nothing. @zm reads the same archive every paid agent reads and bills no
 // tokens at all — so the saving here is not a shorter answer or a better cache, it is the
 // absence of a charge.
 //
-// It offers and never decides. The human addressed somebody, or addressed nobody and MADRE
-// picked the first ready agent; changing that silently would be MADRE spending — or not
+// It offers and never decides. The human addressed somebody, or addressed nobody and ZM
+// picked the first ready agent; changing that silently would be ZM spending — or not
 // spending — in their name. One line, one button, and it says what it matched on.
 const OFFER_WHY = {
   decision: 'what was decided',
@@ -13034,19 +13034,19 @@ const OFFER_WHY = {
 function syncFreeOffer() {
   const box = els.freeOffer;
   if (!box) return;
-  const madre = state.agents.get('madre');
+  const zm = state.agents.get('zm');
   const chosen = els.target.value;
   const why = archiveQuestion(els.input.value);
   // Only worth offering when it is free, ready, and not already where it would go.
-  if (!why || !madre?.ready || chosen === 'madre' || state.mode >= 2) { box.hidden = true; box.replaceChildren(); return; }
+  if (!why || !zm?.ready || chosen === 'zm' || state.mode >= 2) { box.hidden = true; box.replaceChildren(); return; }
   if (box.dataset.why === why && !box.hidden) return;
   box.dataset.why = why;
   box.replaceChildren();
-  box.append(el('span', 'free-what', t('@madre can answer this from the project archive, on this computer, for no tokens · it read {why}', { why: t(OFFER_WHY[why]) })));
-  const go = el('button', 'free-go', t('ASK @madre'));
+  box.append(el('span', 'free-what', t('@zm can answer this from the project archive, on this computer, for no tokens · it read {why}', { why: t(OFFER_WHY[why]) })));
+  const go = el('button', 'free-go', t('ASK @zm'));
   go.type = 'button';
   go.addEventListener('click', () => {
-    els.target.value = 'madre';
+    els.target.value = 'zm';
     renderPicker();
     box.hidden = true;
     els.input.focus();
@@ -13063,7 +13063,7 @@ els.composer?.addEventListener('submit', () => { if (els.freeOffer) { els.freeOf
 // The offer under the box when Intenciones has something worth saying about the message being
 // written: a rung measured to be enough here, or a request that looks like it needs more than the
 // rung chosen. The server holds what was measured and the conversation so far, so it is asked a
-// moment after the typing stops. Never on top of the @madre offer: a question for the archive is
+// moment after the typing stops. Never on top of the @zm offer: a question for the archive is
 // not a question about any rung.
 const INTENT_NAMES = {
   chat: 'a short reply', lookup: 'a lookup', explain: 'an explanation', review: 'a review',
@@ -13112,7 +13112,7 @@ async function syncIntentOffer() {
   const draft = intentDraft();
   const offer = state.intentOffer;
   // Nothing to say about an agent whose CLI takes no effort, a message too short to be anything,
-  // or one the @madre offer already speaks for.
+  // or one the @zm offer already speaks for.
   // A try belongs to the agent it was taken for: another agent, and it is put away.
   if (state.effortOnce && state.effortOnce.agent !== draft.agent) dropEffortOnce();
   if (!draft.info?.levels.length || draft.text.trim().length < 8 || !els.freeOffer?.hidden) { offer.key = ''; offer.explore = null; dropEffortOnce(); hideIntentOffer(); return; }
@@ -13224,7 +13224,7 @@ function paintIntentTry(box, said) {
   const level = effortLabel(said.effort);
   box.replaceChildren();
   box.classList.remove('up');
-  box.append(el('span', 'free-what', `${t('Looks like {what}', { what: t(INTENT_NAMES[said.intent] ?? 'an explanation') })} · ${t('{level} might be enough · try it on this one and MADRE will notice', { level: level.toUpperCase() })}`));
+  box.append(el('span', 'free-what', `${t('Looks like {what}', { what: t(INTENT_NAMES[said.intent] ?? 'an explanation') })} · ${t('{level} might be enough · try it on this one and ZM will notice', { level: level.toUpperCase() })}`));
   box.append(el('span', 'intent-basis trial', t('Trial')));
   const later = el('button', 'free-later', t('Not now'));
   later.type = 'button';
@@ -13251,8 +13251,8 @@ function paintIntentTried(box, once) {
   box.replaceChildren();
   box.classList.remove('up');
   box.append(el('span', 'free-what', once.from
-    ? t('This one goes at {level} · if it falls short, MADRE will notice and go back to {from}', { level, from: effortLabel(once.from).toUpperCase() })
-    : t('This one goes at {level} · if it falls short, MADRE will notice and go back to the agent\'s default level', { level })));
+    ? t('This one goes at {level} · if it falls short, ZM will notice and go back to {from}', { level, from: effortLabel(once.from).toUpperCase() })
+    : t('This one goes at {level} · if it falls short, ZM will notice and go back to the agent\'s default level', { level })));
   box.append(el('span', 'intent-basis trial', t('Trial')));
   const undo = el('button', 'free-later', t('Undo'));
   undo.type = 'button';
@@ -13619,7 +13619,7 @@ async function runSlashCommand(text) {
         draft: true,
         // The card shows `vendor` under the name, so the instruction has to say what it is for.
         // Left unsaid, Codex wrote `vendor: 'you'` and the room printed it as the author.
-        text: t('Create a MADRE module for this request: {request} Write exactly one <id>.module.mjs file for review. Set vendor to whoever wrote it — the human\'s name or team if you know it, otherwise leave it out; never the word "you". Do not install it; MADRE will show the human an install card.', { request: rest }),
+        text: t('Create a ZM module for this request: {request} Write exactly one <id>.module.mjs file for review. Set vendor to whoever wrote it — the human\'s name or team if you know it, otherwise leave it out; never the word "you". Do not install it; ZM will show the human an install card.', { request: rest }),
       };
     }
     return { handled: false, text: rest, target };
@@ -13952,7 +13952,7 @@ els.composer.addEventListener('submit', async (event) => {
   // and the effort are the ones chosen for THAT agent; the chip's would be another agent's.
   const mention = outgoing.match(/^@([a-z0-9_-]+)\b/i)?.[1]?.toLowerCase();
   let addressed = mention && state.agents.has(mention) ? mention : target;
-  // Several agents named at the start («@opencode @madre ¿…?», 2026-10-29): the same question goes
+  // Several agents named at the start («@opencode @zm ¿…?», 2026-10-29): the same question goes
   // to each one that can answer, each in a turn of its own, and the conversation shows it once with
   // every agent it went to (room.mjs, `together`). It used to reach the first one only, with the
   // others' names left in the text — and that one answered that the message was not for it. Up to
@@ -13968,7 +13968,7 @@ els.composer.addEventListener('submit', async (event) => {
       addressed = able[0];
     }
   }
-  // An agent that is switched off (no session, or nothing MADRE can run) is not written to: the
+  // An agent that is switched off (no session, or nothing ZM can run) is not written to: the
   // message stays in the box and Settings opens on that agent, where it is connected.
   if (addressed && state.agents.has(addressed) && !canAnswer(state.agents.get(addressed))) {
     const off = state.agents.get(addressed);
@@ -14043,7 +14043,7 @@ els.composer.addEventListener('submit', async (event) => {
       syncModuleComposer();
     }
   } catch (error) {
-    toast(t('Could not reach MADRE: {error}', { error: error.message }));
+    toast(t('Could not reach ZM: {error}', { error: error.message }));
   } finally {
     els.input.disabled = false;
     els.send.disabled = false;
@@ -14051,7 +14051,7 @@ els.composer.addEventListener('submit', async (event) => {
   }
 });
 
-// The agents a message names at its very start, in order and once each: «@opencode @madre, ¿…?».
+// The agents a message names at its very start, in order and once each: «@opencode @zm, ¿…?».
 function leadingCrew(text) {
   const head = String(text ?? '').match(/^(?:@[a-z0-9_-]+\b[\s,:;]*)+/i)?.[0] ?? '';
   const named = [...head.matchAll(/@([a-z0-9_-]+)/gi)].map((match) => match[1].toLowerCase()).filter((agent) => state.agents.has(agent));
@@ -14072,7 +14072,7 @@ const mother = {
   os: document.querySelector('#mother-os'),
   answer: document.querySelector('#mother-answer'),
   list: document.querySelector('#mother-list'),
-  // The remedies are for the computer MADRE runs on, which the project says (WEB-08); the browser's
+  // The remedies are for the computer ZM runs on, which the project says (WEB-08); the browser's
   // own system is only the guess when it does not — a phone reading Diagnostics was given Linux.
   platform: PLATFORMS[state.platform] ? state.platform : detectPlatform(),
   bootTimer: null,
@@ -14113,7 +14113,7 @@ function downloadConditionLog(records) {
   const url = URL.createObjectURL(blob);
   const link = el('a');
   link.href = url;
-  link.download = `madre-conditions-${new Date().toISOString().slice(0, 10)}.csv`;
+  link.download = `zm-conditions-${new Date().toISOString().slice(0, 10)}.csv`;
   document.body.append(link);
   link.click();
   link.remove();
@@ -14160,7 +14160,7 @@ const SEVERITY_WORDS = { blocking: t('BLOCKING'), common: t('COMMON'), degraded:
 const severityWord = (severity) => SEVERITY_WORDS[severity] ?? String(severity);
 
 // A known condition whose remedy did not work is still worth hearing about. In Spanish it goes to
-// the form on madre.run, which asks for no account; in English, to a prefilled GitHub issue. Both
+// the form on zm.run, which asks for no account; in English, to a prefilled GitHub issue. Both
 // addresses come from the room's own sentinel, with the condition's code as what it is about.
 async function reportCondition(condition) {
   const about = `${condition.code ?? condition.id} · ${condition.title}`;
@@ -14729,7 +14729,7 @@ function appendModuleOutput(event) {
 async function switchModule(item) {
   // Turning the test browser on may download its browser first (src/modules/playwright.mjs): said
   // before the wait, so a switch that takes a minute is not mistaken for one that hung.
-  if (item.id === 'playwright' && !item.status?.installed) toast(t('Getting the test browser ready: MADRE downloads what it is missing. It can take a few minutes.'), { tone: 'note' });
+  if (item.id === 'playwright' && !item.status?.installed) toast(t('Getting the test browser ready: ZM downloads what it is missing. It can take a few minutes.'), { tone: 'note' });
   const response = await fetch(`/api/extensions/${item.id}/install`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ confirm: true }) });
   const result = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(result.error ?? t('{name} could not be turned on or off.', { name: item.name }));
@@ -14752,7 +14752,7 @@ function drawFilesTarget() {
 /* ---------- Settings › Connect MCP (2026-10-14) ---------- */
 //
 // The MCP servers of this project, and only here: added by hand or brought from the apps the person
-// already uses, each one started and checked by MADRE before an agent gets it (src/modules/
+// already uses, each one started and checked by ZM before an agent gets it (src/modules/
 // mcp-connect.mjs). A row says what it is, whether it answered and with how many tools, from which
 // mode its tools that act are handed, and the one thing to do when it needs something.
 const mcpUI = { servers: null, adding: null, found: null, picked: new Set(), open: new Set(), said: null, asked: false, tokenFor: null };
@@ -14789,23 +14789,23 @@ function drawMcpSettings(host) {
     sxButton(t('Import from your apps'), () => void openMcpImport()),
     sxButton(t('Add a tool'), () => { mcpUI.adding = mcpUI.adding ? null : { transport: 'stdio', auth: 'none', env: [] }; drawMcpTarget(); }, { tone: 'primary' }),
   );
-  const list = sxBlock(host, t('Outside tools (MCP)'), t('Let the agents use other apps and services: a program on this computer or a service online. MADRE checks each one first; if one fails, the agents carry on without it.'), { aside, className: 'mcp-block' });
+  const list = sxBlock(host, t('Outside tools (MCP)'), t('Let the agents use other apps and services: a program on this computer or a service online. ZM checks each one first; if one fails, the agents carry on without it.'), { aside, className: 'mcp-block' });
   if (mcpUI.servers === null) sxRow(list, t('Reading…'), null);
   else if (!mcpUI.servers.length && !mcpUI.adding) sxRow(list, t('No outside tools yet'), t('Add one by hand, or bring the ones you already use in Claude Code, Codex, Gemini or Cursor.'));
   for (const server of mcpUI.servers ?? []) list.rows.append(mcpServerRow(server));
   if (mcpUI.said) sxFoot(list, mcpUI.said);
-  sxFoot(list, t('Tools that only look things up work from #1 CHAT ONLY. Tools that do things — send, write, publish — only from the mode you choose: #4 FULL ACCESS unless you lower it. Keys stay locked in MADRE, never in your files.'));
+  sxFoot(list, t('Tools that only look things up work from #1 CHAT ONLY. Tools that do things — send, write, publish — only from the mode you choose: #4 FULL ACCESS unless you lower it. Keys stay locked in ZM, never in your files.'));
   if (mcpUI.adding) drawMcpForm(host);
   if (mcpUI.found) drawMcpImport(host);
   drawMcpCatalog(host);
 }
-// CONNECTORS (public/mcp-catalog.js, 2026-10-20): the best known servers, checked against MADRE,
+// CONNECTORS (public/mcp-catalog.js, 2026-10-20): the best known servers, checked against ZM,
 // one press each. Connecting one is what «Add a tool» does by hand, with the address filled in:
-// MADRE saves it, signs in when it asks, and reads its tools before any agent gets them.
+// ZM saves it, signs in when it asks, and reads its tools before any agent gets them.
 function drawMcpCatalog(host) {
   const norm = (address) => { try { return new URL(address).toString(); } catch { return address; } };
   const have = new Map((mcpUI.servers ?? []).filter((one) => one.url).map((one) => [norm(one.url), one]));
-  const block = sxBlock(host, t('Connectors'), t('The best known services, checked against MADRE on {date}. One press connects one to this project; any other MCP server goes in with «Add a tool».', { date: new Date(`${CATALOG_CHECKED}T12:00:00`).toLocaleDateString(document.documentElement.lang === 'en' ? 'en-US' : 'es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) }), { className: 'mcp-block mcp-catalog-block' });
+  const block = sxBlock(host, t('Connectors'), t('The best known services, checked against ZM on {date}. One press connects one to this project; any other MCP server goes in with «Add a tool».', { date: new Date(`${CATALOG_CHECKED}T12:00:00`).toLocaleDateString(document.documentElement.lang === 'en' ? 'en-US' : 'es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) }), { className: 'mcp-block mcp-catalog-block' });
   for (const group of MCP_GROUPS) {
     const items = MCP_CATALOG.filter((one) => one.group === group.id);
     if (!items.length) continue;
@@ -14837,7 +14837,7 @@ function mcpConnectorCard(item, connected) {
   const words = el('div', 'mcp-card-words');
   const name = el('b', null, item.label);
   const chip = el('span', `sx-chip${item.checked === 'tools' ? ' on' : ''}`, MCP_CHECKED_WORDS[item.checked]());
-  chip.title = item.checked === 'tools' ? t('MADRE connected to it and read its tools.') : item.checked === 'signin' ? t('MADRE found its sign-in. Its tools are read the moment you sign in.') : t('MADRE checks it as soon as you paste the token.');
+  chip.title = item.checked === 'tools' ? t('ZM connected to it and read its tools.') : item.checked === 'signin' ? t('ZM found its sign-in. Its tools are read the moment you sign in.') : t('ZM checks it as soon as you paste the token.');
   const top = el('div', 'mcp-card-top');
   top.append(name, chip);
   words.append(top, el('span', 'mcp-card-about', t(item.about)), el('small', null, item.maker));
@@ -14964,7 +14964,7 @@ async function mcpSignIn(server) {
 }
 function drawMcpForm(host) {
   const draft = mcpUI.adding;
-  const block = sxBlock(host, t('Add a tool'), t('A name for it, and how MADRE reaches it. MADRE checks it as soon as you save.'), { className: 'mcp-block mcp-form' });
+  const block = sxBlock(host, t('Add a tool'), t('A name for it, and how ZM reaches it. ZM checks it as soon as you save.'), { className: 'mcp-block mcp-form' });
   const input = (value, placeholder, { mono = false, type = 'text', change } = {}) => {
     const field = el('input', `sx-input${mono ? ' mono' : ''}`);
     field.type = type; field.value = value ?? ''; field.placeholder = placeholder; field.spellcheck = false; field.autocomplete = 'off';
@@ -14987,10 +14987,10 @@ function drawMcpForm(host) {
       vars.append(line);
     });
     vars.append(sxButton(t('Add a variable'), () => { draft.env.push({ name: '', value: '', secret: true }); drawMcpTarget(); }));
-    sxRow(block, t('Variables'), t('Settings it needs, like an API key. Secret ones stay locked in MADRE, never in a file.'), vars, { stack: true });
+    sxRow(block, t('Variables'), t('Settings it needs, like an API key. Secret ones stay locked in ZM, never in a file.'), vars, { stack: true });
   } else {
     sxRow(block, t('Address'), t('The MCP address the service gives you, starting with https://.'), input(draft.url, 'https://example.com/mcp', { mono: true, change: (value) => { draft.url = value.trim(); } }), { stack: true });
-    sxRow(block, t('Sign-in'), t('Sign in opens the service\'s own page. A token is a code you paste once; MADRE keeps it safe.'), sxSeg([{ value: 'none', text: t('None') }, { value: 'oauth', text: t('Sign in') }, { value: 'token', text: t('Token') }], draft.auth, (value) => { draft.auth = value; drawMcpTarget(); }, { label: t('Sign-in') }));
+    sxRow(block, t('Sign-in'), t('Sign in opens the service\'s own page. A token is a code you paste once; ZM keeps it safe.'), sxSeg([{ value: 'none', text: t('None') }, { value: 'oauth', text: t('Sign in') }, { value: 'token', text: t('Token') }], draft.auth, (value) => { draft.auth = value; drawMcpTarget(); }, { label: t('Sign-in') }));
     if (draft.auth === 'token') sxRow(block, t('Token'), null, input(draft.token, t('paste it here'), { mono: true, type: 'password', change: (value) => { draft.token = value; } }), { stack: true });
   }
   const save = sxButton(draft.auth === 'oauth' && draft.transport === 'http' ? t('Save and sign in') : t('Save and check'), async () => {
@@ -15024,7 +15024,7 @@ async function openMcpImport() {
 function drawMcpImport(host) {
   const found = mcpUI.found;
   const block = sxBlock(host, t('Import from your apps'), found.length
-    ? t('Tools you already set up in other apps. Nothing is copied until you import; then MADRE keeps their keys safe and checks each one.')
+    ? t('Tools you already set up in other apps. Nothing is copied until you import; then ZM keeps their keys safe and checks each one.')
     : t('No outside tools were found in .mcp.json, opencode.json, Claude Code, Codex, Gemini CLI or Cursor.'), { className: 'mcp-block' });
   for (const one of found) {
     const box = el('input');
@@ -15097,7 +15097,7 @@ async function reach(url, init) {
   try {
     return await fetch(url, init);
   } catch (error) {
-    const said = { error: t('Could not reach MADRE: {error}', { error: error.message }) };
+    const said = { error: t('Could not reach ZM: {error}', { error: error.message }) };
     return { ok: false, status: 0, json: async () => said };
   }
 }
@@ -15145,7 +15145,7 @@ function drawLocalTarget() {
   hardwareBlock(target, item.recommended?.hardware);
 }
 
-// What the version on a card means. A module that ships with MADRE has its own version, written
+// What the version on a card means. A module that ships with ZM has its own version, written
 // in its file and starting at 1.0.0; it cannot update by itself, because it arrives in a release.
 // A module that wraps something else — a browser server, a model runner, a CLI — shows that
 // thing's version, found on this computer; nothing found is not a version but an absence, and the
@@ -15160,7 +15160,7 @@ function versionLabel(item) {
 function updateWord(update) {
   if (!update) return null;
   if (update.enabled === false) return { text: t('CHECKS ARE OFF'), kind: 'note' };
-  if (update.available) return { text: update.via === 'madre' ? t('MADRE {version} AVAILABLE', { version: update.latest }) : t('{version} AVAILABLE', { version: update.latest }), kind: 'new' };
+  if (update.available) return { text: update.via === 'zm' ? t('ZM {version} AVAILABLE', { version: update.latest }) : t('{version} AVAILABLE', { version: update.latest }), kind: 'new' };
   // Nothing installed is not up to date: the newest is simply what installing would bring.
   if (update.latest && !update.current) return { text: t('NEWEST IS {version}', { version: update.latest }), kind: 'note' };
   if (update.latest) return { text: t('UP TO DATE'), kind: 'note' };
@@ -15170,19 +15170,19 @@ function updateWord(update) {
 
 function updateNote(item, update) {
   if (!update) return t('Check for a newer version');
-  if (update.via === 'madre') {
+  if (update.via === 'zm') {
     return update.available
-      ? t('This module ships in MADRE {ships}, and MADRE {latest} is out. A module that comes with MADRE updates when MADRE does.', { ships: update.ships, latest: update.latest })
-      : t('This module ships in MADRE {ships}, which is the newest release. A module that comes with MADRE updates when MADRE does.', { ships: update.ships });
+      ? t('This module ships in ZM {ships}, and ZM {latest} is out. A module that comes with ZM updates when ZM does.', { ships: update.ships, latest: update.latest })
+      : t('This module ships in ZM {ships}, which is the newest release. A module that comes with ZM updates when ZM does.', { ships: update.ships });
   }
   const what = update.name;
   if (update.available) return t('{what} {latest} is out; this computer has {current}.', { what, latest: update.latest, current: update.current });
   if (update.latest && !update.current) return t('{what} {latest} is the newest release. It is not on this computer yet.', { what, latest: update.latest });
   if (update.latest) return t('{what} {latest} is the newest, and it is what this computer has.', { what, latest: update.latest });
-  return t('MADRE could not check whether there is a newer {what}.', { what });
+  return t('ZM could not check whether there is a newer {what}.', { what });
 }
 
-// A fold inside a card. It remembers whether it was left open, like every other fold in MADRE,
+// A fold inside a card. It remembers whether it was left open, like every other fold in ZM,
 // and it carries its own EXPAND / COLLAPSE. It is deliberately not a `.fold`: the panel's
 // EXPAND ALL belongs to MU/TH/UR's sections, not to fourteen folds in another dialog.
 function cardFold(card, label, { key, count = null, open = false } = {}) {
@@ -15230,7 +15230,7 @@ function metrics(box, rows) {
 
 // Every card has the same floors in the same order, whatever the module is: what it is, what it
 // does, what it touches, how it is doing — and then its actions, with the main switch last. A DEV
-// module also offers uninstall there; a module MADRE ships never does.
+// module also offers uninstall there; a module ZM ships never does.
 function removeModuleButton(item, { className = 'remove-module', text = t('UNINSTALL') } = {}) {
   const remove = el('button', className, text);
   remove.type = 'button';
@@ -15239,7 +15239,7 @@ function removeModuleButton(item, { className = 'remove-module', text = t('UNINS
     // The room's own question sheet, as every other question in the room (no longer the console).
     const answer = await roomAsk({
       title: t('Uninstall {name}?', { name: item.name }),
-      body: t("Remove {name}? Its file {file} is deleted. MADRE's own modules cannot be removed.", { name: item.name, file: item.file }),
+      body: t("Remove {name}? Its file {file} is deleted. ZM's own modules cannot be removed.", { name: item.name, file: item.file }),
       choices: [{ value: 'keep', label: t('Keep it'), focus: true }, { value: 'remove', label: t('Uninstall'), tone: 'danger' }],
     });
     if (answer !== 'remove') return;
@@ -15360,7 +15360,7 @@ function cardShell(item, { on, state: stateText }) {
 
 // FLOOR 5, for a connector: the secrets it declared. The field is a password field, it posts to
 // the module's own vault route, and it is never filled back in — what comes back from the server
-// is the name and the length, which is all MADRE itself is allowed to know. FORGET removes it.
+// is the name and the length, which is all ZM itself is allowed to know. FORGET removes it.
 function cardSecrets(panel, item) {
   if (!item.secrets?.length) return;
   const box = cardBlock(panel, t('KEYS'));
@@ -15409,7 +15409,7 @@ function cardSecrets(panel, item) {
 }
 
 // FLOOR 4, the part every module can have without writing a line of interface: the settings it
-// declared in the SDK. MADRE draws them and saves them into the module's own block of config.
+// declared in the SDK. ZM draws them and saves them into the module's own block of config.
 function cardControls(panel, item) {
   if (!item.controls?.length) return;
   const box = cardBlock(panel, t('SETTINGS'));
@@ -15458,9 +15458,9 @@ function cardControls(panel, item) {
   box.append(row);
 }
 
-// Somebody's own module, handed to MADRE from the panel. A module runs inside MADRE with the
+// Somebody's own module, handed to ZM from the panel. A module runs inside ZM with the
 // human's permissions, so the choice is theirs to make knowingly: the file is named, what it
-// means is said in one line, and MADRE checks it before it is installed rather than after.
+// means is said in one line, and ZM checks it before it is installed rather than after.
 modules.add?.addEventListener('click', () => modules.file?.click());
 modules.file?.addEventListener('change', async () => {
   const file = modules.file.files?.[0];
@@ -15470,7 +15470,7 @@ modules.file?.addEventListener('change', async () => {
   // The question is the #4 key itself: a module can do what #4 can.
   const words = await askModuleKey({
     title: t('Install {name}?', { name: file.name }),
-    what: t('A module runs inside MADRE, with your permissions, on this computer. MADRE checks that it loads and keeps to the house rules before installing it — it cannot check what it intends. Install it only if you trust where it came from.'),
+    what: t('A module runs inside ZM, with your permissions, on this computer. ZM checks that it loads and keeps to the house rules before installing it — it cannot check what it intends. Install it only if you trust where it came from.'),
   });
   if (!words) return;
   let text;
@@ -15487,7 +15487,7 @@ modules.file?.addEventListener('change', async () => {
     renderModules();
     barModulesChanged();
     toast(`${t('Diagnostics › ')}${t('{name} installed', { name: result.installed.name })}${result.installed.version ? ` · v${result.installed.version}` : ''}. ${t('It loads in every project on this computer.')}`);
-    // A key the contract does not answer to. Not fatal — a module written for a newer MADRE may
+    // A key the contract does not answer to. Not fatal — a module written for a newer ZM may
     // carry fields this one has not learned — but a misspelling is far likelier, and it used to
     // install in silence and leave the author wondering why their card came out empty.
     warnUnknownModuleFields(result.installed);
@@ -15507,7 +15507,7 @@ const MARKET_FIELDS = {
   shelf: 'Choose its shelf.',
   author: 'Write your name and your GitHub user.',
   spdx: 'Choose the license of your code.',
-  minMadre: 'Write the oldest MADRE it works with, like 1.1.0.',
+  minMadre: 'Write the oldest ZM it works with, like 1.1.0.',
 };
 async function sendToMarket(host, item, opener) {
   const ask = async (payload) => {
@@ -15518,7 +15518,7 @@ async function sendToMarket(host, item, opener) {
   opener.disabled = false;
   if (!first.ok) { toast(first.result.error ?? t('{name} could not be checked.', { name: item.name })); return; }
   host.querySelector('.mods-submit')?.remove();
-  const block = sxBlock(host, t('Send to the Market'), t('What the Market will show, in Spanish and English. MADRE checks it as the Market does; then the author of MADRE reads the code and signs it.'), { className: 'mods-submit' });
+  const block = sxBlock(host, t('Send to the Market'), t('What the Market will show, in Spanish and English. ZM checks it as the Market does; then the author of ZM reads the code and signs it.'), { className: 'mods-submit' });
   const entry = first.result.entry;
   const input = (value, label, { area = false } = {}) => {
     const node = el(area ? 'textarea' : 'input', 'sx-input');
@@ -15554,7 +15554,7 @@ async function sendToMarket(host, item, opener) {
   rows.spdx = sxRow(block, t('License of your code'), t('Under which others may read and reuse it.'), license);
   const oldest = input(entry.minMadre, '1.1.0');
   oldest.classList.add('mono');
-  rows.minMadre = sxRow(block, t('Oldest MADRE it works with'), null, oldest);
+  rows.minMadre = sxRow(block, t('Oldest ZM it works with'), null, oldest);
   const read = () => ({ ...entry, name: name.read(), line: line.read(), summary: summary.read(), shelf: shelf.value, author: { name: author.value.trim(), github: github.value.trim().replace(/^@/, '') }, spdx: license.value, minMadre: oldest.value.trim() });
   const said = el('div', 'mods-submit-said');
   const show = (result) => {
@@ -15571,7 +15571,7 @@ async function sendToMarket(host, item, opener) {
       said.append(el('b', null, t('To fix first')), list);
     }
     for (const one of result.undeclared ?? []) said.append(el('p', 'mods-submit-warn', one));
-    // A check that never ran (MADRE did not answer, the server failed) says so instead of nothing.
+    // A check that never ran (ZM did not answer, the server failed) says so instead of nothing.
     if (!result.ok && result.error && !plain.length && !rest.length) said.append(el('p', 'mods-submit-warn', t(result.error)));
     if (result.ok && !result.folder) said.append(el('p', 'mods-submit-ok', t('Ready: prepare the files.')));
     if (!result.folder) return;
@@ -15579,7 +15579,7 @@ async function sendToMarket(host, item, opener) {
     ready.append(el('b', null, t('The two files are ready')), el('code', null, result.folder));
     if (!result.shown) ready.append(el('p', 'sx-hint', t('Open that folder from your file browser.')));
     const steps = el('ol', 'mods-submit-steps');
-    for (const step of [t('Open GitHub: it asks you to sign in if you are not.'), t('Drag the two files of the folder onto the page.'), t('Say in one line what your module does and press «Propose changes».'), t('The author of MADRE reads it; once signed, it is in the Market for everyone.')]) steps.append(el('li', null, step));
+    for (const step of [t('Open GitHub: it asks you to sign in if you are not.'), t('Drag the two files of the folder onto the page.'), t('Say in one line what your module does and press «Propose changes».'), t('The author of ZM reads it; once signed, it is in the Market for everyone.')]) steps.append(el('li', null, step));
     const go = el('a', 'sx-btn primary', t('Open GitHub'));
     go.href = result.upload;
     go.target = '_blank';
@@ -15634,7 +15634,7 @@ async function refreshModuleFile(item, button) {
   toast(t('Diagnostics › {name} is now {version}.', { name: item.name, version: done.result.installed.version ?? t('the newest file') }));
 }
 
-// Fetching a newer version of what a module drives. MADRE shows the command, the human reads it,
+// Fetching a newer version of what a module drives. ZM shows the command, the human reads it,
 // and only then does anything run — and what runs lands in the room line by line, like every
 // other install.
 // Anything that downloads or installs — a module's update, Ollama, a model, an agent's CLI — shows
@@ -15650,8 +15650,8 @@ function jobSheet() {
   node.setAttribute('role', 'status');
   node.setAttribute('aria-live', 'polite');
   node.hidden = true;
-  // MADRE's loader in a card (loader.js): the pulse beats while the work goes on.
-  node.innerHTML = `<span class="job-icon madre-loader-mark" aria-hidden="true">${LOADER_MARK}</span>`; // trusted: our own SVG
+  // ZM's loader in a card (loader.js): the pulse beats while the work goes on.
+  node.innerHTML = `<span class="job-icon zm-loader-mark" aria-hidden="true">${LOADER_MARK}</span>`; // trusted: our own SVG
   const words = el('div', 'job-words');
   node.title_ = el('b', 'job-title');
   node.state_ = el('span', 'job-state');
@@ -15791,7 +15791,7 @@ async function renderEconomy(box) {
     [count(totals.output), t('OUTPUT CHARGED'), t('tokens the agent writes in its answer · the more expensive part')],
     [count(saved.tokens), t('NOT CHARGED IN FULL'), t('read back from a cache (a fraction of the price, or of the plan) plus what was never sent')],
     [pct(totals.cacheShare), t('CAME FROM CACHE'), t('of everything read, the share nobody charged twice')],
-    [totals.charsPerInputToken ? totals.charsPerInputToken.toFixed(2) : '—', t('CHARACTERS PER TOKEN'), t('what MADRE wrote compared with what the agents were charged for reading · a ratio, not an exact count')],
+    [totals.charsPerInputToken ? totals.charsPerInputToken.toFixed(2) : '—', t('CHARACTERS PER TOKEN'), t('what ZM wrote compared with what the agents were charged for reading · a ratio, not an exact count')],
   ]) {
     const cell = el('div', 'economy-stat');
     cell.title = hint;
@@ -15807,7 +15807,7 @@ async function renderEconomy(box) {
   first.append(el('p', 'unit-note', t('tokens read back from a cache at a fraction of their price, or never sent at all')));
   metrics(first, [
     [t('FROM THE CACHE'), count(saved.cachedTokens), t('the CLI said it read these back instead of charging them again · measured')],
-    [t('NEVER SENT'), count(saved.unsentTokens), t('part of what MADRE sends the agent that this answer did not need · estimated from characters, not measured')],
+    [t('NEVER SENT'), count(saved.unsentTokens), t('part of what ZM sends the agent that this answer did not need · estimated from characters, not measured')],
     [t('OF THE INPUT'), pct(saved.cachedShare), t('the share of everything read that came back from a cache')],
   ]);
   first.append(el('p', 'note', t('One half is measured and the other is estimated, and they are never added without saying so. Neither of them is the Token saver: the Token saver shortens the answer, which is the next reading.')));
@@ -15819,11 +15819,11 @@ async function renderEconomy(box) {
     const free = el('div', 'card-block');
     free.append(cardHead('home', t('TURNS THE PROJECT ANSWERED ITSELF')));
     metrics(free, [
-      [t('FREE TURNS'), count(read.free.turns), t('answered by @madre on this computer · no provider, no bill')],
+      [t('FREE TURNS'), count(read.free.turns), t('answered by @zm on this computer · no provider, no bill')],
       [t('OF EVERY TURN'), pct(read.free.share), t('of the answers measured in this project')],
       [t('A PAID TURN'), read.free.paidOutputMedian ? `${count(read.free.paidOutputMedian)}↑` : '—', t('the typical (median) paid answer here · what the others cost, not what these would have')],
     ]);
-    free.append(el('p', 'note', t('These turns have no bill because nothing left this computer to answer them. MADRE does not say what they would have cost somewhere else: nobody measured that.')));
+    free.append(el('p', 'note', t('These turns have no bill because nothing left this computer to answer them. ZM does not say what they would have cost somewhere else: nobody measured that.')));
     box.append(free);
   }
 
@@ -15841,7 +15841,7 @@ async function renderEconomy(box) {
       [t('IN TOKENS'), `≈${Math.round(block.perTurn / CH_PER_TOKEN)}`, t('at {rate} characters per token · an estimate', { rate: CH_PER_TOKEN })],
       [t('TURNS CARRYING IT'), count(block.turns), t('of the {n} measured in this project', { n: count(read.turns) })],
     ]);
-    second.append(el('p', 'note', t('What the Token saver costs is certain and measured here. What it saves is not: the shorter answer below is observed, never promised. Output is the dearer half of every bill, so the trade is usually favourable — MADRE does not turn it into money because it does not know your prices.')));
+    second.append(el('p', 'note', t('What the Token saver costs is certain and measured here. What it saves is not: the shorter answer below is observed, never promised. Output is the dearer half of every bill, so the trade is usually favourable — ZM does not turn it into money because it does not know your prices.')));
   }
   if (read.ash?.agents?.length) ashComparison(second, read.ash);
   else second.append(el('p', 'note', t('No answers recorded yet with the Token saver on and off. Leave it on for a few answers and off for a few more, and the comparison shows here.')));
@@ -15851,7 +15851,7 @@ async function renderEconomy(box) {
   const third = el('div', 'card-block');
   third.append(cardHead('bars', t('HOW EACH PROMPT IS SPLIT')));
   economyBlocks(third, read);
-  third.append(el('p', 'note', t('{pct} of each prompt is a fixed header the cache can reuse. MADRE wrote {chars} characters of the {input} input tokens you were charged for; the rest is what the agents\' apps read on their own.', { pct: pct(read.totals.prefixShare), chars: count(read.totals.chars), input: count(read.totals.input) })));
+  third.append(el('p', 'note', t('{pct} of each prompt is a fixed header the cache can reuse. ZM wrote {chars} characters of the {input} input tokens you were charged for; the rest is what the agents\' apps read on their own.', { pct: pct(read.totals.prefixShare), chars: count(read.totals.chars), input: count(read.totals.input) })));
   // The tools a turn carried. A server's tool list goes into every call a CLI makes inside a turn;
   // the middle turn with it against the middle turn without it, per agent, with the counts behind.
   if (read.servers?.length) {
@@ -15946,7 +15946,7 @@ function ashComparison(box, ash) {
     list.append(group);
   }
   box.append(list);
-  box.append(el('p', 'note', t('The median answer of each group, not an average. You choose when to ask for compact answers, so the two groups are different tasks, not the same task twice — MADRE does not claim a percentage saved.')));
+  box.append(el('p', 'note', t('The median answer of each group, not an average. You choose when to ask for compact answers, so the two groups are different tasks, not the same task twice — ZM does not claim a percentage saved.')));
 }
 
 // The economy, on the card of the thing it is about. It fills as the room is used, because it
@@ -15976,7 +15976,7 @@ function paintAshEconomy(box) {
     metrics(box, [
       [t('TOKENS SAVED'), count(saved.tokens), t('read back from the CLI cache, plus what was never sent')],
       [t('FROM CACHE'), count(saved.cachedTokens), t('input the CLI did not charge again · {pct} of the input', { pct: pct(saved.cachedShare) })],
-      [t('NEVER SENT'), `${count(saved.unsentChars)} CH`, t('part of what MADRE sends the agent that this answer did not need')],
+      [t('NEVER SENT'), `${count(saved.unsentChars)} CH`, t('part of what ZM sends the agent that this answer did not need')],
       [t('SPENT ON INPUT'), count(totals.input), t('input tokens actually charged')],
       [t('SPENT ON OUTPUT'), count(totals.output), t('output tokens, the dearer half')],
       [t('TURNS'), count(read.turns), t('measured so far')],
@@ -16193,7 +16193,7 @@ function intentsPair(pending, repaint) {
 
 // The quick test's own window, over the room, the way PERSONALIZE is: the human judges here, where
 // they already are, instead of in MU/TH/UR. It follows the run and ends with what it means in one
-// sentence: what is enough for which kind of request, and what MADRE will do about it.
+// sentence: what is enough for which kind of request, and what ZM will do about it.
 const INTENT_KINDS = { lookup: 'lookups', explain: 'explanations', review: 'reviews', diagnose: 'diagnoses', design: 'design questions' };
 const intentsWindow = { node: document.querySelector('#intents-window'), body: document.querySelector('#intents-body'), box: null, ready: false, timer: null };
 
@@ -16255,9 +16255,9 @@ function intentsOutcome(last) {
   if (last.ended === 'error') return t('The test could not finish: {error}', { error: last.error ?? '' });
   if (last.ended === 'stopped') return t('The test was stopped. What it had not finished does not count.');
   if (last.kind !== 'quick') return t('The full test finished: {n} comparisons. MODULES → INTENCIONES shows what each kind of request needs.', { n: last.compared ?? 0 });
-  if (level) return t('You saw no difference in {same} of {n} questions: {level} is enough for {kinds} in this project. From now on MADRE suggests it when you write one.', { same: last.same, n: last.compared, level, kinds });
-  if (last.worse) return t('You saw a difference in {worse} of {n} questions. MADRE does not suggest going lower for {kinds}.', { worse: last.worse, n: last.compared, kinds });
-  return t('You saw no difference in {same} of {n} questions. It is a first reading: there were not enough questions of one kind to settle it, and MADRE does not change anything because of it.', { same: last.same, n: last.compared });
+  if (level) return t('You saw no difference in {same} of {n} questions: {level} is enough for {kinds} in this project. From now on ZM suggests it when you write one.', { same: last.same, n: last.compared, level, kinds });
+  if (last.worse) return t('You saw a difference in {worse} of {n} questions. ZM does not suggest going lower for {kinds}.', { worse: last.worse, n: last.compared, kinds });
+  return t('You saw no difference in {same} of {n} questions. It is a first reading: there were not enough questions of one kind to settle it, and ZM does not change anything because of it.', { same: last.same, n: last.compared });
 }
 
 async function paintIntentsWindow() {
@@ -16277,7 +16277,7 @@ async function paintIntentsWindow() {
   body.replaceChildren(page);
   const run = read.running;
   // What Intenciones is for, said once at the top (2026-10-28).
-  page.append(el('p', 'intents-about', t('Intenciones finds out how much thinking each kind of question needs. The same question is answered at the level you use and at a lower one; if you cannot tell the answers apart, MADRE suggests the lower level for questions like it next time: faster, and fewer tokens.')));
+  page.append(el('p', 'intents-about', t('Intenciones finds out how much thinking each kind of question needs. The same question is answered at the level you use and at a lower one; if you cannot tell the answers apart, ZM suggests the lower level for questions like it next time: faster, and fewer tokens.')));
   if (run) {
     // How far the test got: the pairs already judged out of the ones it will ask.
     if (run.total) {
@@ -16345,7 +16345,7 @@ function builtinCard(item) {
       for (const [role, model, present, label] of [
         ['embeddings', item.recommended?.embed ?? 'nomic-embed-text', Boolean(info.embedModel), t('SEARCH BY MEANING')],
         ['archivist', item.recommended?.chat ?? 'qwen2.5:3b', Boolean(info.chatModel), t('ARCHIVIST')],
-        ['agent', item.recommended?.chat ?? 'qwen2.5:3b', Boolean(info.chatModel), t('@madre in the project')],
+        ['agent', item.recommended?.chat ?? 'qwen2.5:3b', Boolean(info.chatModel), t('@zm in the project')],
       ]) {
         if (present) {
           const box = el('label', 'toggle');
@@ -16516,7 +16516,7 @@ function moduleCard(item) {
     const warn = el('div', 'confirm');
     warn.append(el('span', 'warn', t('CANNOT INSTALL HERE YET')));
     for (const problem of item.preflight.problems) warn.append(el('p', null, t(problem)));
-    // What MADRE can put right itself (Continuity on a Mac with no git): one key, never a terminal.
+    // What ZM can put right itself (Continuity on a Mac with no git): one key, never a terminal.
     if (item.preflight.fix) {
       const fix = el('button', 'primary', item.preflight.fix.label ?? t('Set it up'));
       fix.type = 'button';
@@ -16533,8 +16533,8 @@ function moduleCard(item) {
   }
   if (modules.confirming === item.id && !blocked) {
     const confirm = el('div', 'confirm');
-    // Written as it is said, names and all: the card's lowercase used to read «madre» and «(ide)».
-    confirm.append(el('span', 'warn as-written', t('This writes into the project. MADRE will run, in the project folder:')));
+    // Written as it is said, names and all: the card's lowercase used to read «zm» and «(ide)».
+    confirm.append(el('span', 'warn as-written', t('This writes into the project. ZM will run, in the project folder:')));
     const first = item.install.prepare ?? [];
     confirm.append(commandBlock([...first.map((step) => step.display), item.install.display]));
     for (const step of first) if (step.note) confirm.append(el('span', 'note as-written', step.note));
@@ -16586,7 +16586,7 @@ function moduleCard(item) {
 // its switch where it has a plain one. The modules with something to read — what Ash saved, what
 // Intenciones measured, how the local model is — take two columns and say it on the tile. A tile
 // opens the module's card in a sheet, the way a category of AJUSTES opens; the ones with a reading
-// can also float as windows of their own. MADRE decides which, for its own modules: nothing in the
+// can also float as windows of their own. ZM decides which, for its own modules: nothing in the
 // SDK asks for it.
 function moduleIcon(item) {
   const face = moduleFace(item);
@@ -16596,7 +16596,7 @@ function moduleIcon(item) {
   span.style.setProperty('--cat', 'var(--phosphor)');
   return span;
 }
-// A plain on/off: MADRE's own modules with a switch. Ollama has roles instead, Git Pulse is always
+// A plain on/off: ZM's own modules with a switch. Ollama has roles instead, Git Pulse is always
 // there, and a module somebody wrote installs rather than switches.
 const moduleSwitches = (item) => item.kind === 'builtin' && !item.fixed && item.id !== 'ollama';
 const moduleOn = (item) => Boolean(item.status?.installed);
@@ -16704,9 +16704,9 @@ function moduleFacts(host, item) {
 // Intenciones measured, Ollama's local brain), and last what it touches and what it adds. A module
 // somebody wrote that installs rather than switches keeps its install card, inside a block.
 const sentenceCase = (text) => { const words = String(text ?? ''); return words === words.toUpperCase() ? words.charAt(0) + words.slice(1).toLowerCase() : words.charAt(0).toUpperCase() + words.slice(1); };
-// In Settings (inSettings, 2026-10-27) a part of MADRE reads as one more block of its category: its
+// In Settings (inSettings, 2026-10-27) a part of ZM reads as one more block of its category: its
 // name over what it does, its switch and its own settings in the same block, no version of its own
-// and no list of what it touches — it comes with MADRE.
+// and no list of what it touches — it comes with ZM.
 function moduleSheet(host, item, { inSettings = false } = {}) {
   if (!inSettings) host.append(moduleGlance(item));
   if (item.kind !== 'builtin') {
@@ -16718,7 +16718,7 @@ function moduleSheet(host, item, { inSettings = false } = {}) {
   const on = moduleOn(item);
   const about = sxBlock(host, inSettings ? (moduleFace(item).name ?? t(item.name)) : t('What it does'), t(moduleFace(item).summary ?? item.summary ?? ''));
   // Whose idea it was, when a module says (Reminders, 2026-10-20): credited where it is used.
-  if (item.credit) sxRow(about, t('Idea by {name}', { name: item.credit }), t('Thank you for building MADRE with us.'));
+  if (item.credit) sxRow(about, t('Idea by {name}', { name: item.credit }), t('Thank you for building ZM with us.'));
   if (item.fixed) sxRow(about, t('Always on'), item.status?.detail ? sentenceCase(t(item.status.detail)) : null);
   else {
     const blocked = !on && item.preflight && !item.preflight.ok;
@@ -16786,13 +16786,13 @@ function moduleRest(host, item, { inSettings = false, about = null } = {}) {
         node.value = control.value ?? '';
         node.addEventListener('change', () => save(control, node.value, node));
       }
-      // A module's words go through the catalogue too: MADRE's own are translated there.
+      // A module's words go through the catalogue too: ZM's own are translated there.
       node.setAttribute?.('aria-label', t(control.label));
       sxRow(block, sentenceCase(t(control.label)), control.note ? t(control.note) : null, node);
     }
   }
   if (item.secrets?.length) {
-    const block = sxBlock(host, t('Keys'), t("Kept in MADRE's vault under this module's name. The value goes nowhere but the module."), { className: 'mods-keys' });
+    const block = sxBlock(host, t('Keys'), t("Kept in ZM's vault under this module's name. The value goes nowhere but the module."), { className: 'mods-keys' });
     cardSecrets(block.rows, item);
   }
 
@@ -16804,7 +16804,7 @@ function moduleRest(host, item, { inSettings = false, about = null } = {}) {
     void renderEconomy(app);
   }
   if (item.id === 'intents') {
-    const block = sxBlock(host, t('What your use taught'), `${t('Per agent and per kind of request: the lowest effort that was enough in your own turns, learned for no tokens. Below, a test that learns faster, for a price.')} ${t('When a lower level might be enough, MADRE offers to try it on a single message and watches how it goes; if it falls short, the next one goes back up.')}`, { className: 'mods-reading mods-intents' });
+    const block = sxBlock(host, t('What your use taught'), `${t('Per agent and per kind of request: the lowest effort that was enough in your own turns, learned for no tokens. Below, a test that learns faster, for a price.')} ${t('When a lower level might be enough, ZM offers to try it on a single message and watches how it goes; if it falls short, the next one goes back up.')}`, { className: 'mods-reading mods-intents' });
     intentsReading(block.rows);
   }
   if (item.id === 'ollama') { ollamaBlock(host, item); hardwareBlock(host, item.recommended?.hardware); }
@@ -16818,7 +16818,7 @@ function moduleRest(host, item, { inSettings = false, about = null } = {}) {
     sxRow(yours, t('Newer file'), item.updates?.url ?? null, fresh);
     sxRow(yours, t('Remove'), t('It stops loading. The file stays where it is.'), removeModuleButton(item, { className: 'sx-btn danger', text: t('Remove') }));
     const send = sxButton(t('Prepare'), () => { send.disabled = true; void sendToMarket(host, item, send); });
-    sxRow(yours, t('Send to the Market'), t('For anyone to find it. MADRE checks it here; the author of MADRE reads it and signs it.'), send);
+    sxRow(yours, t('Send to the Market'), t('For anyone to find it. ZM checks it here; the author of ZM reads it and signs it.'), send);
   }
 }
 
@@ -16871,7 +16871,7 @@ function ollamaBlock(host, item) {
   for (const [role, model, present, label, hint] of [
     ['embeddings', item.recommended?.embed ?? 'nomic-embed-text', Boolean(info.embedModel), t('Search by meaning'), info.embedModel ?? null],
     ['archivist', item.recommended?.chat ?? 'qwen2.5:3b', Boolean(info.chatModel), t('Archivist'), info.chatModel ?? null],
-    ['agent', item.recommended?.chat ?? 'qwen2.5:3b', Boolean(info.chatModel), t('@madre in the project'), info.chatModel ?? null],
+    ['agent', item.recommended?.chat ?? 'qwen2.5:3b', Boolean(info.chatModel), t('@zm in the project'), info.chatModel ?? null],
   ]) {
     if (present) {
       sxRow(roles, label, hint, sxSwitch(info.settings[role] !== false, async (next, box) => {
@@ -16920,7 +16920,7 @@ function moduleDetail(item) {
 
 // Modules whose whole sheet is a category of Settings: every way in to them lands there.
 // Suggested effort, options and commands are how the room works (Work and limits); connections between
-// projects are part of what it remembers (2026-10-27): parts of MADRE, set where the rest is set.
+// projects are part of what it remembers (2026-10-27): parts of ZM, set where the rest is set.
 const IN_SETTINGS = { ollama: 'local', intents: 'room', choices: 'room', runs: 'room', enlaces: 'memory' };
 const SETTINGS_PARTS = { room: ['intents', 'choices', 'runs'], memory: ['enlaces'] };
 function drawPartsTarget() {
@@ -17104,7 +17104,7 @@ async function syncNotes() {
 // notes opened where they can be seen and the reminders taken in.
 async function notesAfterTurn() {
   // In a conversation's window the turn ended here, and the room around it is told to look.
-  if (SPLIT_CHAT) { try { window.parent?.postMessage({ madre: 'notes' }, location.origin); } catch { /* not in a frame of the room */ } return; }
+  if (SPLIT_CHAT) { try { window.parent?.postMessage({ zm: 'notes' }, location.origin); } catch { /* not in a frame of the room */ } return; }
   if (modules.items.find((one) => one.id === 'reminders')?.status?.installed) void loadReminders();
   if (!notesOn()) return;
   const answer = await fetch('/api/notes', { cache: 'no-store' }).then((response) => (response.ok ? response.json() : null)).catch(() => null);
@@ -17118,7 +17118,7 @@ async function notesAfterTurn() {
 }
 // A conversation's window says its turn ended: only a frame of this page, from this same address.
 window.addEventListener?.('message', (event) => {
-  if (SPLIT_CHAT || event.origin !== location.origin || event.data?.madre !== 'notes') return;
+  if (SPLIT_CHAT || event.origin !== location.origin || event.data?.zm !== 'notes') return;
   if ([...document.querySelectorAll('iframe')].some((frame) => frame.contentWindow === event.source)) void notesAfterTurn();
 });
 async function saveNote(change) {
@@ -17510,10 +17510,10 @@ function renderModulesDev() {
   step(t('Ask for it'), t('Type /module and say what it should do. The agent reads the SDK and writes the file; you review it and decide whether it is installed.'), ask);
   const folders = modules.folders ?? {};
   const where = el('div', 'guide-where');
-  where.append(el('code', null, folders.user ? `${folders.user}/` : '~/.pulse/modules/'), el('span', null, t('every project')), el('code', null, folders.project ? `${folders.project}/` : '<project>/.madre/modules/'), el('span', null, t('this project')));
+  where.append(el('code', null, folders.user ? `${folders.user}/` : '~/.pulse/modules/'), el('span', null, t('every project')), el('code', null, folders.project ? `${folders.project}/` : '<project>/.zm/modules/'), el('span', null, t('this project')));
   const read = el('a', 'sx-link', t('Read the SDK ↗'));
-  read.href = modules.sdk ?? 'https://github.com/jossuealcacao-exe/madre/blob/main/docs/SDK.md'; read.target = '_blank'; read.rel = 'noopener noreferrer';
-  step(t('Or write it yourself'), t('Put the file in one of these folders. A file somebody else wrote goes in with + Add a module, and MADRE checks it before it runs.'), where, read);
+  read.href = modules.sdk ?? 'https://github.com/jossuealcacao-exe/zm/blob/main/docs/SDK.md'; read.target = '_blank'; read.rel = 'noopener noreferrer';
+  step(t('Or write it yourself'), t('Put the file in one of these folders. A file somebody else wrote goes in with + Add a module, and ZM checks it before it runs.'), where, read);
   const reload = sxButton(t('Reload modules'), async () => {
     reload.disabled = true;
     try {
@@ -17525,7 +17525,7 @@ function renderModulesDev() {
     } catch (error) { toast(t('The reload failed: {error}', { error: error.message })); } finally { reload.disabled = false; }
   }, { title: t('Load your module files again without restarting the project') });
   step(t('Load it'), t('Press Reload modules and it appears on the board with its own card, no restart.'), reload);
-  step(t('If it talks to a service'), t('Connecting to a service from outside is almost always possible, if that service lets you get your own key in minutes and revoke it. Your module declares the key it needs, where it reaches and which of its tools send; MADRE draws the field, answers for the traffic and holds sending until #4 FULL ACCESS.'));
+  step(t('If it talks to a service'), t('Connecting to a service from outside is almost always possible, if that service lets you get your own key in minutes and revoke it. Your module declares the key it needs, where it reaches and which of its tools send; ZM draws the field, answers for the traffic and holds sending until #4 FULL ACCESS.'));
   section.append(steps);
   const yours = modules.items.filter((item) => item.external);
   if (yours.length) {
@@ -17602,7 +17602,7 @@ function offerModule(text) {
     const words = el('div', 'market-offer-words');
     words.append(el('b', null, t(item.name)), el('span', null, t(says)));
     const acts = el('div', 'market-offer-acts');
-    // What came with MADRE (Local AI) is set up in its place in Settings: it is not installed from
+    // What came with ZM (Local AI) is set up in its place in Settings: it is not installed from
     // the Market, and the card never sends there (2026-10-30).
     const ownPlace = IN_SETTINGS[item.id] ?? null;
     const switchable = !ownPlace && moduleSwitches(item) && marketEntry(item.id).scope !== 'project';
@@ -17649,7 +17649,7 @@ function openModules() {
 }
 // THE MARKET, MET (1.0.5): the first time someone opens Modules, a card beside the Market's key
 // says what it is in plain words. Once per person (hintSeen); after any card already showing.
-// Whoever knew MADRE before had the Market already: they are told only what is new (2026-10-21).
+// Whoever knew ZM before had the Market already: they are told only what is new (2026-10-21).
 let marketInviteTries = 0;
 function inviteToMarket(delay = 900) {
   if (state.device || hintsSeen().market || roomTour().returning()) return;
@@ -17744,12 +17744,12 @@ function openRoomMarket(focus = null) {
     // The Market's basket, as on Home's bar (salas-mac.html), beside its word.
     market.innerHTML = trazo('market-key'); // trusted: our own SVG string
     market.append(el('span', null, t('Market')));
-    market.title = t('Every module MADRE can add to this project');
+    market.title = t('Every module ZM can add to this project');
     market.addEventListener('click', () => openRoomMarket());
     add.before(market);
   }
 }
-// The Market's catalog from madre.run: the faces of the modules that came after this MADRE, and what
+// The Market's catalog from zm.run: the faces of the modules that came after this ZM, and what
 // it updated on its own since, said once. Not on a phone: it has no Market.
 if (!state.device) void loadMarket({ toast: (words, action) => toast(words, { action }), open: (id) => openRoomMarket(id) }).then(() => { if (modules.dialog.open) renderModules(); });
 // «En marcha» (2026-10-30): the key with how many things run, in every open project, and its panel.
@@ -18013,7 +18013,7 @@ function fillLoginAsk(box) {
     open.rel = 'noopener noreferrer';
     box.append(open);
   }
-  // A device sign-in (GitHub Copilot through OpenCode): the code is MADRE's to show, the page's
+  // A device sign-in (GitHub Copilot through OpenCode): the code is ZM's to show, the page's
   // to be typed into. Nothing comes back here; the sign-in ends on its own once it is typed.
   if (loginNow.deviceCode) {
     const said = el('div', 'login-device');
@@ -18116,7 +18116,7 @@ function renderAgentInstall(event) {
   const node = paint(el('div', `system connections${finished && !detected ? ' failed' : ''}`), agent);
   node.append(el('b', null, t('connections › ')));
   node.append(finished
-    ? (detected ? `${t('{name} installed', { name: label ?? agent })}${version ? ` · ${version}` : ''}${where === 'madre' ? t(" · in MADRE's own folder ({prefix}), no administrator needed", { prefix }) : ''}${t(' · sign in to finish')}` : `${t('{name} was not installed', { name: label ?? agent })}${error ? ` · ${error}` : code ? t(' · exit {code}', { code }) : ''}`)
+    ? (detected ? `${t('{name} installed', { name: label ?? agent })}${version ? ` · ${version}` : ''}${where === 'zm' ? t(" · in ZM's own folder ({prefix}), no administrator needed", { prefix }) : ''}${t(' · sign in to finish')}` : `${t('{name} was not installed', { name: label ?? agent })}${error ? ` · ${error}` : code ? t(' · exit {code}', { code }) : ''}`)
     : t('installing {label} · {command}', { label: label ?? agent, command }));
   if (finished && !replaying) toast(detected ? t('Diagnostics › {label} is on this computer. Sign in and the project opens.', { label: label ?? agent }) : t('Diagnostics › {label} could not be installed. The log is above.', { label: label ?? agent }));
   if (finished) { renderOnboarding(); if (state.settingsOpen) void loadSettings(); }
@@ -18128,7 +18128,7 @@ function appendLoginOutput(event) {
   const { agent, line, url, deviceCode } = event.payload;
   if (!replaying && loginNow.agent === agent) {
     // The address stays on screen instead of scrolling past: the heartbeat used to be the only
-    // line left, so the one thing the human had to open was the first thing MADRE lost.
+    // line left, so the one thing the human had to open was the first thing ZM lost.
     if (url) loginNow.url = url;
     // "Enter code: 3475-C193" is a code to show, not a question: no box to paste into.
     if (deviceCode) loginNow.deviceCode = deviceCode;
@@ -18155,7 +18155,7 @@ function appendLoginOutput(event) {
   if (url && !replaying) toast(t('@{agent}: open {url} to finish signing in', { agent, url }));
 }
 const HEARTBEAT = /^… still running · \d+s · /;
-// MADRE's own «still running» line (src/extensions.mjs, runInstaller), said in the room's language;
+// ZM's own «still running» line (src/extensions.mjs, runInstaller), said in the room's language;
 // what the installer itself printed stays as it printed it (2026-10-20).
 function saidLine(line) {
   const beat = String(line ?? '').match(/^… still running · (\d+)s · (.*)$/);
@@ -18195,12 +18195,12 @@ function readLoginState(live) {
 
 /* ---------- the core ---------- */
 
-// Inside the core. Every turn, MADRE writes a document in the human's name and hands it to a
+// Inside the core. Every turn, ZM writes a document in the human's name and hands it to a
 // process, and until now that document existed only for the instant the process was reading it:
 // nothing stored it, nobody had ever read one. This is that document, built for the turn that
 // has not happened yet, block by block, with what each block weighs and the words themselves.
 //
-// It is read, never written. What MADRE promises about the crew — that they read by default,
+// It is read, never written. What ZM promises about the crew — that they read by default,
 // that they are told not to touch .env — is true because these words are fixed. A core you could
 // edit would turn every one of those sentences into a claim about a text somebody may have
 // changed. Blocks that can be switched off say where their switch is.
@@ -18259,7 +18259,7 @@ function brewRow(key, value, className = null) {
 
 async function openCore() {
   if (!core.dialog) return;
-  core.agent ??= [...state.agents.values()].find((agent) => agent.ready && agent.id !== 'madre')?.id
+  core.agent ??= [...state.agents.values()].find((agent) => agent.ready && agent.id !== 'zm')?.id
     ?? [...state.agents.values()].find((agent) => agent.ready)?.id ?? null;
   // Whatever is half-written in the composer is what you are about to send, so that is what the
   // document is built around.
@@ -18316,10 +18316,10 @@ const paneInto = (id, node) => { core.paneNodes[id]?.replaceChildren(node); };
 
 // The core speaks in sentences (2026-10-09). Its words were written for the terminal, in capitals;
 // the room now reads them the way the question sheet does (askWords): a line mostly in capitals is
-// lowered, its first letter raised, and what is a name stays as it is — MU/TH/UR, MADRE, a mode, a
+// lowered, its first letter raised, and what is a name stays as it is — MU/TH/UR, ZM, a mode, a
 // figure («11.0M», «5h»), a path or a version. Unlike the sheet, an @agent is written as the room
 // writes it, in lower case. What is literal (pre, code, a select, the console's log) is not touched.
-const CORE_KEEP = /^(MADRE|MOTHER|MU\/TH\/UR|CONTROL|AIRLOCK|CREATE|GHOST|EXCHANGE|NOSTROMO|ASH|BISHOP|MCP|SDK|URL|API|CLI|CLIs|JSON|ID|#\d.*|.*[\/\d].*)$/;
+const CORE_KEEP = /^(ZM|MOTHER|MU\/TH\/UR|CONTROL|AIRLOCK|CREATE|GHOST|EXCHANGE|NOSTROMO|ASH|BISHOP|MCP|SDK|URL|API|CLI|CLIs|JSON|ID|#\d.*|.*[\/\d].*)$/;
 function coreWords(text) {
   const words = String(text ?? '');
   const letters = words.replace(/[^\p{L}]/gu, '');
@@ -18426,7 +18426,7 @@ async function fillCoreBoard() {
 
     const local = el('div', 'mem-kpis');
     memTile(local, { label: t('SERVER'), value: o.running ? (o.version ? `v${o.version}` : t('ON')) : t('OFF'), sub: o.running ? o.host : (o.error ?? t('not running')) });
-    memTile(local, { label: t('CHAT'), value: o.madreModel ?? o.chatModel ?? '—', sub: o.madreModel ? t('TRAINED FOR THIS PROJECT') : t('NOT TRAINED FOR THIS PROJECT YET') }).classList.add('word');
+    memTile(local, { label: t('CHAT'), value: o.zmModel ?? o.chatModel ?? '—', sub: o.zmModel ? t('TRAINED FOR THIS PROJECT') : t('NOT TRAINED FOR THIS PROJECT YET') }).classList.add('word');
     memTile(local, { label: t('SEARCH BY MEANING'), value: o.embedModel ?? '—', sub: d?.vectors ? t('{n} SEARCHABLE BY MEANING', { n: memFmt((d.vectors.memories ?? 0) + (d.vectors.entries ?? 0)) }) : t('RECALL MATCHES WORDS ONLY') }).classList.add('word');
     const measured = state.localModel?.checked;
     memTile(local, { label: t('MEASURED HERE'), value: measured ? `${measured.matched}/${measured.n}` : '—', sub: measured ? t('LANDED WHERE THE AGENTS DID · {verdict}', { verdict: measured.passed ? t('READY') : t('NOT YET') }) : t('NOT MEASURED YET'), meter: measured?.n ? measured.matched / measured.n : null });
@@ -18441,7 +18441,7 @@ async function fillCoreBoard() {
         const row = el('div', 'mem-signal');
         const top = el('div', 'top');
         top.append(el('b', null, model.name), el('span', null, formatSize(model.size || 0)));
-        const role = [model.name === o.madreModel ? '@MADRE' : null, model.name === o.chatModel ? t('CHAT') : null, model.name === o.embedModel ? t('SEARCH BY MEANING') : null].filter(Boolean);
+        const role = [model.name === o.zmModel ? '@ZM' : null, model.name === o.chatModel ? t('CHAT') : null, model.name === o.embedModel ? t('SEARCH BY MEANING') : null].filter(Boolean);
         const facts = [...role, model.details?.parameter_size, model.details?.quantization_level, model.family].filter(Boolean);
         row.append(top, memMeter((model.size || 0) / largest));
         if (facts.length) row.append(el('span', 'detail', facts.join(' · ')));
@@ -18491,7 +18491,7 @@ async function fillCoreBoard() {
     does.append(
       role('embeddings', t('SEARCH BY MEANING'), t('Prepares each memory so recall can find it by meaning.')),
       role('archivist', t('ARCHIVIST'), t('Distils the exchanges into memories, on this computer.')),
-      role('agent', '@MADRE', t('Answers in the project as the fifth agent.')),
+      role('agent', '@ZM', t('Answers in the project as the fifth agent.')),
     );
   }
   const mem = settings?.settings?.memory;
@@ -18565,7 +18565,7 @@ function renderCoreStrip() {
   const field = el('textarea');
   field.id = 'core-text';
   field.rows = 1;
-  field.placeholder = t('type the question you would send, and see here what MADRE would send the agent');
+  field.placeholder = t('type the question you would send, and see here what ZM would send the agent');
   field.value = core.text ?? '';
   field.addEventListener('input', () => {
     core.text = field.value;
@@ -18620,7 +18620,7 @@ function drawCoreTabs() {
   // Under each name, the one figure a person reads: how long, for whom, how many are on.
   const meta = chatShellOn() ? {
     document: briefing ? t('≈{n} tokens · {parts} parts', { n: tokensFor(briefing.chars).toLocaleString(), parts: briefing.parts.length }) : t('Reading…'),
-    launch: briefing?.launch ? (briefing.launch.local ? t('Runs inside MADRE') : `@${briefing.agent}`) : '—',
+    launch: briefing?.launch ? (briefing.launch.local ? t('Runs inside ZM') : `@${briefing.agent}`) : '—',
     egress: core.outbound ? t('{on} of {n} on', { n: core.outbound.destinations.length, on }) : '—',
     board: t('Sessions and use'),
     console: core.history.length ? t('{n} asked', { n: core.history.length }) : t('In your own words'),
@@ -18681,7 +18681,7 @@ const CORE_BLOCK_NAMES = {
   'inspect': 'What it may look at',
   'lease': 'Permission for this message',
   'linked': 'Connected projects',
-  'madre': '@madre',
+  'zm': '@zm',
   'mcp': 'Outside tools',
   'memories': 'Memories',
   'memory-server': 'Memory tools',
@@ -18759,12 +18759,12 @@ function renderCoreDoc(briefing) {
   if (window.omitted) carried.append(brewRow(t('LEFT BEHIND'), t('{n} OLDER MESSAGES · WHICH IS WHAT RECALL IS FOR', { n: window.omitted })));
   carried.append(brewRow(t('READ TO BUILD IT'), t('{m} MEMORIES · {q} EXACT QUOTES', { m: briefing.recalled, q: briefing.quoted })));
   carried.append(brewRow(t('NOT COUNTED'), t('NONE OF THEM COUNTS AS USED: THIS IS A PREVIEW, NOT A REAL ANSWER')));
-  carried.append(brewRow(t('WEIGHT'), t('{ch} CH · ≈{tokens} TOKENS · ESTIMATED AT {rate} CH/TOKEN, NOT MEASURED: MADRE DOES NOT HAVE THE PROVIDER\'S TOKENIZER', { ch: briefing.chars.toLocaleString(), tokens: tokensFor(briefing.chars).toLocaleString(), rate: CH_PER_TOKEN })));
+  carried.append(brewRow(t('WEIGHT'), t('{ch} CH · ≈{tokens} TOKENS · ESTIMATED AT {rate} CH/TOKEN, NOT MEASURED: ZM DOES NOT HAVE THE PROVIDER\'S TOKENIZER', { ch: briefing.chars.toLocaleString(), tokens: tokensFor(briefing.chars).toLocaleString(), rate: CH_PER_TOKEN })));
   if (briefing.spared) carried.append(brewRow(t('LEFT OUT'), t('{n} CHARACTERS THIS TURN HAS NO USE FOR', { n: briefing.spared.toLocaleString() })));
   doc.append(carried);
 
   doc.append(brewHead(t('FIXED')));
-  doc.append(el('p', 'core-fixed', t('YOU CANNOT EDIT THIS. WHAT MADRE PROMISES ABOUT THE AGENTS IS TRUE BECAUSE THESE WORDS ARE FIXED. OPEN A BLOCK AND IT SAYS WHAT PUT IT THERE AND WHERE YOU TAKE IT AWAY: SWITCHED OFF, NEVER REWRITTEN.')));
+  doc.append(el('p', 'core-fixed', t('YOU CANNOT EDIT THIS. WHAT ZM PROMISES ABOUT THE AGENTS IS TRUE BECAUSE THESE WORDS ARE FIXED. OPEN A BLOCK AND IT SAYS WHAT PUT IT THERE AND WHERE YOU TAKE IT AWAY: SWITCHED OFF, NEVER REWRITTEN.')));
   return doc;
 }
 
@@ -18783,7 +18783,7 @@ function shellArg(value) {
 
 function renderCoreLaunch(launch) {
   const floor = el('div', 'core-launch');
-  floor.append(brewHead(t('THE LAUNCH'), t('WHAT MADRE WOULD RUN TO DELIVER IT')));
+  floor.append(brewHead(t('THE LAUNCH'), t('WHAT ZM WOULD RUN TO DELIVER IT')));
 
   if (!launch) { floor.append(el('p', 'note', t('NO AGENT IS PICKED, SO THERE IS NO COMMAND TO SHOW.'))); return floor; }
   if (launch.local || !launch.args) { floor.append(el('p', 'note', String(launch.says ?? '').toUpperCase())); return floor; }
@@ -18809,7 +18809,7 @@ function renderCoreLaunch(launch) {
     floor.append(rows);
   }
 
-  const servers = [...(launch.memoryServer ? [{ ...launch.memoryServer, brief: t('the archive of this project, read and written through MADRE') }] : []), ...(launch.mcpServers ?? [])]
+  const servers = [...(launch.memoryServer ? [{ ...launch.memoryServer, brief: t('the archive of this project, read and written through ZM') }] : []), ...(launch.mcpServers ?? [])]
     .filter((server, at, all) => all.findIndex((other) => other.name === server.name) === at);
   if (servers.length) {
     floor.append(brewHead(t('OUTSIDE TOOLS (MCP) IT CAN USE'), `${servers.length}`));
@@ -18832,13 +18832,13 @@ function renderCoreLaunch(launch) {
 
 /* ---------- pane · what left this machine ---------- */
 
-// MADRE keeps what it knows in a file you own, and that sentence is worth exactly as much as the
+// ZM keeps what it knows in a file you own, and that sentence is worth exactly as much as the
 // list that qualifies it. This is the list: every address this process may reach, what it says
 // there, what turns it off — and beside it, what actually went out, counted by the wrapper every
 // fetch in this process goes through, a module's included.
 function renderCoreOutbound(view) {
   const floor = el('div', 'core-outbound');
-  floor.append(brewHead(t('OUTBOUND'), t('EVERY ADDRESS MADRE CAN REACH, AND WHETHER IT IS ON TODAY')));
+  floor.append(brewHead(t('OUTBOUND'), t('EVERY ADDRESS ZM CAN REACH, AND WHETHER IT IS ON TODAY')));
   if (!view) { floor.append(el('p', 'note', t('THE LOG COULD NOT BE READ.'))); return floor; }
 
   const list = el('div', 'core-egress');
@@ -18852,7 +18852,7 @@ function renderCoreOutbound(view) {
     if (one.where) when.append(el('span', 'where', ` · ${one.where}`));
     const count = el('span', 'n', one.calls
       ? t('{n} REQUESTS', { n: one.calls }) + (one.failed ? t(' · {n} FAILED', { n: one.failed }) : '') + (one.last ? ` · ${agoWords(one.last).toUpperCase()}` : '')
-      : one.inside ? t('NOTHING YET') : t('NOT THROUGH MADRE'));
+      : one.inside ? t('NOTHING YET') : t('NOT THROUGH ZM'));
     row.append(state, to, count, what, when);
     list.append(row);
   }
@@ -19133,7 +19133,7 @@ function memActivity(card, dash) {
   card.append(chart);
 
   // The same numbers without pointing at anything: every value the crosshair shows is here too.
-  const table = cardFold(card, t('BY DAY · TABLE'), { key: 'madre.memory.table' });
+  const table = cardFold(card, t('BY DAY · TABLE'), { key: 'zm.memory.table' });
   const lived = dash.days.map((day, i) => [day, ...rows.map(([id]) => dash.series[id][i])]).filter(([, ...values]) => values.some(Boolean)).reverse();
   if (!lived.length) { table.append(el('p', 'note', t('NOTHING HAPPENED IN THESE DAYS.'))); return; }
   const grid = el('table', 'mem-table');
@@ -19349,7 +19349,7 @@ function examsBlock(known = null, { pass = null } = {}) {
 // A section of MU/TH/UR that folds. The header stays what it was, so nothing about the look
 // changes; what it opens onto goes into the body. Whether it was left open is remembered on this
 // browser, because a panel that forgets is a panel you fight with every time you open it.
-const FOLD_KEY = 'madre.folds';
+const FOLD_KEY = 'zm.folds';
 function foldState() {
   try { return JSON.parse(localStorage.getItem(FOLD_KEY) ?? '{}') ?? {}; } catch { return {}; }
 }
@@ -19700,10 +19700,10 @@ function drawMemory(host, data) {
     ['gemini', t('Gemini · needs your key')],
     ['off', t('Off · exact words only')],
   ], mem.embedProvider ?? data.config?.memory?.embedProvider ?? 'auto', (value, node) => save({ embedProvider: value }, t('search by meaning: {what}.', { what: node.options[node.selectedIndex].textContent.toLowerCase() })), t('Search by meaning')));
-  if (mem.envWins) sxFoot(recall, t('Some of these values are fixed by how MADRE was started; those win next time it starts.'));
+  if (mem.envWins) sxFoot(recall, t('Some of these values are fixed by how ZM was started; those win next time it starts.'));
 
-  // The dataset behind MADRE AI, and the recipe that trains on it, outside MADRE.
-  const train = sxBlock(host, t('Train your own AI'), t('Advanced: export what the project learned, train a model on your computer, and @madre answers with it.'));
+  // The dataset behind ZM AI, and the recipe that trains on it, outside ZM.
+  const train = sxBlock(host, t('Train your own AI'), t('Advanced: export what the project learned, train a model on your computer, and @zm answers with it.'));
   const datasetHint = el('span', 'sx-hint', t('Reading…'));
   const exportButton = sxButton(t('Export'), async () => {
     exportButton.disabled = true;
@@ -19715,11 +19715,11 @@ function drawMemory(host, data) {
   datasetRow.querySelector('.sx-words').append(datasetHint);
   // What it is, then the recipe in order (2026-10-14): one command per step, for a Mac with an
   // Apple chip or — tried, not promised — Linux with an NVIDIA card through MLX's CUDA package.
-  train.append(el('p', 'sx-hint sx-train-what', t('The training data are question-and-answer pairs taken from this project\'s conversations and notes, with private details hidden. With them a small model is adjusted on your computer, and @madre answers with it.')));
+  train.append(el('p', 'sx-hint sx-train-what', t('The training data are question-and-answer pairs taken from this project\'s conversations and notes, with private details hidden. With them a small model is adjusted on your computer, and @zm answers with it.')));
   const recipe = el('details', 'sx-more');
   recipe.append(el('summary', null, t('Step by step')));
   // Windows trains inside WSL with its NVIDIA card (2026-10-28): the same recipe as Linux, run in
-  // Ubuntu, where MADRE runs too until 1.1.
+  // Ubuntu, where ZM runs too until 1.1.
   let platform = state.platform === 'wsl' ? 'wsl' : /Mac/i.test(navigator.platform ?? '') || !/Linux/i.test(navigator.userAgent ?? '') ? 'mac' : 'linux';
   // The size to train: the largest this computer trains and then runs, unless the human picks
   // another (to train it on a larger machine, say). Every size is offered; the note says what fits.
@@ -19778,10 +19778,10 @@ function drawMemory(host, data) {
     const base = chosen?.base ?? info.baseModel;
     const quantized = Boolean(chosen?.quantized);
     const quote = (path) => `"${path.replace(/\/$/, '')}"`;
-    const venv = 'source ~/.madre-train/bin/activate';
+    const venv = 'source ~/.zm-train/bin/activate';
     const setup = platform === 'mac'
-      ? 'python3 -m venv ~/.madre-train && source ~/.madre-train/bin/activate && pip install mlx-lm'
-      : 'python3 -m venv ~/.madre-train && source ~/.madre-train/bin/activate && pip install "mlx[cuda12]" mlx-lm && python3 -c "import mlx.core as mx; print(\'CUDA:\', mx.cuda.is_available())"';
+      ? 'python3 -m venv ~/.zm-train && source ~/.zm-train/bin/activate && pip install mlx-lm'
+      : 'python3 -m venv ~/.zm-train && source ~/.zm-train/bin/activate && pip install "mlx[cuda12]" mlx-lm && python3 -c "import mlx.core as mx; print(\'CUDA:\', mx.cuda.is_available())"';
     const step = (label, about, command = null) => {
       const li = el('li');
       li.append(el('b', null, label));
@@ -19793,13 +19793,13 @@ function drawMemory(host, data) {
     step(t('Prepare Python, once'), platform === 'mac' ? t('A separate environment with mlx-lm, so nothing else on your computer changes.') : t('A separate environment with MLX for CUDA and mlx-lm. It must print «CUDA: True»; if not, stop here.'), setup);
     step(t('Train · base {model}', { model: chosen?.label ?? base }), (chosen?.params ?? 0) > 3 ? t('An hour or more, depending on the size and on how many pairs there are. It learns from the exported pairs and leaves an adjustment («adapters»).') : t('From 10 to 40 minutes. It learns from the exported pairs and leaves an adjustment («adapters»).'), `${venv} && bash ${quote(`${info.recipeDir}train.sh`)} ${quote(info.roomDir)} ${base}`);
     step(t('Join the adjustment with the base model'), null, `${venv} && cd ${quote(info.roomDir)} && mlx_lm.fuse --model ${base} --adapter-path adapters --save-path fused${quantized ? ' --de-quantize' : ''}`);
-    step(t('Turn it into a file Ollama reads (GGUF)'), t('The first time, it downloads llama.cpp\'s converter.'), `${venv} && cd ${quote(info.roomDir)} && git clone --depth 1 https://github.com/ggml-org/llama.cpp && pip install -r llama.cpp/requirements.txt && python3 llama.cpp/convert_hf_to_gguf.py fused --outfile madre.gguf --outtype ${quantized ? 'f16' : 'q8_0'}`);
-    step(t('Register it in Ollama as {model}', { model: info.modelName }), quantized ? t('Ollama keeps it in 4 bits, the size the table counts on. @madre switches to it at the next recheck of Local AI.') : t('@madre switches to it at the next recheck of Local AI.'), `cd ${quote(info.roomDir)} && cp ${quote(`${info.recipeDir}Modelfile`)} . && ollama create ${info.modelName} -f Modelfile${quantized ? ' --quantize q4_K_M' : ''}`);
-    step(t('Try it before trusting it'), t('Ask @madre ten things the project decided and five it never discussed. It should get the first right and say it never discussed the others; if it makes things up, remove it with «ollama rm {model}» and train with more pairs.', { model: info.modelName }));
+    step(t('Turn it into a file Ollama reads (GGUF)'), t('The first time, it downloads llama.cpp\'s converter.'), `${venv} && cd ${quote(info.roomDir)} && git clone --depth 1 https://github.com/ggml-org/llama.cpp && pip install -r llama.cpp/requirements.txt && python3 llama.cpp/convert_hf_to_gguf.py fused --outfile zm.gguf --outtype ${quantized ? 'f16' : 'q8_0'}`);
+    step(t('Register it in Ollama as {model}', { model: info.modelName }), quantized ? t('Ollama keeps it in 4 bits, the size the table counts on. @zm switches to it at the next recheck of Local AI.') : t('@zm switches to it at the next recheck of Local AI.'), `cd ${quote(info.roomDir)} && cp ${quote(`${info.recipeDir}Modelfile`)} . && ollama create ${info.modelName} -f Modelfile${quantized ? ' --quantize q4_K_M' : ''}`);
+    step(t('Try it before trusting it'), t('Ask @zm ten things the project decided and five it never discussed. It should get the first right and say it never discussed the others; if it makes things up, remove it with «ollama rm {model}» and train with more pairs.', { model: info.modelName }));
     if (state.salas) drawExam();
   };
   // D-S18 · in Home, the exam the Coordinator's local model passes before it gives orders: the
-  // same test as the step above, run by MADRE, with a fixed bar and kept for that exact model.
+  // same test as the step above, run by ZM, with a fixed bar and kept for that exact model.
   const exam = el('div', 'sx-exam');
   if (state.salas) train.append(exam);
   let examTimer = null;
@@ -19810,7 +19810,7 @@ function drawMemory(host, data) {
     const last = reading.exam;
     const part = (key) => `${last?.scores?.[key]?.passed ?? 0}/${last?.scores?.[key]?.total ?? 0}`;
     const said = reading.running ? t('Examining {model}… a local model answers one question at a time; it takes a few minutes.', { model: reading.model?.name ?? '' })
-      : !last ? t('Not examined yet. Until it passes, the Coordinator only answers with @madre.')
+      : !last ? t('Not examined yet. Until it passes, the Coordinator only answers with @zm.')
         : reading.holds ? t('{model} passed on {date}: {known} about the projects, {unknown} said it never discussed, {orders} orders. The Coordinator gives orders with it up to #1.', { model: last.model, date: new Date(last.at).toLocaleDateString(language()), known: part('known'), unknown: part('unknown'), orders: part('orders') })
           : last.passed ? t('{model} passed, but the model in use is another one now ({now}). Examine it again.', { model: last.model, now: reading.model?.name ?? '—' })
             : t('{model} did not pass on {date}: {known} about the projects, {unknown} said it never discussed, {orders} orders.{why}', { model: last.model, date: new Date(last.at).toLocaleDateString(language()), known: part('known'), unknown: part('unknown'), orders: part('orders'), why: last.why?.length ? ` ${last.why.map((one) => t(one)).join(' · ')}` : '' });
@@ -19843,7 +19843,7 @@ function renderSettings() {
 }
 
 function drawConnections(host, data) {
-  host.append(el('p', 'sx-intro', t('One agent is enough to start. MADRE uses the AI apps already on this computer: install one here or sign in, and the project opens. Your passwords stay in each app; MADRE only checks you are signed in.')));
+  host.append(el('p', 'sx-intro', t('One agent is enough to start. ZM uses the AI apps already on this computer: install one here or sign in, and the project opens. Your passwords stay in each app; ZM only checks you are signed in.')));
   for (const agent of data.agents) host.append(connectionCard(agent));
 }
 
@@ -19914,7 +19914,7 @@ function drawOpenCodeSettings(host, s) {
   const picks = el('div', 'oc-picks');
   picks.append(select, other);
   field.append(defaultWords, picks);
-  block.append(head, rows, add, field, el('p', 'sx-foot', t('Keys are written where OpenCode reads them (~/.local/share/opencode/auth.json), readable only by you; MADRE keeps no copy. The rest is saved to ~/.pulse/config.json.')));
+  block.append(head, rows, add, field, el('p', 'sx-foot', t('Keys are written where OpenCode reads them (~/.local/share/opencode/auth.json), readable only by you; ZM keeps no copy. The rest is saved to ~/.pulse/config.json.')));
   host.append(block);
 
   const paintDefault = (providers, current) => {
@@ -20087,7 +20087,7 @@ function drawPermissions(host, data) {
   }
   sxFoot(keys, t('#4 always asks you to confirm: it runs commands, and what leaves the machine does not come back.'));
 
-  const phrase = sxBlock(host, t('Your phrase'), t('MADRE never stores the phrase itself, only a fingerprint of it, and it never leaves this Mac.'));
+  const phrase = sxBlock(host, t('Your phrase'), t('ZM never stores the phrase itself, only a fingerprint of it, and it never leaves this Mac.'));
   const field = el('input', 'sx-input');
   field.type = 'password';
   field.autocomplete = 'new-password';
@@ -20185,13 +20185,13 @@ function drawPrivacy(host, data) {
   terms.addEventListener('change', () => savePrivacy({ terms: terms.value.split('\n') }, (payload) => t('{n} private {term} guarded from now on.', { n: payload.terms.length, term: payload.terms.length === 1 ? t('term') : t('terms') })));
   marker.addEventListener('change', () => savePrivacy({ marker: marker.value }, (payload) => t('private terms appear as {marker}.', { marker: payload.marker })));
 
-  const named = sxBlock(host, t('Words to hide'), t("Names you don't want saved or shared: a company, a brand, a domain. MADRE swaps them out before anything is saved or reaches another agent."));
+  const named = sxBlock(host, t('Words to hide'), t("Names you don't want saved or shared: a company, a brand, a domain. ZM swaps them out before anything is saved or reaches another agent."));
   sxRow(named, t('One per line'), null, terms, { stack: true });
   sxRow(named, t('Replaced with'), t('What the project shows in their place.'), marker);
   sxFoot(named, priv.envWins ? t('The terms stay in config.json; the project only records how many. PULSE_PRIVATE_TERMS is set, so its terms are added on every launch.') : t('The list stays on this computer; the project only notes how many words it has.'));
 
   // Two guards that need no list, because what they catch has a shape rather than a name.
-  const shaped = sxBlock(host, t('Hidden automatically'), t('No list needed: MADRE spots these on its own.'));
+  const shaped = sxBlock(host, t('Hidden automatically'), t('No list needed: ZM spots these on its own.'));
   const guard = (key, label, hint, describe) => sxRow(shaped, label, hint, sxSwitch(priv[key] !== false, (on) => savePrivacy({ [key]: on }, () => `${describe} ${on ? t('on') : t('off')}.`), { label }));
   guard('secrets', t('Access keys and emails'), t('Access keys, service tokens and email addresses are crossed out wherever they appear.'), t('redaction of keys and e-mail addresses'));
   guard('paths', t('Your home folder'), t('/Users/yourname becomes ~: a quoted path still reads, it just stops naming you.'), t('hiding of home paths'));
@@ -20561,7 +20561,7 @@ function renderAsks() {
       nostromo.dialog.close();
       els.input.focus();
       els.input.setSelectionRange(els.input.value.length, els.input.value.length);
-      toast(t('Memory map › the question is in the Write box. Send it to whoever should answer it, or to @madre, which costs nothing.'));
+      toast(t('Memory map › the question is in the Write box. Send it to whoever should answer it, or to @zm, which costs nothing.'));
     });
     const drop = el('button', null, t('NOT THIS'));
     drop.type = 'button';
@@ -21184,7 +21184,7 @@ nostromo.canvas?.addEventListener('click', (event) => {
   if (drag.moved) { drag.moved = false; return; }
   const at = nostromo.flat ? flatAt(event) : nostromoAt(event);
   // The core is the door. Touching it used to be treated as an attempt on the archive; what is
-  // behind it is the document MADRE writes in your name, and reading that is nobody's trespass.
+  // behind it is the document ZM writes in your name, and reading that is nobody's trespass.
   if (at === 'core') { void openCore(); return; }
   // The empty map lets go of the memory in front; the cards stay open until closed.
   if (!at) { nostromo.selected = null; for (const card of nostromo.cards) card.classList.remove('front'); return; }
@@ -21489,15 +21489,15 @@ async function nostromoTraffic(card = frontCard()) {
   const said = [];
   if (node.cold) said.push(t('UNUSED · the archive has been opened {n} times since this was written and never once carried it, and it shares a subject with nothing', { n: node.cold.chances }));
   said.push(traffic.recalled
-    ? t('MADRE has reached for this {n} times', { n: traffic.recalled }) + (traffic.lastRecalled ? t(' · last {when}', { when: agoWords(traffic.lastRecalled) }) : '')
-    : t('MADRE has not reached for this one yet'));
+    ? t('ZM has reached for this {n} times', { n: traffic.recalled }) + (traffic.lastRecalled ? t(' · last {when}', { when: agoWords(traffic.lastRecalled) }) : '')
+    : t('ZM has not reached for this one yet'));
   if (traffic.askers?.length) said.push(traffic.askers.map((asker) => `@${asker.agent} ${asker.times}`).join(' · '));
   if (traffic.recent?.length) {
     const last = traffic.recent[0];
     said.push(t('last turn: {who} · {when}', { who: last.agent ? `@${last.agent}` : t('the project'), when: agoWords(last.at) }));
   } else if (traffic.recalled && traffic.since) {
     // The counters are older than the trail. Saying nothing here would read as "always alone".
-    said.push(t('MADRE has tracked what it is used with since {when} · nothing yet', { when: new Date(traffic.since).toLocaleDateString() }));
+    said.push(t('ZM has tracked what it is used with since {when} · nothing yet', { when: new Date(traffic.since).toLocaleDateString() }));
   }
   cardPart(card, 'exchange').textContent = said.join('\n');
 
@@ -21691,7 +21691,7 @@ const FIRST_TOUCH = {
   memory: {
     button: '#nostromo-bar',
     title: t('Memory map'),
-    text: t('What MADRE remembers about this project, drawn as stars. Drag to turn it, scroll to come closer and click a star to read it.'),
+    text: t('What ZM remembers about this project, drawn as stars. Drag to turn it, scroll to come closer and click a star to read it.'),
   },
   crew: {
     button: '#agents-compact',
@@ -21706,7 +21706,7 @@ const FIRST_TOUCH = {
   browser: {
     button: '#browser-button',
     title: t('The browser'),
-    text: t('The pages you are building, inside MADRE: whatever runs on this computer, at phone, tablet or desktop width. For sites on the internet, turn on Preview in Modules.'),
+    text: t('The pages you are building, inside ZM: whatever runs on this computer, at phone, tablet or desktop width. For sites on the internet, turn on Preview in Modules.'),
   },
   tree: {
     button: '#tree-button',
@@ -21724,14 +21724,14 @@ const FIRST_TOUCH = {
 // page lives on one port, and a project opens on the first free one, so the cards came back with
 // every new port (2026-10-19). The page's own copy stays as the fallback, and what it already held
 // is carried to the person once (keptHints).
-const HINTS_KEY = 'madre.hints';
+const HINTS_KEY = 'zm.hints';
 const keptId = (id) => (/^(new|guide)-/.test(id) ? id : `touch-${id}`);
 const ownHint = (id) => id in FIRST_TOUCH || [...NEW_HINTS, ...GUIDE_HINTS].some((hint) => hint.id === id);
 function pageHints() {
   try { return JSON.parse(localStorage.getItem(HINTS_KEY) ?? '{}') ?? {}; } catch { return {}; }
 }
-// The page's own copy counts only for whoever met MADRE before the person's copy existed (1.0.4,
-// 2026-10-19). A port is reused by every MADRE that ever ran on this computer — another install, a
+// The page's own copy counts only for whoever met ZM before the person's copy existed (1.0.4,
+// 2026-10-19). A port is reused by every ZM that ever ran on this computer — another install, a
 // test, a project that held the port before — and what its storage kept made a new person's cards
 // count as seen before they were ever shown (2026-10-20).
 const HINTS_PERSONAL_SINCE = '2026-10-19';
@@ -21756,7 +21756,7 @@ async function keptHints() {
 }
 function firstTouch(id) {
   // Its cards speak of the Mac's own gestures (a right-click, a panel beside the room). Whoever knew
-  // MADRE before knows its keys: they are told what is new, not what each key is (2026-10-21).
+  // ZM before knows its keys: they are told what is new, not what each key is (2026-10-21).
   if (state.device || roomTour().returning()) return;
   const hint = FIRST_TOUCH[id];
   const seen = hintsSeen();
@@ -21850,25 +21850,25 @@ const NEW_HINTS = [
   { id: 'new-finder', level: '1.0.2', button: '#tree-button', spill: '.bar-more', title: t('New: your files stay up to date'), text: t('The file list updates by itself after every answer and every command. A colored dot on a folder tells you which agent changed something inside.') },
   { id: 'new-memory-access', level: '1.0.2', button: '#nostromo-bar', spill: '.bar-more', title: t('New: open the memory faster'), text: t('The Memory map asks you to type the project name before it opens. You can skip that step for 1, 8 or 24 hours, or for good: choose «Don\'t ask again…» when it asks, or go to Settings › Permissions.') },
   { id: 'new-dots', level: '1.0.2', button: '#messages .sys-dots:not(.open)', onScreen: true, title: t('New: notices shrink into dots'), text: t('To keep the chat clean, notices shrink into a small dot after 10 seconds. Click the dot to read them again. The ones that need something from you stay open.') },
-  // 1.0.5 (2026-10-21), for whoever met MADRE before it.
+  // 1.0.5 (2026-10-21), for whoever met ZM before it.
   { id: 'new-code-ask', level: '1.0.5', button: '#code-button', title: t('New in Code: ask about any line'), text: t('In Code, click a line number and press ASK. You choose the agent and what you want: that it explains the line, improves it, tests it or fixes it.') },
-  { id: 'new-notes', level: '1.0.5', button: '#modules-button', spill: '.bar-more', title: t('New: Notes and Reminders'), text: t('Turn them on in Modules. Then write to an agent «remind me tomorrow at 5 to call the client», and MADRE tells you when the time comes.') },
+  { id: 'new-notes', level: '1.0.5', button: '#modules-button', spill: '.bar-more', title: t('New: Notes and Reminders'), text: t('Turn them on in Modules. Then write to an agent «remind me tomorrow at 5 to call the client», and ZM tells you when the time comes.') },
   { id: 'new-connectors', level: '1.0.5', button: '#custom-button', panel: '#settings', title: t('New: connectors ready to use'), text: t('In Settings › Connectors (MCP) you now pick GitHub, Notion or your calendar from a list and connect it with one key.') },
-  { id: 'new-manual', level: '1.0.5', button: '#custom-button', panel: '#settings', title: t('New: the user manual'), text: t('Pictures of MADRE with every step marked, for whenever you want to look something up. Settings › System › User manual, or as a PDF.') },
+  { id: 'new-manual', level: '1.0.5', button: '#custom-button', panel: '#settings', title: t('New: the user manual'), text: t('Pictures of ZM with every step marked, for whenever you want to look something up. Settings › System › User manual, or as a PDF.') },
 ];
-// The way in, for whoever meets MADRE now (2026-10-21): once the bonjour is behind them and they
+// The way in, for whoever meets ZM now (2026-10-21): once the bonjour is behind them and they
 // open a project, the box, who answers and how far it may go, one card after the other. Every other
 // key says what it is the first time it is pressed (FIRST_TOUCH).
 const GUIDE_HINTS = [
   { id: 'guide-talk', button: '#composer .field', title: t('Start here'), text: t('Write here what you need, the way you would ask a person. Try «explain what this project does». ↵ sends it.') },
   { id: 'guide-agent', button: '#picker', title: t('Who answers'), text: t('This circle is the agent that will answer you. Press it to pick another: Codex, Claude, Gemini, whichever you are signed in to.') },
-  { id: 'guide-mode', button: '.picker .mode-chip', title: t('How far it may go'), text: t('With #1 the agent reads and answers, nothing more. When you want it to create or change files, raise it here; MADRE asks you first.') },
+  { id: 'guide-mode', button: '.picker .mode-chip', title: t('How far it may go'), text: t('With #1 the agent reads and answers, nothing more. When you want it to create or change files, raise it here; ZM asks you first.') },
   // Code and the manual too (2026-10-21): the two things someone new asked for and did not find.
   // Each says once what its first touch would have said again (`touches`).
   { id: 'guide-code', button: '#code-button', spill: '.bar-more', touches: 'code', title: t('Code'), text: t('Your project\'s files open here, beside the chat. Click a line number and press ASK to ask an agent about it.') },
   { id: 'guide-manual', button: '#custom-button', title: t('The user manual'), text: t('To look something up later: Settings › System › User manual, with pictures of every step. Also as a PDF.') },
 ];
-// News is for whoever met MADRE before it came: someone back from 0.7.2 or 1.0, or someone who began
+// News is for whoever met ZM before it came: someone back from 0.7.2 or 1.0, or someone who began
 // new before its version (`met`, written on the bonjour: src/tour.mjs, NEWS_LEVEL). Gated on the path
 // alone, it never reached anyone who had begun new — a person on 1.0.0 never heard of the copilot or
 // outside tools, nor someone on 1.0.4 of what 1.0.5 brings (2026-10-21).
@@ -21878,11 +21878,11 @@ function isNewsFor(hint) {
   if (roomTour().path() !== 'new') return true;
   const met = roomTour().state()?.met;
   if (met) return levelBelow(met, hint.level);
-  // A person from before `met` was written met MADRE before 1.0.5; 1.0.2's cards only if before it too.
+  // A person from before `met` was written met ZM before 1.0.5; 1.0.2's cards only if before it too.
   const at = roomTour().state()?.bonjourAt;
   return Boolean(at) && (hint.level !== '1.0.2' || at < NEWS_SINCE);
 }
-// Someone who met MADRE on this version (public/tour.js, newcomer): walked through the way in.
+// Someone who met ZM on this version (public/tour.js, newcomer): walked through the way in.
 // Whoever knew it before is told only what is new (2026-10-21).
 const isNewcomer = () => roomTour().newcomer();
 // Asked again while a card has nothing to point at, a few times only: a timer that never stops would
@@ -21995,7 +21995,7 @@ function showWhatsNew(news, { after = null } = {}) {
   const shown = String(news.version ?? '').replace(/\.0$/, '');
   const board = { at: null, went: false };
   const dialog = el('dialog', 'whats-new');
-  dialog.setAttribute('aria-label', t("What's new in MADRE {version}", { version: news.version }));
+  dialog.setAttribute('aria-label', t("What's new in ZM {version}", { version: news.version }));
   const sheet = el('div', 'wn-sheet');
 
   // The head: the mark, the version you now have, what it is about, and the window's ×.
@@ -22129,7 +22129,7 @@ function showWhatsNew(news, { after = null } = {}) {
     dialog.remove();
     if (!board.went) after?.();
   });
-  // Seen once it is shown, not once it is closed: a board left open when MADRE was turned off, the
+  // Seen once it is shown, not once it is closed: a board left open when ZM was turned off, the
   // page reloaded or the tab closed came back at the next start (2026-10-19).
   setTimeout(() => {
     dialog.showModal();
@@ -22140,7 +22140,7 @@ function showWhatsNew(news, { after = null } = {}) {
   return dialog;
 }
 
-/* ---------- Release channel: is there a newer MADRE? A pill in the bar, the command in MU/TH/UR. ---------- */
+/* ---------- Release channel: is there a newer ZM? A pill in the bar, the command in MU/TH/UR. ---------- */
 
 const updateUI = { pill: document.querySelector('#update-pill'), info: null, timer: null, announced: null, restarting: false };
 async function loadVersion({ force = false } = {}) {
@@ -22148,7 +22148,7 @@ async function loadVersion({ force = false } = {}) {
     updateUI.info = await fetch(`/api/version${force ? '?force=1' : ''}`).then((response) => response.json());
   } catch { updateUI.info = null; }
   // The first time a newer version shows up in this session, say so once; the pill stays.
-  if (updateUI.info?.available && updateUI.announced !== updateUI.info.latest && !replaying) { updateUI.announced = updateUI.info.latest; toast(t('Diagnostics › MADRE {version} is on npm. Open SETTINGS › Version to restart with it.', { version: updateUI.info.latest })); }
+  if (updateUI.info?.available && updateUI.announced !== updateUI.info.latest && !replaying) { updateUI.announced = updateUI.info.latest; toast(t('Diagnostics › ZM {version} is on npm. Open SETTINGS › Version to restart with it.', { version: updateUI.info.latest })); }
   renderUpdate();
   clearTimeout(updateUI.timer);
   updateUI.timer = setTimeout(() => void loadVersion(), 60 * 60 * 1000);
@@ -22165,7 +22165,7 @@ function renderUpdate() {
         get.innerHTML = UPDATE_GLYPH; // trusted: our own SVG string
         // The words in their own piece: a narrow bar keeps only the arrow (styles.css).
         pill.replaceChildren(glyph, el('span', 'update-words', t('{version} available', { version: info.latest })), get);
-      } else pill.replaceChildren(glyph, t('{version} AVAILABLE', { version: info.latest })); pill.title = t('MADRE {latest} is on npm · you run {current} · open SETTINGS for the command', { latest: info.latest, current: info.current }); }
+      } else pill.replaceChildren(glyph, t('{version} AVAILABLE', { version: info.latest })); pill.title = t('ZM {latest} is on npm · you run {current} · open SETTINGS for the command', { latest: info.latest, current: info.current }); }
   }
   const target = state.settingsTargets.release;
   if (target?.isConnected) drawRelease(target, info);
@@ -22176,25 +22176,25 @@ function drawRelease(section, info) {
   if (!info) { sxBlock(section, t('Version'), t('The version could not be read.')); return; }
   const where = { npx: t('Runs without being installed (npx).'), project: t("Installed inside this project."), global: t('Installed on this computer.') }[info.install] ?? t('It runs from source.');
   const chip = info.available ? sxChip(t('{version} available', { version: info.latest }), 'warn') : info.latest ? sxChip(t('Up to date'), 'on') : null;
-  const block = sxBlock(section, `MADRE ${info.current}`, where, { aside: chip });
+  const block = sxBlock(section, `ZM ${info.current}`, where, { aside: chip });
   // What this version brought, again: the board that opened after the update, for whoever closed
   // it too fast or wants to show someone. Only where it exists.
   if (info.notes) sxRow(block, t("What's new in this version"), null, sxButton(t('Open'), () => void openWhatsNew()));
   // Whoever came from 0.7.2 took the tour of what changed; whoever is new, the one of the essentials.
   const back = roomTour().path() === 'back';
-  if (!state.device) sxRow(block, back ? t('The tour of MADRE 1.0') : t('Getting to know MADRE'), back ? t('Everything new, chapter by chapter. ? opens the gestures anywhere.') : t('The essentials, chapter by chapter. ? opens the gestures anywhere.'), sxButton(t('See the tour'), () => { openSettings(false); roomTour().openChapters(); }));
+  if (!state.device) sxRow(block, back ? t('The tour of ZM 1.0') : t('Getting to know ZM'), back ? t('Everything new, chapter by chapter. ? opens the gestures anywhere.') : t('The essentials, chapter by chapter. ? opens the gestures anywhere.'), sxButton(t('See the tour'), () => { openSettings(false); roomTour().openChapters(); }));
   const when = info.checkedAt ? new Date(info.checkedAt).toLocaleString() : null;
   const check = sxSwitch(info.enabled, async (on, box) => {
     box.disabled = true;
     try { await fetch('/api/updates/settings', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ check: on }) }); toast(on ? t('Diagnostics › Look for new versions on: one check a day.') : t('Diagnostics › Look for new versions off: no request leaves for npm.')); await loadVersion(); }
     catch (error) { box.checked = !on; box.disabled = false; toast(t('The setting was not saved: {error}', { error: error.message })); }
   }, { disabled: Boolean(info.envWins), label: t('Look for new versions') });
-  sxRow(block, t('Look for new versions'), t('Once a day MADRE checks whether there\'s a new version. Only the app\'s name is sent.') + (info.envWins ? ` ${t('Set by PULSE_UPDATE_CHECK.')}` : ''), check);
+  sxRow(block, t('Look for new versions'), t('Once a day ZM checks whether there\'s a new version. Only the app\'s name is sent.') + (info.envWins ? ` ${t('Set by PULSE_UPDATE_CHECK.')}` : ''), check);
   if (info.enabled) sxRow(block, t('Last check'), when ?? t('Not yet.'), sxButton(t('Check now'), () => void loadVersion({ force: true })));
-  // Supporting MADRE (2026-10-30): a donation on GitHub Sponsors, in the person's browser, as Home's
+  // Supporting ZM (2026-10-30): a donation on GitHub Sponsors, in the person's browser, as Home's
   // Settings › Version has it under this copy's identifier (salas-mac.js, drawDonate). Not from a phone.
   if (!state.device) {
-    const give = sxBlock(section, t('Support MADRE'), t('MADRE is free and made by one person. A donation helps keep it going and growing.'));
+    const give = sxBlock(section, t('Support ZM'), t('ZM is free and made by one person. A donation helps keep it going and growing.'));
     const go = el('a', 'sx-btn primary', t('Donate'));
     go.href = SPONSORS_URL;
     go.target = '_blank';
@@ -22205,7 +22205,7 @@ function drawRelease(section, info) {
 
   if (!info.available) return;
   const canRestart = info.install !== 'source';
-  const fresh = sxBlock(section, t('MADRE {version} is ready', { version: info.latest }), canRestart
+  const fresh = sxBlock(section, t('ZM {version} is ready', { version: info.latest }), canRestart
     ? t('Restart here: the project closes, updates and comes back in a few seconds. Nothing is lost. Or run the command yourself.')
     : t('Pull the repository and start it again.'), { className: 'sx-fresh' });
   if (canRestart) {
@@ -22213,13 +22213,13 @@ function drawRelease(section, info) {
       restart.disabled = true; restart.textContent = t('Restarting…'); updateUI.restarting = true;
       // The whole room waits, as a Mac does for its update: the loader on the curtain, through the
       // three steps there are — the new version arriving, the room closed, the room back with it.
-      const waiting = waitCurtain({ label: t('Downloading MADRE {version}…', { version: info.latest }) });
+      const waiting = waitCurtain({ label: t('Downloading ZM {version}…', { version: info.latest }) });
       let stopCreep = creep(waiting.loader, { to: 0.45, rate: 0.02 });
       try {
         const payload = await fetch('/api/updates/apply', { method: 'POST' }).then((response) => response.json());
         if (payload.error) throw new Error(payload.error);
         stopCreep();
-        setLoader(waiting.loader, 0.5, t('Restarting MADRE…'));
+        setLoader(waiting.loader, 0.5, t('Restarting ZM…'));
         stopCreep = creep(waiting.loader, { to: 0.88, rate: 0.015, every: 400 });
         const from = info.current;
         const wait = async () => {
@@ -22229,9 +22229,9 @@ function drawRelease(section, info) {
               const next = await fetch('/api/version', { cache: 'no-store' }).then((response) => response.json());
               if (next?.current && next.current !== from) {
                 stopCreep();
-                setLoader(waiting.loader, 0.94, t('MADRE {version} is ready', { version: next.current }));
+                setLoader(waiting.loader, 0.94, t('ZM {version} is ready', { version: next.current }));
                 // The page that comes keeps the curtain and the share, and fills the rest as it boots.
-                try { sessionStorage.setItem('madre.curtain', waiting.loader.dataset.p ?? '0.94'); } catch { /* it simply arrives */ }
+                try { sessionStorage.setItem('zm.curtain', waiting.loader.dataset.p ?? '0.94'); } catch { /* it simply arrives */ }
                 setTimeout(() => location.reload(), 420);
                 return;
               }
@@ -22311,20 +22311,20 @@ function renderMotherSentinel() {
   syncSettingsCards();
 }
 // ANONYMOUS DIAGNOSTICS (src/telemetry.mjs, 2026-10-28): on unless turned off here, and what goes,
-// readable as it goes: the next batch, exactly as madre.run would get it.
+// readable as it goes: the next batch, exactly as zm.run would get it.
 function drawDiagnostics(section) {
-  const block = sxBlock(section, t('Anonymous diagnostics'), t('So the author learns what fails and what gets used, without asking you anything: errors with private details removed; how many turns, modes and features were used; how this copy runs (system, memory, agents, how many projects, MADRE\'s modules) and whether it was installed, updated or uninstalled; and, while MADRE is open, every five minutes, that it is on. Never what you write, your projects or your files.'));
+  const block = sxBlock(section, t('Anonymous diagnostics'), t('So the author learns what fails and what gets used, without asking you anything: errors with private details removed; how many turns, modes and features were used; how this copy runs (system, memory, agents, how many projects, ZM\'s modules) and whether it was installed, updated or uninstalled; and, while ZM is open, every five minutes, that it is on. Never what you write, your projects or your files.'));
   const holder = el('div');
   block.append(holder);
   void fetch('/api/telemetry').then((response) => (response.ok ? response.json() : null)).catch(() => null).then((reading) => {
     if (!holder.isConnected || !reading) return;
     const fixed = Boolean(reading.env);
-    sxRow(holder, t('Send anonymous diagnostics'), fixed ? t('Off: MADRE was started with PULSE_TELEMETRY=0.') : t('Once a day, and soon after an error never seen before, to madre.run. Turning it off deletes what was waiting.'), sxSwitch(reading.on, async (on, box) => {
+    sxRow(holder, t('Send anonymous diagnostics'), fixed ? t('Off: ZM was started with PULSE_TELEMETRY=0.') : t('Once a day, and soon after an error never seen before, to zm.run. Turning it off deletes what was waiting.'), sxSwitch(reading.on, async (on, box) => {
       box.disabled = true;
       try {
         const response = await fetch('/api/telemetry', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ on }) });
         const answer = await response.json().catch(() => ({}));
-        if (!response.ok || typeof answer.on !== 'boolean') throw new Error(answer.error ? t(answer.error) : t('MADRE did not answer. Check that it is still open.'));
+        if (!response.ok || typeof answer.on !== 'boolean') throw new Error(answer.error ? t(answer.error) : t('ZM did not answer. Check that it is still open.'));
         toast(answer.on ? t('Anonymous diagnostics on.') : t('Anonymous diagnostics off. What was waiting was deleted.'), { tone: 'done' });
       } catch (error) { box.checked = !on; toast(t('It could not be saved: {error}', { error: error.message })); }
       finally { box.disabled = false; }
@@ -22344,15 +22344,15 @@ function drawSentinel(section) {
   const unsent = reports.filter((report) => !report.sent?.ok).length;
   const settings = sentinelUI.settings ?? { autoReport: false, canSend: false, repo: null };
   drawDiagnostics(section);
-  const block = sxBlock(section, t('Error reports'), t('Keeps errors MADRE can\'t explain, with private details removed. New ones reach MADRE\'s author on their own, to fix them; you can turn that off here.'), {
+  const block = sxBlock(section, t('Error reports'), t('Keeps errors ZM can\'t explain, with private details removed. New ones reach ZM\'s author on their own, to fix them; you can turn that off here.'), {
     aside: reports.length ? sxChip(t('{n} reports · {unsent} not sent', { n: reports.length, unsent }), unsent ? 'warn' : '') : sxChip(t('Nothing to report'), 'on'),
   });
-  sxRow(block, t('Send reports automatically'), settings.canSend ? t("New errors go to MADRE's author, with private details removed.") : t('Sending isn\'t set up in this copy of MADRE.'), sxSwitch(settings.autoReport, async (on, box) => {
+  sxRow(block, t('Send reports automatically'), settings.canSend ? t("New errors go to ZM's author, with private details removed.") : t('Sending isn\'t set up in this copy of ZM.'), sxSwitch(settings.autoReport, async (on, box) => {
     box.disabled = true;
     try {
       const result = await fetch('/api/sentinel/settings', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ autoReport: on }) }).then((response) => response.json());
       sentinelUI.settings = result.settings;
-      toast(result.settings.autoReport ? t("Diagnostics › error reports on: new errors go to MADRE's author, with private details removed.") : t('Diagnostics › auto-report off: reports stay here until you send one.'));
+      toast(result.settings.autoReport ? t("Diagnostics › error reports on: new errors go to ZM's author, with private details removed.") : t('Diagnostics › auto-report off: reports stay here until you send one.'));
     } catch (error) { box.checked = !on; toast(t('It could not be saved: {error}', { error: error.message })); }
     finally { renderMotherSentinel(); }
   }, { disabled: !settings.canSend, label: t('Send reports automatically') }), { off: !settings.canSend });
@@ -22361,10 +22361,10 @@ function drawSentinel(section) {
   // in English, where the person reading this is already holding an account.
   const spanish = language() === 'es';
   const both = el('div', 'sx-actions inline');
-  const viaForm = sxButton(t('On madre.run ↗'), () => { if (sentinelUI.formUrl) window.open(sentinelUI.formUrl, '_blank', 'noopener'); }, { tone: spanish ? 'primary' : null });
+  const viaForm = sxButton(t('On zm.run ↗'), () => { if (sentinelUI.formUrl) window.open(sentinelUI.formUrl, '_blank', 'noopener'); }, { tone: spanish ? 'primary' : null });
   const viaIssue = sxButton(t('On GitHub ↗'), () => openFeedback(), { tone: spanish ? null : 'primary' });
   both.append(...(spanish ? [viaForm, viaIssue] : [viaIssue, viaForm]));
-  sxRow(block, t('Tell the author'), t('What failed, or what you wish MADRE did.'), both);
+  sxRow(block, t('Tell the author'), t('What failed, or what you wish ZM did.'), both);
   if (!reports.length) return;
   const list = sxBlock(section, t('Reports'), t('Private details are removed from each one. You can read each report before sending it.'));
   for (const report of reports.slice(0, 20)) {
@@ -22375,7 +22375,7 @@ function drawSentinel(section) {
       const result = await fetch(`/api/sentinel/${report.id}/issue`).then((response) => response.json()).catch(() => ({}));
       if (result.url) window.open(result.url, '_blank', 'noopener'); else toast(t('Diagnostics › no repository to file this in.'));
     });
-    const form = sxButton('madre.run ↗', async () => {
+    const form = sxButton('zm.run ↗', async () => {
       const result = await fetch(`/api/sentinel/${report.id}/issue`).then((response) => response.json()).catch(() => ({}));
       if (result.form) window.open(result.form, '_blank', 'noopener');
     });
@@ -22424,7 +22424,7 @@ const BAR_DEFAULT = ['salas', 'macroverso', 'crew', 'activity', 'code', 'modules
 // button when there is not — and one key: taking it off takes both.
 const BAR_BUILT = {
   crew: { nodes: ['#agents', '#agents-compact'], name: () => t('Agents') },
-  // «En marcha» (2026-10-30): what MADRE is doing, in every open project (public/activity.js).
+  // «En marcha» (2026-10-30): what ZM is doing, in every open project (public/activity.js).
   activity: { nodes: ['#activity-button'], name: () => t('Running now') },
   // In the chat shell Code and Files are one key, named for what a person looks for (adoptFinder).
   code: { nodes: ['#code-button'], name: () => (chatShellOn() ? t('Files') : t('Code')) },
@@ -22434,7 +22434,7 @@ const BAR_BUILT = {
   reload: { nodes: ['#reload-button'], name: () => t('Reload') },
   servers: { nodes: ['#browser-button'], name: () => t('Your servers') },
   finder: { nodes: ['#tree-button'], name: () => t('Files') },
-  phone: { nodes: ['#phone-button'], name: () => t('MADRE on your phone') },
+  phone: { nodes: ['#phone-button'], name: () => t('ZM on your phone') },
   settings: { nodes: ['#custom-button'], name: () => t('Settings') },
 };
 // They ride with the crew when it is there, and lead the keys when it is not: where they always were.
@@ -22509,7 +22509,7 @@ function barCatalogue() {
   if (!state.device && !homeOn()) out.set('salas', { id: 'salas', name: t('Home'), icon: SALAS_ICON, open: () => { globalThis.location.href = '/salas'; } });
   // The MACROVERSO, from the room of SALAS only (phase 3d): SALAS opens straight into it.
   if (!state.device && state.salas) out.set('macroverso', { id: 'macroverso', name: t('Project map'), icon: MACROVERSO_ICON, open: () => { globalThis.location.href = '/salas#macroverso'; } });
-  // Every module that opens as a window: MADRE's own that have something to read, and yours. One
+  // Every module that opens as a window: ZM's own that have something to read, and yours. One
   // that is off is offered too; its window says how to switch it on.
   const items = modules.items ?? [];
   const offered = new Map();
@@ -22535,7 +22535,7 @@ function barShown(id) {
   const nodes = barNodes(id).filter((node) => !node.classList.contains('bar-off'));
   return nodes.find((node) => node.offsetWidth > 0 && node.offsetHeight > 0) ?? null;
 }
-// One size to the eye (2026-10-26): every drawing of the chat shell's keys, MADRE's and the ones a
+// One size to the eye (2026-10-26): every drawing of the chat shell's keys, ZM's and the ones a
 // module brings, spans the same square. Its drawn extent is measured once (what a state shows later,
 // hidden now, does not count) and the key told how much to grow or shrink it; styles.css keeps the
 // stroke as thick as every other's. (Called while the page is still being read: nothing it needs is
@@ -22719,7 +22719,7 @@ function homeBar() {
     key.classList.remove('bar-off', 'bar-overflow');
     if (key.parentNode !== home) home.append(key);
   }
-  // Last, after the settings: turning MADRE off (public/power.js). On the Mac only.
+  // Last, after the settings: turning ZM off (public/power.js). On the Mac only.
   if (!homePower) { homePower = powerKey('tree-button', { project: true }); homePower.id = 'power-button'; }
   labelPowerKey(homePower);
   if (homePower.parentNode !== home || (home.lastElementChild && home.lastElementChild !== homePower)) home.append(homePower);
@@ -22742,7 +22742,7 @@ function homeBar() {
 // a project seen working that stopped, for half an hour or until you go to it.
 const SWITCH_ICON = trazo('switch');
 const SWITCH_TICK = trazo('check');
-const SWITCH_KEPT = 'madre.switch';
+const SWITCH_KEPT = 'zm.switch';
 const SWITCH_NEWS_MS = 30 * 60 * 1000;
 const switcher = { key: null, panel: null, rooms: [], salas: null, timer: 0, asking: false, working: new Set(), done: new Map() };
 try {
@@ -22756,7 +22756,7 @@ function switchKeep() {
 const switchName = (room) => (room.id === switcher.salas ? t('Coordinator') : room.name);
 function switchState(room) {
   const glance = room.glance ?? {};
-  if (glance.outdated) return { key: 'outdated', words: t('Update MADRE in this project to see it here.') };
+  if (glance.outdated) return { key: 'outdated', words: t('Update ZM in this project to see it here.') };
   if (glance.unreachable) return { key: 'quiet', words: t('Not answering right now') };
   if (glance.waitingCount) return { key: 'waiting', count: glance.waitingCount, words: t('Waiting for you · {n}', { n: glance.waitingCount }) };
   if (glance.working?.length) return { key: 'working', words: glance.working.length === 1 ? t('@{agent} is working', { agent: glance.working[0] }) : t('{n} agents working', { n: glance.working.length }) };
@@ -22934,8 +22934,8 @@ function switchDraw() {
   });
 }
 
-// From one MADRE page to another (2026-10-10): the page settles back under a veil of its own
-// ground and goes (styles.css, madre-leaving); the next one lifts the veil as it arrives. Should
+// From one ZM page to another (2026-10-10): the page settles back under a veil of its own
+// ground and goes (styles.css, zm-leaving); the next one lifts the veil as it arrives. Should
 // the page stay (the browser asked whether to leave unsaved work), the veil goes away again, and
 // a page brought back by the browser's Back comes without it.
 
@@ -23006,9 +23006,9 @@ function chatShell() {
 
   shellUI.foot = el('div', 'side-foot');
   const who = el('div', 'side-who');
-  // MADRE and its version as one name, the author under it (2026-10-27): the chat shell says them
+  // ZM and its version as one name, the author under it (2026-10-27): the chat shell says them
   // here and only here; the foot of the conversation keeps only what modules put there (styles.css).
-  who.append(el('b', null, initial.version ? `MADRE ${initial.version}` : 'MADRE'));
+  who.append(el('b', null, initial.version ? `ZM ${initial.version}` : 'ZM'));
   const copy = el('a', 'side-copy', `© ${YEAR} ${AUTHOR}`);
   copy.href = AUTHOR_URL;
   copy.target = '_blank';
@@ -23016,16 +23016,16 @@ function chatShell() {
   who.append(copy);
   shellUI.foot.append(who,
     shellKey(document.querySelector('#custom-button')?.innerHTML ?? '', t('Settings'), () => document.querySelector('#custom-button')?.click()),
-    (() => { const off = shellKey(POWER_ICON, t('Restart or turn off MADRE'), () => openPowerMenu(off)); off.setAttribute('aria-haspopup', 'menu'); return asProjectKey(off); })());
+    (() => { const off = shellKey(POWER_ICON, t('Restart or turn off ZM'), () => openPowerMenu(off)); off.setAttribute('aria-haspopup', 'menu'); return asProjectKey(off); })());
 
   side.prepend(head, nav, scroll);
   side.append(shellUI.foot);
 
   // The bar's families (styles.css, .bar-family), a hairline before each: the project's tools,
-  // MADRE's own, and the apps and modules a person puts on the bar (2026-10-26). Placed by order,
+  // ZM's own, and the apps and modules a person puts on the bar (2026-10-26). Placed by order,
   // so they stand right whatever the bar's own arrangement.
   const bar = document.querySelector('.shell > .bar:not(.bar-home)');
-  if (bar) for (const family of ['project', 'madre', 'apps']) { const line = el('span', `bar-family ${family}`); line.setAttribute('aria-hidden', 'true'); bar.append(line); }
+  if (bar) for (const family of ['project', 'zm', 'apps']) { const line = el('span', `bar-family ${family}`); line.setAttribute('aria-hidden', 'true'); bar.append(line); }
   // And a spring between the pills and the keys: the title and its pills at one end, the keys at the other.
   if (bar) { const spring = el('span', 'bar-spring'); spring.setAttribute('aria-hidden', 'true'); bar.append(spring); }
   // Code and Files are one key here: Code's, with its </> (2026-10-27), named for both.
@@ -23175,11 +23175,11 @@ function leaveTo(url) {
   const root = document.documentElement;
   const still = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   if (!root?.classList || still) { globalThis.location.href = url; return; }
-  root.classList.add('madre-leaving');
+  root.classList.add('zm-leaving');
   setTimeout(() => { globalThis.location.href = url; }, 200);
-  setTimeout(() => root.classList.remove('madre-leaving'), 2500);
+  setTimeout(() => root.classList.remove('zm-leaving'), 2500);
 }
-globalThis.addEventListener?.('pageshow', () => document.documentElement?.classList?.remove('madre-leaving'));
+globalThis.addEventListener?.('pageshow', () => document.documentElement?.classList?.remove('zm-leaving'));
 
 // Reads the order, builds what it needs and hides what is off. An id nobody knows — a module that
 // was deleted — is skipped, and AJUSTES is never in the list because it is never anywhere but last.
@@ -23702,7 +23702,7 @@ function phoneCard() {
   return phoneUI.card ??= (() => {
     const node = el('div', 'bar-card phone-card');
     node.setAttribute('role', 'dialog');
-    node.setAttribute('aria-label', t('Use MADRE from your phone'));
+    node.setAttribute('aria-label', t('Use ZM from your phone'));
     node.hidden = true;
     document.body?.append(node);
     return node;
@@ -23774,7 +23774,7 @@ function phoneDraw({ busy = false, error = null } = {}) {
   const card = phoneCard();
   const view = phoneUI.view;
   const head = el('div', 'bar-card-head');
-  head.append(el('h3', null, t('Use MADRE from your phone')));
+  head.append(el('h3', null, t('Use ZM from your phone')));
   const body = el('div', 'phone-body');
   const say = (text, className = 'phone-say') => body.append(el('p', className, text));
   if (error) {
@@ -23783,7 +23783,7 @@ function phoneDraw({ busy = false, error = null } = {}) {
   } else if (busy || !view) {
     say(t('One moment…'), 'phone-say phone-quiet');
   } else if (!view.available) {
-    say(t('MADRE cannot tell which network this computer is on, so it cannot open the door to a phone here.'));
+    say(t('ZM cannot tell which network this computer is on, so it cannot open the door to a phone here.'));
   } else if (!view.network?.trusted) {
     say(t('Your phone reaches this Mac over your Wi-Fi. Do it only on a network you trust, like the one at home or at the office: on a public network, someone connected to it could see what passes between the two.'));
     body.append(sxButton(t('This is a network I trust'), () => void phoneTrust(), { tone: 'primary' }));
@@ -23791,7 +23791,7 @@ function phoneDraw({ busy = false, error = null } = {}) {
     const done = el('div', 'phone-done');
     done.append(el('span', 'phone-check'), el('b', null, t('Your {device} is connected.', { device: deviceLabel(phoneUI.paired.kind) })));
     body.append(done);
-    say(t('On the phone, add MADRE to the home screen to open it like an app. Your projects are there whenever this Mac is awake and on this Wi-Fi.'));
+    say(t('On the phone, add ZM to the home screen to open it like an app. Your projects are there whenever this Mac is awake and on this Wi-Fi.'));
     body.append(sxButton(t('Pair another phone'), () => void phoneInvite()));
   } else if (phoneUI.invite && phoneUI.invite.invite.expiresAt > Date.now()) {
     const qr = el('div', 'phone-qr');
@@ -23807,7 +23807,7 @@ function phoneDraw({ busy = false, error = null } = {}) {
     say(t('If your Mac asks whether to allow incoming connections, choose Allow.'), 'phone-say phone-quiet');
     // Safari on an iPhone with its warning for not secure connections on is in HTTPS-only mode and
     // refuses http: the bridge is http over the Wi-Fi for now (docs/MOBILE.md, phase 1).
-    say(t('On an iPhone, if Safari does not open it or says the connection is not secure: in Settings › Apps › Safari, under Privacy & Security, turn off the warning for not secure connections. For now MADRE reaches your phone over your Wi-Fi without https.'), 'phone-say phone-quiet');
+    say(t('On an iPhone, if Safari does not open it or says the connection is not secure: in Settings › Apps › Safari, under Privacy & Security, turn off the warning for not secure connections. For now ZM reaches your phone over your Wi-Fi without https.'), 'phone-say phone-quiet');
   } else {
     say(t('The code expired.'));
     body.append(sxButton(t('Make another code'), () => void phoneInvite(), { tone: 'primary' }));
@@ -23836,8 +23836,8 @@ function drawPhones(host) {
   const paint = (view) => {
     block.rows.replaceChildren();
     for (const old of block.querySelectorAll('.sx-foot')) old.remove();
-    if (!view.available) { sxRow(block, t('Not available here'), t('MADRE cannot tell which network this computer is on.')); return; }
-    sxRow(block, t('Use MADRE from your phone'), t('Turned off, no phone reaches this Mac, not even a paired one.'), sxSwitch(view.enabled, async (on) => paint(await phoneCall('/api/phone/enabled', { on }).catch((error) => { toast(error.message); return view; })), { label: t('Use MADRE from your phone') }));
+    if (!view.available) { sxRow(block, t('Not available here'), t('ZM cannot tell which network this computer is on.')); return; }
+    sxRow(block, t('Use ZM from your phone'), t('Turned off, no phone reaches this Mac, not even a paired one.'), sxSwitch(view.enabled, async (on) => paint(await phoneCall('/api/phone/enabled', { on }).catch((error) => { toast(error.message); return view; })), { label: t('Use ZM from your phone') }));
     for (const device of view.devices) {
       const forget = sxButton(t('Forget'), async () => {
         const next = await phoneCall('/api/phone/forget', { id: device.id }).catch((error) => { toast(error.message); return null; });
@@ -24225,9 +24225,9 @@ if (!SPLIT_CHAT) roomTour();
       column.append(row);
     };
     make('claude', 'Claude', [el('span', 'badge ash', 'AHORRO DE TOKENS')], '↳ Prueba de comunicación entre agentes…',
-      'Hola a todos, soy @claude abriendo la ronda de prueba. Pido a cada agente una línea de confirmación.\n\n```pulse\n- @codex: saluda y confirma que recibes este mensaje en una línea.\n- @gemini: saluda y confirma que recibes este mensaje en una línea.\n- @opencode: saluda y confirma que recibes este mensaje en una línea.\n- @madre: saluda y confirma que recibes este mensaje en una línea.\n```');
-    make('madre', 'Madre', [el('span', 'badge', 'CONTESTÁNDOLE A @CLAUDE')], '',
-      'Soy @madre, la memoria de esta sala hablando, con qwen2.5:7b sobre Ollama en esta máquina. El archivista es mi otra mitad: el mismo modelo, de fondo, lee lo que la sala dice cada pocos intercambios o tras unos minutos de reposo y guarda hechos, decisiones, preferencias y preguntas abiertas. Eso es lo que ves en el Mapa de memoria y lo que yo cito con [#n]. No escribo archivos, no ejecuto ni tomo decisiones por nadie.\n\nSí puedo convocar al equipo si me lo pides: «@madre, pregúntale al equipo …» abre una ronda con cada agente en línea y cierro con un resumen citado. Para enseñarme algo no hace falta dictármelo: trabaja en la sala y se destila solo.');
+      'Hola a todos, soy @claude abriendo la ronda de prueba. Pido a cada agente una línea de confirmación.\n\n```pulse\n- @codex: saluda y confirma que recibes este mensaje en una línea.\n- @gemini: saluda y confirma que recibes este mensaje en una línea.\n- @opencode: saluda y confirma que recibes este mensaje en una línea.\n- @zm: saluda y confirma que recibes este mensaje en una línea.\n```');
+    make('zm', 'Madre', [el('span', 'badge', 'CONTESTÁNDOLE A @CLAUDE')], '',
+      'Soy @zm, la memoria de esta sala hablando, con qwen2.5:7b sobre Ollama en esta máquina. El archivista es mi otra mitad: el mismo modelo, de fondo, lee lo que la sala dice cada pocos intercambios o tras unos minutos de reposo y guarda hechos, decisiones, preferencias y preguntas abiertas. Eso es lo que ves en el Mapa de memoria y lo que yo cito con [#n]. No escribo archivos, no ejecuto ni tomo decisiones por nadie.\n\nSí puedo convocar al equipo si me lo pides: «@zm, pregúntale al equipo …» abre una ronda con cada agente en línea y cierro con un resumen citado. Para enseñarme algo no hace falta dictármelo: trabaja en la sala y se destila solo.');
     for (const node of [
       renderTerminalCard({ id: 'sample-ok', payload: { name: 'run', ok: true, text: 'PDF listo: output/pdf/cotizacion.pdf', run: { line: 'node scripts/pdf.mjs', exitCode: 0, durationMs: 2000, agent: 'codex' } } }),
       renderTerminalCard({ id: 'sample-fail', payload: { name: 'run', ok: false, text: 'ℹ tests 60\n✔ test 1 passed\n✖ test 9 failed\nℹ pass 53\nℹ fail 7', run: { line: 'npm test', exitCode: 1, durationMs: 4200, agent: 'codex' } } }),
@@ -24355,17 +24355,17 @@ const LAB = [
     const events = [
       ev('message.created', { messageId: u1, role: 'user', sender: 'you', target: 'codex', mode: 2, text: 'Revisa el README y el título del paquete; arma un plan con los demás si hace falta.', status: 'sent', attachments: [{ name: 'README.md', fileName: 'lab-readme.md', size: 4096, contentType: 'text/markdown' }, { name: 'notas.txt', fileName: 'lab-notas.txt', size: 812, contentType: 'text/plain' }] }, 1),
       { ...ev('agent.started', { messageId: `lab-think-${Date.now()}`, agent: 'gemini', timeoutMs: 180000 }, 2), timestamp: new Date().toISOString() },
-      ev('message.created', { messageId: a1, parentMessageId: u1, role: 'assistant', sender: 'codex', target: 'you', mode: 2, model: 'gpt-5.6-sol', effort: 'high', status: 'sent', text: 'Revisé el proyecto: el título del README no coincidía con el nombre del paquete [#214]. Lo dejé anotado y reparto la revisión.\n\n```pulse\n- @claude: corre las pruebas y dime cuántas pasan.\n- @gemini: revisa que el README se lea bien.\n- @opencode: compara con la versión anterior.\n- @madre: resume lo que se decidió.\n```\n\nEsta es la función que arma el título:\n\n```js\nexport function titulo(paquete) {\n  return paquete.nombre ?? \'MADRE\';\n}\n// se usa en README.md y en la barra\n```' }, 3),
+      ev('message.created', { messageId: a1, parentMessageId: u1, role: 'assistant', sender: 'codex', target: 'you', mode: 2, model: 'gpt-5.6-sol', effort: 'high', status: 'sent', text: 'Revisé el proyecto: el título del README no coincidía con el nombre del paquete [#214]. Lo dejé anotado y reparto la revisión.\n\n```pulse\n- @claude: corre las pruebas y dime cuántas pasan.\n- @gemini: revisa que el README se lea bien.\n- @opencode: compara con la versión anterior.\n- @zm: resume lo que se decidió.\n```\n\nEsta es la función que arma el título:\n\n```js\nexport function titulo(paquete) {\n  return paquete.nombre ?? \'ZM\';\n}\n// se usa en README.md y en la barra\n```' }, 3),
       ev('choice.offered', { agent: 'codex', question: '¿Actualizo también el CHANGELOG?', options: ['Sí, con una línea', 'Sí, con el detalle', 'No por ahora'], recommended: 0 }, 4),
       ev('message.created', { messageId: `lab-a2-${Date.now()}`, parentMessageId: u1, role: 'assistant', sender: 'gemini', target: 'you', mode: 1, status: 'sent', text: 'El README se lee bien. Para corregir el título necesito #3 por 15 min: tengo que editar README.md, que ya existe.' }, 5),
       ev('message.created', { messageId: `lab-a3-${Date.now()}`, parentMessageId: u1, role: 'assistant', sender: 'opencode', target: 'you', mode: 1, status: 'sent', text: 'Comparé con la versión anterior. Para dejar el cambio necesito #3 por 15 min.' }, 6),
       ev('message.created', { messageId: `lab-u2-${Date.now()}`, role: 'user', sender: 'you', target: 'opencode', mode: 3, text: 'Adelante con el cambio.', status: 'sent' }, 7),
-      ev('run.requested', { messageId: u1, responseMessageId: `lab-run-${Date.now()}`, agent: 'madre', reason: 'Ver que el cambio quedó', mode: 3, commands: [{ line: "node -e \"console.log('uno')\"", argv: ['node', '-e', "console.log('uno')"] }, { line: 'git status --short', argv: ['git', 'status', '--short'] }, { line: 'ls | head', why: 'uses "{char}", which needs a shell; put each command on its own line', whyArgs: { char: '|' } }] }, 8),
+      ev('run.requested', { messageId: u1, responseMessageId: `lab-run-${Date.now()}`, agent: 'zm', reason: 'Ver que el cambio quedó', mode: 3, commands: [{ line: "node -e \"console.log('uno')\"", argv: ['node', '-e', "console.log('uno')"] }, { line: 'git status --short', argv: ['git', 'status', '--short'] }, { line: 'ls | head', why: 'uses "{char}", which needs a shell; put each command on its own line', whyArgs: { char: '|' } }] }, 8),
       ev('command.output', { name: 'run', ok: true, text: 'PDF listo: output/pdf/cotizacion.pdf', run: { line: 'node scripts/pdf.mjs', exitCode: 0, durationMs: 2000, agent: 'codex' } }, 9),
       ev('command.output', { name: 'run', ok: false, text: 'ℹ tests 60\n✔ test 1 passed\n✖ test 9 failed\nℹ pass 53\nℹ fail 7', run: { line: 'npm test', exitCode: 1, durationMs: 4200, agent: 'claude' } }, 10),
       ev('copilot.started', { until: new Date(Date.now() + 3600000).toISOString(), minutes: 60 }, 11),
-      ev('limit.warning', { agent: 'codex', usedPercent: 71.3, projectedPercent: 87.2, level: 'warning', source: 'room-soft-budget', resetAt: null, alternatives: ['claude'], message: 'MADRE warning: @codex is at 71% of its local window.' }, 12),
-      ev('message.failed', { messageId: `lab-f-${Date.now()}`, target: 'madre', error: 'madre is not installed on this computer.' }, 13),
+      ev('limit.warning', { agent: 'codex', usedPercent: 71.3, projectedPercent: 87.2, level: 'warning', source: 'room-soft-budget', resetAt: null, alternatives: ['claude'], message: 'ZM warning: @codex is at 71% of its local window.' }, 12),
+      ev('message.failed', { messageId: `lab-f-${Date.now()}`, target: 'zm', error: 'zm is not installed on this computer.' }, 13),
     ];
     for (const event of events) renderEvent(event);
     apply();
