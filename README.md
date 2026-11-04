@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/zarzmra/madre/main/public/assets/brand/zm-logo.jpg" alt="ZM" width="100%">
+  <img src="https://raw.githubusercontent.com/zarzmra/ZM-Studio/main/public/assets/brand/madre-app-512.png" alt="ZM" width="100%">
 </p>
 
 <p align="center"><b>Español</b> · <a href="README.en.md">English</a></p>

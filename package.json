@@ -17,13 +17,13 @@
     "mcp",
     "pulse"
   ],
-  "homepage": "https://github.com/zarzmra/madre#readme",
+  "homepage": "https://github.com/zarzmra/ZM-Studio#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zarzmra/madre.git"
+    "url": "git+https://github.com/zarzmra/ZM-Studio.git"
   },
   "bugs": {
-    "url": "https://github.com/zarzmra/madre/issues"
+    "url": "https://github.com/zarzmra/ZM-Studio/issues"
   },
   "author": {
     "name": "ZM",
