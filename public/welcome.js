@@ -168,7 +168,7 @@ export function openWelcome({ at = null, then = null, host = {} } = {}) {
   // The logo draws itself in once, when the welcome opens, and stays in the rail from then on: the
   // steps are repainted under it, never the logo, or its drawing started over with every step.
   const brand = el('div', 'wl-brand');
-  brand.setAttribute('aria-label', 'MADRE');
+  brand.setAttribute('aria-label', 'ZM');
   brand.innerHTML = BRAND_LOGO; // trusted: our own SVG string
   const railBody = el('div', 'wl-rail-body');
   rail.append(brand, railBody);

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MADRE · Lobby</title>
+    <title>ZM · Lobby</title>
     <!-- The ficha (src/ficha.mjs): a 401 that asks for it means this tab's was replaced (MADRE started
          again and opened a new one); the page reloads into the page that says where to open MADRE. -->
     <script>(function () { var ask = window.fetch; window.fetch = function () { return ask.apply(this, arguments).then(function (answer) { if (answer.status === 401 && answer.headers.get('x-madre-ficha') === 'needed') location.reload(); return answer; }); }; })();</script>

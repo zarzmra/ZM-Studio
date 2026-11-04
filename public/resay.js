@@ -110,5 +110,5 @@ export function resay(text, { when = language() } = {}) {
   // Two last touches on our own sentences: the joiner between agents, which an older MADRE
   // wrote in English, and the name this product used to have.
   out = out.replace(/(@[\w-]+) or (?=@)/g, '$1 o ');
-  return out.replace(/^PULSE /, 'MADRE ');
+  return out.replace(/^PULSE /, 'ZM ');
 }

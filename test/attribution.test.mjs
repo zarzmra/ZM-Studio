@@ -40,8 +40,8 @@ test('attribution · drawn, it is one link to the author with the version and th
     assert.equal(link.tag, 'a');
     assert.equal(link.href, 'https://jossuealcala.com');
     assert.equal(link.rel, 'noopener');
-    assert.equal(link.children[0].textContent, 'MADRE 1.0.2');
-    assert.equal(link.children[1].text, ' · © 2026 Jossue Alcalá');
+    assert.equal(link.children[0].textContent, 'ZM 1.0.2');
+    assert.equal(link.children[1].text, ' · Desarrollado con MADRE de Jossue Alcalá');
     assert.equal(drawAttribution(host, ''), null);
   } finally { delete globalThis.document; }
 });

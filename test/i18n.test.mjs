@@ -168,7 +168,7 @@ test('i18n: every word the markup shows is one the catalogue knows', async () =>
   // that is the same word in both languages.
   const html = await read('index.html');
   const NOT_TRANSLATED = new Set([
-    'MADRE', 'MU/TH/UR', 'MU/TH/UR 6000', 'NOSTROMO', '◉ NOSTROMO', 'CREATE', 'ash', 'EN', 'AIRLOCK',
+    'MADRE', 'ZM', 'MU/TH/UR', 'MU/TH/UR 6000', 'NOSTROMO', '◉ NOSTROMO', 'CREATE', 'ash', 'EN', 'AIRLOCK',
     'madre doctor', 'MADRE · madre.run', '127.0.0.1:3000',
     'ARCHIVIST', 'Agent', 'Send', 'MEMORY RESEARCH · LOADING…', 'FORGET THIS MEMORY', 'DESIGNATION ›',
     'HUMAN ›', 'THE CORE', 'MODULES', 'FILES', 'CONVERSATIONS', 'NEW CONVERSATION', 'connecting',
@@ -315,7 +315,7 @@ test('i18n: a failure recorded in another language is read in this one', async (
   // The ledger keeps the sentence MADRE wrote at the time; the screen says it again, now.
   const old = "PULSE exhausted: @claude has used 99% of its local room token budget (MADRE's own soft limit, not the provider's quota; cache reads count a tenth) and another turn like the last one would reach 103%. Continue with @codex or @gemini.";
   const said = resay(old, { when: 'es' });
-  assert.match(said, /^MADRE agotada: @claude lleva 99% de su límite de uso local/);
+  assert.match(said, /^ZM agotada: @claude lleva 99% de su límite de uso local/);
   assert.match(said, /otra respuesta como la anterior lo llevaría a 103%/);
   assert.match(said, /Sigue con @codex o @gemini\./, 'the joiner between agents stayed English');
   assert.match(resay('Gemini was interrupted: STOPALL by the human.', { when: 'es' }), /Gemini se interrumpió: STOPALL hecho por ti\./);
@@ -473,7 +473,7 @@ test('i18n · «Mac» only where MADRE runs on one; elsewhere the machine is nam
   const name = page.setHostName(null);
   try {
     setLanguage('es');
-    assert.equal(t('MADRE does not know that project on this Mac.'), 'MADRE no conoce ese proyecto en esta computadora.');
+    assert.equal(t('MADRE does not know that project on this Mac.'), 'ZM no conoce ese proyecto en esta computadora.');
     assert.equal(pick({ en: 'on your Mac', es: 'en tu Mac' }), 'en tu computadora');
   } finally { page.setHostIsMac(was); page.setHostName(name); setLanguage(DEFAULT_LANGUAGE); }
 });

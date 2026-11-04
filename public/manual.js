@@ -218,7 +218,7 @@ function draw(lang, madre) {
   const copy = MANUAL[lang];
   const other = lang === 'es' ? 'en' : 'es';
   document.documentElement.lang = lang;
-  document.title = `MADRE · ${copy.title}`;
+  document.title = `ZM · ${copy.title}`;
   const root = document.getElementById('manual');
   root.replaceChildren();
 
@@ -227,7 +227,7 @@ function draw(lang, madre) {
     const bar = el('nav', 'manual-bar');
     const brand = el('span', 'manual-brand');
     brand.innerHTML = '<img src="/assets/brand/zm-app.svg" alt="" width="22" height="22">'; // trusted: our own markup
-    brand.append(el('b', null, 'MADRE'));
+    brand.append(el('b', null, 'ZM'));
     const keys = el('div', 'manual-keys');
     const swap = el('a', 'manual-key', copy.language);
     swap.href = `?lang=${other}`;
@@ -245,7 +245,7 @@ function draw(lang, madre) {
   mark.src = '/assets/brand/zm-app.svg';
   mark.alt = '';
   cover.append(mark, el('h1', null, copy.title), el('p', 'manual-subtitle', copy.subtitle));
-  if (madre) cover.append(el('p', 'manual-version', `MADRE ${madre}`));
+  if (madre) cover.append(el('p', 'manual-version', `ZM ${madre}`));
   const intro = el('div', 'manual-intro');
   for (const line of copy.intro) intro.append(el('p', null, plain(line)));
   cover.append(intro);
@@ -407,7 +407,7 @@ function draw(lang, madre) {
   root.append(keysPart);
 
   const foot = el('footer', 'manual-foot');
-  foot.append(el('p', null, copy.closing), el('p', 'manual-copy', `MADRE${madre ? ` ${madre}` : ''} · © 2026 Jossue Alcalá`));
+  foot.append(el('p', null, copy.closing), el('p', 'manual-copy', `ZM${madre ? ` ${madre}` : ''} · ${lang === 'en' ? 'Built with MADRE by Jossue Alcalá' : 'Desarrollado con MADRE de Jossue Alcalá'}`));
   root.append(foot);
   if (printing) for (const one of root.querySelectorAll('.manual-shot')) one.classList.add('shown');
   else watchShots(root);

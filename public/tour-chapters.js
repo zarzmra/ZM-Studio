@@ -61,12 +61,12 @@ export const CHAPTERS = [
     points: {
       es: [
         'Agrega la carpeta de cada proyecto. Ninguno se abre hasta que tú lo pidas, y agregarla no cambia nada de lo que hay dentro.',
-        'Con clic derecho o ⋯ en un proyecto lo anclas a la barra o lo quitas de MADRE. Su carpeta se queda como está.',
+        'Con clic derecho o ⋯ en un proyecto lo anclas a la barra o lo quitas de ZM. Su carpeta se queda como está.',
         'Acomoda Inicio a tu gusto: arrastra las tarjetas o haz clic derecho en una para cambiarla de tamaño. «Te necesita» y «Resumen reciente» te cuentan qué pasó mientras no estabas.',
       ],
       en: [
         'Add the folder of each project. None opens until you ask, and adding it changes nothing inside.',
-        'Right-click or ⋯ on a project to pin it to the bar or take it out of MADRE. Its folder stays as it is.',
+        'Right-click or ⋯ on a project to pin it to the bar or take it out of ZM. Its folder stays as it is.',
         'Arrange Home your way: drag the cards, or right-click one to change its size. «Needs you» and «Recent summary» tell you what happened while you were away.',
       ],
     },
@@ -81,7 +81,7 @@ export const CHAPTERS = [
     id: 'renamed',
     only: 'es',
     title: { es: 'Nombres más claros', en: 'Clearer names' },
-    lead: { es: 'MADRE ahora dice las cosas como son. Lo que buscabas sigue ahí, con otro nombre.', en: 'MADRE now says things as they are.' },
+    lead: { es: 'ZM ahora dice las cosas como son. Lo que buscabas sigue ahí, con otro nombre.', en: 'ZM now says things as they are.' },
     moved: [
       [{ es: 'Turnos', en: 'Turns' }, { es: 'Respuestas', en: 'Replies' }],
       [{ es: 'Remedio · condición', en: 'Remedy · condition' }, { es: 'Solución · problema', en: 'Solution · problem' }],
@@ -211,12 +211,12 @@ export const CHAPTERS = [
     points: {
       es: [
         'Hay cinco niveles, de menos a más: #0 Incógnito, #1 Solo conversar, #2 Crear, #3 Editar y #4 Acceso total.',
-        'Con #3 y #4, MADRE te pide confirmar antes de que el agente toque algo, y con #4 te lo pide dos veces. Cómo confirmas lo eliges en Ajustes › Permisos.',
+        'Con #3 y #4, ZM te pide confirmar antes de que el agente toque algo, y con #4 te lo pide dos veces. Cómo confirmas lo eliges en Ajustes › Permisos.',
         'Si quieres, una confirmación puede durar unos minutos. Mientras dura, la ves junto a la caja de texto.',
       ],
       en: [
         'There are five levels, from least to most: #0 Incognito, #1 Chat only, #2 Create, #3 Edit and #4 Full access.',
-        'With #3 and #4, MADRE asks you to confirm before the agent touches anything, and with #4 it asks twice. How you confirm, you choose in Settings › Permissions.',
+        'With #3 and #4, ZM asks you to confirm before the agent touches anything, and with #4 it asks twice. How you confirm, you choose in Settings › Permissions.',
         'If you like, a confirmation can last a few minutes. While it does, you see it beside the text box.',
       ],
     },
@@ -267,16 +267,16 @@ export const CHAPTERS = [
   {
     id: 'maps',
     title: { es: 'Los mapas', en: 'The maps' },
-    lead: { es: 'Dos dibujos: lo que MADRE recuerda de un proyecto y cómo se conectan tus proyectos.', en: 'Two drawings: what MADRE remembers about a project, and how your projects connect.' },
+    lead: { es: 'Dos dibujos: lo que ZM recuerda de un proyecto y cómo se conectan tus proyectos.', en: 'Two drawings: what ZM remembers about a project, and how your projects connect.' },
     news: { kind: 'changed', es: 'NOSTROMO ahora es el Mapa de memoria, con su tecla en la barra; el Mapa de proyectos es nuevo.', en: 'NOSTROMO is now the Memory map, with its key on the bar; the Project map is new.' },
     points: {
       es: [
-        'El Mapa de memoria, en la barra del proyecto, dibuja como una estrella cada cosa que MADRE recuerda de él.',
+        'El Mapa de memoria, en la barra del proyecto, dibuja como una estrella cada cosa que ZM recuerda de él.',
         'El Mapa de proyectos, en Inicio, muestra tus proyectos y sus conexiones. Necesita una pantalla de al menos 900 px de ancho.',
         'Para conectar dos proyectos, arrastra uno sobre el otro en el Mapa de proyectos.',
       ],
       en: [
-        'The Memory map, on the project\'s bar, draws as a star each thing MADRE remembers about it.',
+        'The Memory map, on the project\'s bar, draws as a star each thing ZM remembers about it.',
         'The Project map, in Home, shows your projects and their connections. It needs a screen at least 900 px wide.',
         'To connect two projects, drag one onto the other in the Project map.',
       ],
@@ -292,7 +292,7 @@ export const CHAPTERS = [
   {
     id: 'settings',
     title: { es: 'Diagnóstico y Ajustes', en: 'Diagnostics and Settings' },
-    lead: { es: 'En Ajustes cambias cómo se ve y cómo trabaja MADRE. Diagnóstico te ayuda cuando algo falla.', en: 'In Settings you change how MADRE looks and works. Diagnostics helps when something fails.' },
+    lead: { es: 'En Ajustes cambias cómo se ve y cómo trabaja ZM. Diagnóstico te ayuda cuando algo falla.', en: 'In Settings you change how ZM looks and works. Diagnostics helps when something fails.' },
     since: { kind: 'changed', es: 'Los Ajustes de Inicio suman IA local. En Ajustes › Agentes cada agente se pliega, y OpenCode agrupa sus modelos por proveedor.', en: 'Home\'s Settings gain Local AI. In Settings › Agents each agent folds, and OpenCode groups its models by provider.' },
     news: { kind: 'new', es: 'Lo que estaba repartido entre MU/TH/UR, ⚙ CONEXIONES y la barra ahora está en una ventana con buscador, y Diagnóstico te da la solución.', en: 'What was spread across MU/TH/UR, ⚙ CONNECTIONS and the bar now lives in one window with a search, and Diagnostics gives you the remedy.' },
     points: {
@@ -323,12 +323,12 @@ export const CHAPTERS = [
       es: [
         'Cada mosaico tiene su interruptor. Tócalo para ver qué hace antes de encenderlo.',
         'Algunos, como Ahorro de tokens, Esfuerzo sugerido y Notas, se abren en su propia ventana.',
-        'Antes de encender uno, MADRE te dice qué va a escribir y qué necesita. En el Mercado encuentras más.',
+        'Antes de encender uno, ZM te dice qué va a escribir y qué necesita. En el Mercado encuentras más.',
       ],
       en: [
         'Every tile has its switch. Press it to see what it does before you turn it on.',
         'Some, such as Token saver, Suggested effort and Notes, open in their own window.',
-        'Before you turn one on, MADRE tells you what it will write and what it needs. The Market has more.',
+        'Before you turn one on, ZM tells you what it will write and what it needs. The Market has more.',
       ],
     },
     keys: [],
@@ -343,12 +343,12 @@ export const CHAPTERS = [
     points: {
       es: [
         'Se configura en Inicio › Ajustes › IA local. Ahí eliges si la usan todos tus proyectos, solo los que tú enciendas, o si cada proyecto lo decide; y en «Dirección de Ollama», la de otra computadora de tu red.',
-        'MADRE te recomienda los modelos que caben en tu equipo y te dice cuánto pesan antes de descargarlos. Una descarga se puede cancelar: lo que ya bajó se queda y sigue desde ahí.',
+        'ZM te recomienda los modelos que caben en tu equipo y te dice cuánto pesan antes de descargarlos. Una descarga se puede cancelar: lo que ya bajó se queda y sigue desde ahí.',
         'Un proyecto sin IA local sigue trabajando con tus agentes. Solo deja de buscar por significado, de resumir su memoria y de usar a @madre.',
       ],
       en: [
         'It is set in Home › Settings › Local AI. There you choose whether all your projects use it, only the ones you switch on, or each project decides; and in «Ollama address», another computer\'s on your network.',
-        'MADRE recommends the models that fit your computer and tells you how big they are before you download them. A download can be cancelled: what arrived stays, and it picks up from there.',
+        'ZM recommends the models that fit your computer and tells you how big they are before you download them. A download can be cancelled: what arrived stays, and it picks up from there.',
         'A project without the local AI keeps working with your agents. It only stops searching by meaning, summing up its memory and using @madre.',
       ],
     },
@@ -359,7 +359,7 @@ export const CHAPTERS = [
     id: 'phone',
     title: { es: 'Tu teléfono', en: 'Your phone' },
     lead: { es: 'Sigue tu trabajo desde el teléfono.', en: 'Carry on with your work from your phone.' },
-    news: { kind: 'new', es: 'En 0.7.2 MADRE solo se abría en la Mac.', en: 'In 0.7.2 MADRE only opened on the Mac.' },
+    news: { kind: 'new', es: 'En 0.7.2 ZM solo se abría en la Mac.', en: 'In 0.7.2 ZM only opened on the Mac.' },
     points: {
       es: [
         'Conecta tu teléfono con un código QR. Tiene que estar en la misma red Wi‑Fi que tu Mac.',
@@ -380,7 +380,7 @@ export const CHAPTERS = [
     id: 'gestures',
     title: { es: 'Gestos y atajos', en: 'Gestures and shortcuts' },
     lead: { es: 'Todos los atajos en una hoja. La abres con la tecla ? en cualquier pantalla.', en: 'Every shortcut on one sheet. The ? key opens it on any screen.' },
-    news: { kind: 'new', es: 'Los gestos y atajos de todo MADRE, juntos en una hoja por primera vez.', en: 'The gestures and shortcuts of all of MADRE, together on one sheet for the first time.' },
+    news: { kind: 'new', es: 'Los gestos y atajos de todo ZM, juntos en una hoja por primera vez.', en: 'The gestures and shortcuts of all of ZM, together on one sheet for the first time.' },
     since: { kind: 'changed', es: 'Suma los gestos del tablero de Inicio: acomodar, arrastrar y agregar tarjetas.', en: 'It adds the gestures of Home\'s board: arrange, drag and add cards.' },
     points: { es: [], en: [] },
     keys: [],
@@ -390,7 +390,7 @@ export const CHAPTERS = [
 
 // The sheet of gestures: what `?` opens anywhere, and the last chapter.
 export const GESTURES = [
-  [{ es: 'En todo MADRE', en: 'Everywhere in MADRE' }, [
+  [{ es: 'En todo ZM', en: 'Everywhere in ZM' }, [
     [{ es: 'Ajustes', en: 'Settings' }, '⌘ ,'],
     [{ es: 'Cerrar lo de encima, uno por uno', en: 'Close what is on top, layer by layer' }, 'Esc'],
     [{ es: 'Detener todo', en: 'Stop everything' }, '/stopall'],
