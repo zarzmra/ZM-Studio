@@ -1,6 +1,6 @@
-# MADRE SDK · write your own modules
+# ZM SDK · write your own modules
 
-A MADRE module is **one file**. No build, no dependencies, no signing up anywhere. You copy it into a folder, reload the modules from «Create your module» in MODULES, and it shows up on the board with its switch. You can write it by hand or ask an AI for it, with this document as context.
+A ZM module is **one file**. No build, no dependencies, no signing up anywhere. You copy it into a folder, reload the modules from «Create your module» in MODULES, and it shows up on the board with its switch. You can write it by hand or ask an AI for it, with this document as context.
 
 ## Where it lives
 
@@ -9,11 +9,11 @@ A MADRE module is **one file**. No build, no dependencies, no signing up anywher
 | `~/.pulse/modules/*.mjs` | All your rooms |
 | `<proyecto>/.madre/modules/*.mjs` | That project only |
 
-No agent can write there: `.madre/` is a forbidden zone in CONTROL and AIRLOCK, and `~/.pulse` is outside every project. A module gets into MADRE only because you put it there.
+No agent can write there: `.madre/` is a forbidden zone in CONTROL and AIRLOCK, and `~/.pulse` is outside every project. A module gets into ZM only because you put it there.
 
 ## The file
 
-The `export default` is a plain object. MADRE wraps it with `defineModule`. There are two complete
+The `export default` is a plain object. ZM wraps it with `defineModule`. There are two complete
 examples, and both work as is:
 
 | | what it teaches |
@@ -36,11 +36,11 @@ export default {
 };
 ```
 
-**Your module does not import packages.** Not MADRE, not the SDK, nothing from npm. Before installing it, MADRE copies your file to a separate temporary folder and loads it there —that way it checks what it is without running it where it lives— and that folder has no `node_modules`: an `import` by package name doesn't resolve and the installation fails.
+**Your module does not import packages.** Not ZM, not the SDK, nothing from npm. Before installing it, ZM copies your file to a separate temporary folder and loads it there —that way it checks what it is without running it where it lives— and that folder has no `node_modules`: an `import` by package name doesn't resolve and the installation fails.
 
 **Node builtins do work**, always: `node:fs`, `node:url`, `node:tls`, `node:child_process`. That's enough to speak any protocol. What there isn't is anything to install.
 
-If you need `defineModule` —to compute something before defining the module, for example— **MADRE hands it to you**: export a function and you receive it as an argument.
+If you need `defineModule` —to compute something before defining the module, for example— **ZM hands it to you**: export a function and you receive it as an argument.
 
 ```js
 export default ({ defineModule }) => defineModule({
@@ -50,11 +50,11 @@ export default ({ defineModule }) => defineModule({
 });
 ```
 
-> The modules that ship with MADRE do write `import { defineModule } from './sdk.mjs'`, because they live inside the package. **If you ask an agent to write one for you, it will read those files and copy that line** — and it won't work. Tell it to export a plain object, or the function above.
+> The modules that ship with ZM do write `import { defineModule } from './sdk.mjs'`, because they live inside the package. **If you ask an agent to write one for you, it will read those files and copy that line** — and it won't work. Tell it to export a plain object, or the function above.
 
 ## What a module can declare
 
-This table is **the complete contract**: 41 fields, not one more. Any other field you write, MADRE
+This table is **the complete contract**: 41 fields, not one more. Any other field you write, ZM
 tells you about at install time ("I didn't understand these fields") instead of silently ignoring it. A test in
 the suite compares this table against the code, so if they ever drift apart, it's a failure.
 
@@ -63,42 +63,42 @@ the suite compares this table against the code, so if they ever drift apart, it'
 |---|---|
 | `id`, `name`, `vendor`, `summary`, `creates`, `requires` | Its page in MODULES. `summary` is one sentence: what it does. `creates` and `requires` are short lines, one idea each |
 | `version` | Yours, and it starts at `1.0.0`. If you don't declare it, the page shows the file's date |
-| `sdk` | The SDK contract your module was written for, a whole number: `1` (up to MADRE 1.0.5) or `2` (`ctx.t`, `ctx.services.ollama.generate`, and a module that is one file importing nothing from MADRE). Without it, it is `1`. A MADRE that does not know your contract does not load it and tells you why; the Market only offers it to the ones that do. The number counts what MADRE hands a module, not MADRE's version: a new MADRE keeps understanding the earlier contracts |
-| `tracks` | If your module wraps something from outside, its version isn't yours: it's that thing's. Declare `{ name, npm }` or `{ name, github }` and return the version found in `status(ctx)` as `runs: [{ name, version }]`. MADRE shows that version and looks for a newer one on its own, once a day, with the page's ↻ button to check now |
-| `updatePlan(ctx, { latest })` | How that new version is brought to this computer: `{ command, args, display, note, after }`. MADRE shows `display` and runs nothing until the human has read it; the output lands in the room line by line. With no command, return `{ command: null, note, download }` and the page sends you to download it |
-| `updates` | An https `{ url }` where you publish **your own module**. With that, its page gets a button that fetches the file, verifies it the same way as an installation, and replaces it if it passes. If you installed it from a file, MADRE remembers which one and you don't need to declare anything: edit it and ask for a new copy |
-| `settings` | Default values. They live in `~/.pulse/config.json` under `modules.<idEnCamelCase>`; `enabled` is the switch for every project, and `rooms` keeps what each project said, which wins. MADRE works it out for you: `ctx.settings.enabled` is already this project's |
+| `sdk` | The SDK contract your module was written for, a whole number: `1` (up to ZM 1.0.5) or `2` (`ctx.t`, `ctx.services.ollama.generate`, and a module that is one file importing nothing from ZM). Without it, it is `1`. A ZM that does not know your contract does not load it and tells you why; the Market only offers it to the ones that do. The number counts what ZM hands a module, not ZM's version: a new ZM keeps understanding the earlier contracts |
+| `tracks` | If your module wraps something from outside, its version isn't yours: it's that thing's. Declare `{ name, npm }` or `{ name, github }` and return the version found in `status(ctx)` as `runs: [{ name, version }]`. ZM shows that version and looks for a newer one on its own, once a day, with the page's ↻ button to check now |
+| `updatePlan(ctx, { latest })` | How that new version is brought to this computer: `{ command, args, display, note, after }`. ZM shows `display` and runs nothing until the human has read it; the output lands in the room line by line. With no command, return `{ command: null, note, download }` and the page sends you to download it |
+| `updates` | An https `{ url }` where you publish **your own module**. With that, its page gets a button that fetches the file, verifies it the same way as an installation, and replaces it if it passes. If you installed it from a file, ZM remembers which one and you don't need to declare anything: edit it and ask for a new copy |
+| `settings` | Default values. They live in `~/.pulse/config.json` under `modules.<idEnCamelCase>`; `enabled` is the switch for every project, and `rooms` keeps what each project said, which wins. ZM works it out for you: `ctx.settings.enabled` is already this project's |
 | `status(ctx)` | What the card shows: `{ status: { installed, detail }, preflight: { ok, problems }, install: { display } }`. `install` is returned from here; it is not a top-level field of the module |
-| `status(ctx)` → `runs` | What your module manages that isn't MADRE: `[{ name, version, target }]`. `version` is what you found on this computer (`null` if it isn't there), `target` is what you would install. If it matches `tracks.name`, that is the page's version |
+| `status(ctx)` → `runs` | What your module manages that isn't ZM: `[{ name, version, target }]`. `version` is what you found on this computer (`null` if it isn't there), `target` is what you would install. If it matches `tracks.name`, that is the page's version |
 | `toggle(ctx, payload)` | Replaces the default switch; `confirm: 'texto'` asks for confirmation before turning on |
 | `onToggle(ctx, enabled)` | Reacts to the switch |
 | `ready(ctx)` | What you ask before turning on, in one project or in all (from the Market too): `null` when ready, `{ status, body: { error } }` when not. Turning off never asks it |
-| `footer` | Up to two keys beside MADRE's version, bottom right, while your module is on: `[{ icon: 'heart' \| 'star' \| 'link', label, text, action, url }]`. Words can be one sentence or `{ en, es }`; `url` must be https and opens in a new tab. MADRE draws it: on hover it shows `text` and a button with `action` |
-| `credit` | Whose idea it was, if it was not yours: a name. MADRE says it on the module's card and in the Market («Idea by …») |
-| `icon` | Your module's icon: `{ svg, color }`. `svg` is the drawing — its shapes (`<path d="…"/>`) or a whole `<svg>`, on whatever grid you like — and `color` its tile's, `#rrggbb`. MADRE fits it on its own so it looks like MADRE's: centred and scaled to the same square, drawn in white in one color, on the MADRE color nearest to yours, with anything that is not drawing taken out (scripts, images, links, styles, gradients). Without `icon`, your module wears the grey puzzle piece. Up to 8000 characters |
+| `footer` | Up to two keys beside ZM's version, bottom right, while your module is on: `[{ icon: 'heart' \| 'star' \| 'link', label, text, action, url }]`. Words can be one sentence or `{ en, es }`; `url` must be https and opens in a new tab. ZM draws it: on hover it shows `text` and a button with `action` |
+| `credit` | Whose idea it was, if it was not yours: a name. ZM says it on the module's card and in the Market («Idea by …») |
+| `icon` | Your module's icon: `{ svg, color }`. `svg` is the drawing — its shapes (`<path d="…"/>`) or a whole `<svg>`, on whatever grid you like — and `color` its tile's, `#rrggbb`. ZM fits it on its own so it looks like ZM's: centred and scaled to the same square, drawn in white in one color, on the ZM color nearest to yours, with anything that is not drawing taken out (scripts, images, links, styles, gradients). Without `icon`, your module wears the grey puzzle piece. Up to 8000 characters |
 | `slash` | `/name` commands that run on the server with your `ctx` and return `{ ok, title, text, link }`. The room shows them as a card and the agents read them. `link` is optional: `{ href, label }` with a route of yours (`/api/x/<id>/…`), and the card offers it as a key that opens another tab; an address outside your routes is ignored |
-| `toolsForTurn(ctx, turn)` | MCP servers for an agent's turn: `[{ name, command, args, env, tools, sends, brief }]`. MADRE attaches them to the CLI in its isolated run and describes `brief` to the agent. `turn` carries the agent, the mode, the lease, the folder, the port, and `turn.turn`: the id of the reply that turn will write. If your server calls back to the room on behalf of the turn, send that id; `ctx.room.runningTurn(id)` tells you whether it is still running and for which agent |
+| `toolsForTurn(ctx, turn)` | MCP servers for an agent's turn: `[{ name, command, args, env, tools, sends, brief }]`. ZM attaches them to the CLI in its isolated run and describes `brief` to the agent. `turn` carries the agent, the mode, the lease, the folder, the port, and `turn.turn`: the id of the reply that turn will write. If your server calls back to the room on behalf of the turn, send that id; `ctx.room.runningTurn(id)` tells you whether it is still running and for which agent |
 | `toolsForTurn` → `sends` | Which of your tools **send something outside**. The core withdraws them below `#4` AIRLOCK: the model isn't even told they exist. See below |
-| `reaches` | Where your module reaches, in the same four answers MADRE gives about its own. See below |
-| `secrets` | The keys you need, declared instead of drawn: `[{ name, label, note, where }]`. MADRE draws the field, keeps it in its vault under your id, and gives it back to you through `ctx.vault`. See below |
+| `reaches` | Where your module reaches, in the same four answers ZM gives about its own. See below |
+| `secrets` | The keys you need, declared instead of drawn: `[{ name, label, note, where }]`. ZM draws the field, keeps it in its vault under your id, and gives it back to you through `ctx.vault`. See below |
 | `routes` | Your own HTTP routes: `{ method, path, handler(ctx, { payload, params, url, request, viaPhone }) }` → `{ status, body }`. `viaPhone` is `true` when the request comes from a paired phone: deny it yourself if your route belongs to the Mac |
 | `onEvent(ctx, event)` | Every ledger event of every live conversation in the room, while your module is on. `ctx.room` and `ctx.chat` are that conversation's, and `ctx.record` writes into it. It runs separately: whatever it takes long on or fails at doesn't stop the room. As always, a module doesn't fabricate messages or turns |
-| `controls` | Your module's settings, declared instead of drawn: `[{ key, label, type: 'select' \| 'switch' \| 'text', options, choices, note, invert }]`. MADRE draws them on the page and saves them in your block of `config.json`. In a `select`, `choices: [{ value, label }]` says which phrase the person reads for each value that gets saved (if you give it, `options` comes from there); without it, the person reads the value as is |
+| `controls` | Your module's settings, declared instead of drawn: `[{ key, label, type: 'select' \| 'switch' \| 'text', options, choices, note, invert }]`. ZM draws them on the page and saves them in your block of `config.json`. In a `select`, `choices: [{ value, label }]` says which phrase the person reads for each value that gets saved (if you give it, `options` comes from there); without it, the person reads the value as is |
 | `onSettings(ctx, settings)` | Tells you when the human changed one of your `controls`, in case something live needs to know |
 | `conditions` | Entries for the MU/TH/UR catalog, with a remedy per platform |
-| `kind` | `'builtin'` (the default) changes how MADRE behaves and lives in `config.json`; `'installer'` writes into the project with a command the human confirms before it runs |
+| `kind` | `'builtin'` (the default) changes how ZM behaves and lives in `config.json`; `'installer'` writes into the project with a command the human confirms before it runs |
 | `configKey` | Your block in `config.json`. By default it is your `id` in camelCase; declare it only if you want a different one |
-| `card` | Which card MADRE draws. A module of yours leaves the default value: the named cards are the ones MADRE ships drawn for its own |
+| `card` | Which card ZM draws. A module of yours leaves the default value: the named cards are the ones ZM ships drawn for its own |
 | `models` | The models your module chooses between, if it wraps something that has them. They show up on the page |
 | `package` | The npm package that installs what your module manages, if there is one |
 | `confirm` | A text. If it is there, turning on the switch asks for confirmation and doesn't turn on until the human gives it |
 | `toggledEvent`, `toggledBody` | What gets added to the `extension.toggled` event and to the notice the room sees when your module is turned on or off |
 | `preflight(ctx)`, `detect(ctx)`, `installCommand(ctx)` | **Legacy**, from when a module could only be an installer. They still work; for something new, return `preflight` from `status(ctx)` as above |
-| `describe(ctx)` | MADRE builds it from everything above. **Don't declare it**: it is on the list because the object carries it, not because you have to write it |
+| `describe(ctx)` | ZM builds it from everything above. **Don't declare it**: it is on the list because the object carries it, not because you have to write it |
 
 ### Can it connect to *X*?
 
-That doesn't depend on MADRE. A module can do whatever a Node process can do on your
+That doesn't depend on ZM. A module can do whatever a Node process can do on your
 computer: speak TLS, start a server, store a key. **It depends on how that service
 lets a human hand over their own credential**, and that falls into three tiers:
 
@@ -121,7 +121,7 @@ line of the page. The long catalog, and why, is in
 ### A file that is also a server
 
 `toolsForTurn` returns `args` that point to a file, and you only have one. You don't need two:
-**yours is the module page when MADRE imports it and the MCP server when MADRE executes it.** It knows
+**yours is the module page when ZM imports it and the MCP server when ZM executes it.** It knows
 which of the two it is at the end of the file.
 
 ```js
@@ -136,7 +136,7 @@ if ((await real(process.argv[1])) === (await real(SELF))) serve();
 ```
 
 **Resolve both paths before comparing them.** `process.argv[1] === SELF` looks the same and almost
-always is: when MADRE launches it, it passes the same `SELF` that Node's loader already resolved.
+always is: when ZM launches it, it passes the same `SELF` that Node's loader already resolved.
 But as soon as **you run the file yourself by hand to test it** —`node ~/.pulse/modules/tuyo.mjs`, or
 any path that goes through `/tmp`, which on macOS is a link to `/private/tmp`— `argv[1]` keeps
 what you typed and `SELF` doesn't. The comparison comes out false, `serve()` never runs, the process starts,
@@ -161,7 +161,7 @@ reaches: [{
 }]
 ```
 
-The four answers are the same ones MADRE gives about its own, and for the same reason: whoever
+The four answers are the same ones ZM gives about its own, and for the same reason: whoever
 reads the log deserves to know what travels, when, where to, and where it's turned off. Your declaration is
 stored **separately** from the core's and marked with your `id`, because who promised what is part
 of the promise. It is rebuilt on every load: uninstalling your module takes its destination with it.
@@ -172,7 +172,7 @@ you no longer use.
 
 ### If your module needs a key
 
-Declare them and don't ask for them yourself. MADRE draws a password field on the `KEYS` floor of your
+Declare them and don't ask for them yourself. ZM draws a password field on the `KEYS` floor of your
 page, accepts the value **only from this computer** (`127.0.0.1`), stores it in
 `~/.pulse/credentials/<tu-id>.json` with `0600` permissions inside a `0700` directory, and notes
 in the ledger that one was saved and **with what name and what length, never the value**.
@@ -220,7 +220,7 @@ If *all* of a server's tools send, the whole server doesn't travel below
 it comes short. And whatever you decide to check, check it **in your server and not in the `brief`**: a
 prompt is a suggestion.
 
-**Can it connect to *X*?** The answer doesn't depend on MADRE but on how that service lets
+**Can it connect to *X*?** The answer doesn't depend on ZM but on how that service lets
 a human hand over their own key, and it is mapped in three tiers —with a catalog— in
 [§6 of `CONECTORES.md`](https://github.com/jossuealcacao-exe/madre/blob/main/docs/en/CONNECTORS.md#6--qu%C3%A9-alcanza-un-m%C3%B3dulo-y-de-qui%C3%A9n-es-el-muro), in the repository.
 Read it before writing anything: it saves you discovering halfway through that the service requires an annual
@@ -234,13 +234,13 @@ finishing it, and in the meantime it can only be turned on deliberately with `PU
 
 ## Publishing it
 
-The page of a module of yours has **GET A NEWER FILE**: MADRE fetches the file —from the `url` you declared or from the file you installed it from—, verifies it in a separate copy, and only replaces the installed one if it loads, follows the house rules, and states a different version. Verifying installs nothing.
+The page of a module of yours has **GET A NEWER FILE**: ZM fetches the file —from the `url` you declared or from the file you installed it from—, verifies it in a separate copy, and only replaces the installed one if it loads, follows the house rules, and states a different version. Verifying installs nothing.
 
-And in the MODULES header there is **+ ADD A MODULE** to install someone else's `.mjs`. It goes through the same door as everything else. Said plainly, because it is what it is: a module runs **inside MADRE, with the permissions of whoever opens it**. MADRE checks that it loads and that it doesn't leave its pen —its own id, routes only under `/api/x/<id>/`, never on top of a MADRE module—; what the code *intends* is something nobody but you can check.
+And in the MODULES header there is **+ ADD A MODULE** to install someone else's `.mjs`. It goes through the same door as everything else. Said plainly, because it is what it is: a module runs **inside ZM, with the permissions of whoever opens it**. ZM checks that it loads and that it doesn't leave its pen —its own id, routes only under `/api/x/<id>/`, never on top of a ZM module—; what the code *intends* is something nobody but you can check.
 
 ### In the Market, for everyone
 
-A module of yours can be in MADRE's Market, free, with your name on it. It is curated: the author of MADRE reads the code, signs it and publishes it; nothing reaches the Market without a person reading it.
+A module of yours can be in ZM's Market, free, with your name on it. It is curated: the author of ZM reads the code, signs it and publishes it; nothing reaches the Market without a person reading it.
 
 1. On your module's page, **Send to the Market › Prepare**. Write what the Market will show —name, one line and what it does, in Spanish and English—, the shelf, your name and GitHub user, and the license of your code.
 2. **Check** checks it the way the Market will: that it loads as any module loads, that the entry says the same id and version, and what its code reaches for (commands, the network, files, environment variables). If it talks to the network, declare `reaches`.
@@ -253,7 +253,7 @@ From the terminal, the same check: `npx @jossuealcala/madre check-module --file 
 
 ## The module page
 
-You don't draw anything: you declare, and MADRE builds your module the same way as its own. In MODULES each module is a card on the board and, when you tap it, a page with the same blocks as SETTINGS. That's why yours reads the same as the ones MADRE ships.
+You don't draw anything: you declare, and ZM builds your module the same way as its own. In MODULES each module is a card on the board and, when you tap it, a page with the same blocks as SETTINGS. That's why yours reads the same as the ones ZM ships.
 
 **The board card** has an icon, your `name`, a line with your `summary`, and its switch if it is a module that gets turned on. A module of yours carries the «Yours» tag.
 
@@ -268,7 +268,7 @@ You don't draw anything: you declare, and MADRE builds your module the same way 
 | Commands | what it adds to the text box | `commands` or `slash` |
 | Yours | get a newer file and remove it | the file you installed, `updates` |
 
-A module that installs into the project instead of being turned on keeps its install card, with the command in view before anything runs, inside the «What it does» block. The figures at the top of the page and the dedicated window belong to MADRE's modules that keep a reading (Ash, Suggested effort, Ollama); you don't need to declare anything for them.
+A module that installs into the project instead of being turned on keeps its install card, with the command in view before anything runs, inside the «What it does» block. The figures at the top of the page and the dedicated window belong to ZM's modules that keep a reading (Ash, Suggested effort, Ollama); you don't need to declare anything for them.
 
 ## The `ctx`
 
@@ -280,7 +280,7 @@ ctx = {
   readConfig(), updateConfig(patch),
   record(type, payload),           // escribe un evento en el ledger; tipo "algo.algo", nunca message.* ni agent.*
   language, t(text, vars),         // the room's language, 'es' or 'en', and your words in it (sdk: 2):
-                                   // an English sentence MADRE already knows, or your own { es, en }
+                                   // an English sentence ZM already knows, or your own { es, en }
   services: { history, imageKey, ollama: { state, generate }, … }, // what the server offers;
                                    // ollama.generate({ system, prompt, json }) answers with the local model (sdk: 2)
   vault: { get, held, keep, forget } // tus secretos, y solo los tuyos
@@ -315,26 +315,26 @@ Texts come cut at 600 characters. It is the ground for a module that reports on 
 - **Don't store credentials.** Use the sessions that already live on the machine.
 - **Don't write into the project** from a module; that's what the agents' modes are for. A module that installs something into the project is `kind: 'installer'` and shows the command before running it.
 - **Fail softly.** An exception in `toolsForTurn` hands over nothing; in a command, the card states the error. Never break an agent's turn.
-- **MADRE's voice.** Short uppercase labels, notes that say what doesn't leave the machine, `MU/TH/UR › ` when you speak in a notice.
+- **ZM's voice.** Short uppercase labels, notes that say what doesn't leave the machine, `MU/TH/UR › ` when you speak in a notice.
 
 ## Let your AI build it, in the room
 
-Type `/module <lo que debe hacer>` in the composer. It is the explicit entry point to the guided flow: if `#2 CREATE` isn't active, MADRE asks you to choose it and keeps your request intact. With `#2` active, it keeps the agent you chose and hands it the SDK contract and the example. The agent must write **a single file** named `<id>.module.mjs` in its scratch folder; it cannot install it on its own. That file carries its `icon`: the agent draws it with the rest of the module and MADRE fits it to the tile.
+Type `/module <lo que debe hacer>` in the composer. It is the explicit entry point to the guided flow: if `#2 CREATE` isn't active, ZM asks you to choose it and keeps your request intact. With `#2` active, it keeps the agent you chose and hands it the SDK contract and the example. The agent must write **a single file** named `<id>.module.mjs` in its scratch folder; it cannot install it on its own. That file carries its `icon`: the agent draws it with the rest of the module and ZM fits it to the tile.
 
-MADRE recognizes that name and puts a card in the room: `INSTALL FOR EVERY ROOM` or `INSTALL FOR THIS PROJECT`. Read it, decide, one click. MADRE validates it in a copy, saves it as `<id>.mjs` in the folder you chose, and it appears in MODULES with the «Yours» tag. You can also ask for the same thing in natural language while you're in `#2` or higher; `/module` makes the format explicit and doesn't grant permissions on its own.
+ZM recognizes that name and puts a card in the room: `INSTALL FOR EVERY ROOM` or `INSTALL FOR THIS PROJECT`. Read it, decide, one click. ZM validates it in a copy, saves it as `<id>.mjs` in the folder you chose, and it appears in MODULES with the «Yours» tag. You can also ask for the same thing in natural language while you're in `#2` or higher; `/module` makes the format explicit and doesn't grant permissions on its own.
 
 Agents never write to `~/.pulse/modules` or `.madre/modules`: they propose, you install.
 
-A module of yours carries the «Yours» tag and is removed from its page with «Remove» —also from «Create your module», in the list of yours—. MADRE confirms the exact file, deletes that file and its origin record for updates, and withdraws it from the room without restarting it. It doesn't delete files the module created or its saved settings. The modules that ship with MADRE don't show that button: they aren't removed, they're turned off.
+A module of yours carries the «Yours» tag and is removed from its page with «Remove» —also from «Create your module», in the list of yours—. ZM confirms the exact file, deletes that file and its origin record for updates, and withdraws it from the room without restarting it. It doesn't delete files the module created or its saved settings. The modules that ship with ZM don't show that button: they aren't removed, they're turned off.
 
 ## What a module cannot touch
 
-A module runs inside MADRE's process with your permissions: install only what you've read. MADRE, for its part, protects its core like this:
+A module runs inside ZM's process with your permissions: install only what you've read. ZM, for its part, protects its core like this:
 
-- Its HTTP routes live under `/api/x/<id>/`; a module with routes outside that doesn't load, so none can impersonate `/api/state`, `/api/messages`, or any route of MADRE's own.
+- Its HTTP routes live under `/api/x/<id>/`; a module with routes outside that doesn't load, so none can impersonate `/api/state`, `/api/messages`, or any route of ZM's own.
 - It cannot use the `id` of a built-in module or of another one already loaded.
 - `record()` rejects the reserved event types (`message.*`, `agent.*`); it cannot fabricate turns or messages.
-- It receives nobody's credentials; like MADRE, it uses the sessions that already live on the machine.
+- It receives nobody's credentials; like ZM, it uses the sessions that already live on the machine.
 - An error in `toolsForTurn` hands over nothing; in a command, the card states the error; at load time, the board warns how many didn't load and «Create your module» says which file and why. None of that stops the room.
 
 ## Testing it
@@ -344,4 +344,4 @@ A module runs inside MADRE's process with your permissions: install only what yo
 3. Turn it on with its switch. Type `/tu-comando` in the composer.
 4. Change the file and reload again: no need to restart the room.
 
-With an AI: give it this document and `hello-module.mjs`, describe what you want, and ask it for a single `.mjs` file with `export default { … }`. MADRE does the rest.
+With an AI: give it this document and `hello-module.mjs`, describe what you want, and ask it for a single `.mjs` file with `export default { … }`. ZM does the rest.

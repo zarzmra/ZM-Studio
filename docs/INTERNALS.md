@@ -1,10 +1,10 @@
-# MADRE por dentro
+# ZM por dentro
 
 Lo que el README no necesita contar para usar la sala, pero sí quien quiera entenderla, operarla en condiciones raras o escribir un módulo. Cada afirmación aquí corresponde a código en `src/` y tiene prueba en `test/`.
 
 ## El ledger
 
-Cada proyecto tiene una sala estable bajo `PULSE_HOME` (por defecto `~/.pulse/rooms/<sala>/`). Su fuente de verdad es `events.jsonl`: un evento por línea, secuencia creciente, append-only para la sala. MADRE reconstruye la ventana de conversación desde ahí aunque se reinicie o se abra desde otro IDE.
+Cada proyecto tiene una sala estable bajo `PULSE_HOME` (por defecto `~/.pulse/rooms/<sala>/`). Su fuente de verdad es `events.jsonl`: un evento por línea, secuencia creciente, append-only para la sala. ZM reconstruye la ventana de conversación desde ahí aunque se reinicie o se abra desde otro IDE.
 
 Las escrituras se serializan entre procesos locales con un lock en disco, así dos IDEs sobre la misma sala nunca producen secuencias repetidas. La única operación que reescribe el ledger es el purgado de privacidad, bajo el mismo lock, atómica (archivo temporal y rename), conservando secuencias.
 
@@ -14,7 +14,7 @@ Los errores de un agente se guardan acotados en `message.failed`: una línea de 
 
 ## El stream
 
-`/api/events` se alimenta del ledger, no de la memoria del proceso: los eventos que otro proceso MADRE agregue a la misma sala llegan a las páginas abiertas. El sondeo lee solo los bytes nuevos cada 500 ms (`PULSE_BROADCAST_INTERVAL_MS`); un archivo que encoge, tras un purgado, reinicia el offset. Cada frame lleva `id: <secuencia>`, así un cliente que reconecta pide desde donde se quedó. Un cliente que deja de consumir se desconecta al acumular 1 MiB sin drenar (`PULSE_SSE_MAX_BUFFERED_BYTES`). Los eventos GHOST no tienen secuencia: llegan a las páginas abiertas y nunca al ledger.
+`/api/events` se alimenta del ledger, no de la memoria del proceso: los eventos que otro proceso ZM agregue a la misma sala llegan a las páginas abiertas. El sondeo lee solo los bytes nuevos cada 500 ms (`PULSE_BROADCAST_INTERVAL_MS`); un archivo que encoge, tras un purgado, reinicia el offset. Cada frame lleva `id: <secuencia>`, así un cliente que reconecta pide desde donde se quedó. Un cliente que deja de consumir se desconecta al acumular 1 MiB sin drenar (`PULSE_SSE_MAX_BUFFERED_BYTES`). Los eventos GHOST no tienen secuencia: llegan a las páginas abiertas y nunca al ledger.
 
 La ventana de contexto que recibe un agente es de 16 000 caracteres (`PULSE_CONTEXT_MAX_CHARS`); se omiten los mensajes antiguos antes que los recientes. Un mensaje de más de 20 000 caracteres (`PULSE_MAX_MESSAGE_CHARS`) se registra y se rechaza sin invocar al agente.
 
@@ -22,7 +22,7 @@ La ventana de contexto que recibe un agente es de 16 000 caracteres (`PULSE_CONT
 
 `memory.sqlite` vive junto al ledger y se deriva de él: si falta o su esquema cambió, se reconstruye desde `events.jsonl`. Contiene:
 
-- `entries` con FTS5 en trigramas: todo mensaje, fallo y tarjeta de comando fuera de GHOST, con su secuencia. Las respuestas enlatadas de MADRE (`synthetic`) no entran.
+- `entries` con FTS5 en trigramas: todo mensaje, fallo y tarjeta de comando fuera de GHOST, con su secuencia. Las respuestas enlatadas de ZM (`synthetic`) no entran.
 - `memories` con FTS5: las notas destiladas, tipadas (`decision`, `fact`, `preference`, `question`), con las secuencias que las sustentan, quién las escribió y su origen (`distilled` o `noted`).
 - `entry_vectors` y `memory_vectors`: embeddings de 768 dimensiones, calculados en segundo plano y nunca en el camino crítico de un turno.
 
@@ -58,21 +58,21 @@ Las tres se miden **contra un control**: dentro de una sala todo habla de los mi
 
 Cada esfera de la barra lleva un anillo. Muestra el límite real del proveedor cuando el CLI lo publica, si no, la ventana local.
 
-- **Codex** escribe en cada rollout de sesión (`~/.codex/sessions`) sus ventanas de cuenta, de 5 horas y semanal, con porcentaje usado y hora de reinicio. MADRE lee el más reciente; no hay red de por medio.
-- **Claude Code** publica `/usage` en el endpoint OAuth de Anthropic. Con `PULSE_CLAUDE_USAGE=1`, MADRE lo consulta con el token que Claude Code guarda en el llavero o en `~/.claude/.credentials.json`; el token solo viaja a `api.anthropic.com`, como hace el propio CLI. Es opcional porque implica leer una credencial. `PULSE_OFFICIAL_QUOTA=0` desactiva toda lectura de proveedor.
+- **Codex** escribe en cada rollout de sesión (`~/.codex/sessions`) sus ventanas de cuenta, de 5 horas y semanal, con porcentaje usado y hora de reinicio. ZM lee el más reciente; no hay red de por medio.
+- **Claude Code** publica `/usage` en el endpoint OAuth de Anthropic. Con `PULSE_CLAUDE_USAGE=1`, ZM lo consulta con el token que Claude Code guarda en el llavero o en `~/.claude/.credentials.json`; el token solo viaja a `api.anthropic.com`, como hace el propio CLI. Es opcional porque implica leer una credencial. `PULSE_OFFICIAL_QUOTA=0` desactiva toda lectura de proveedor.
 - **Gemini y OpenCode** no publican nada localmente: su anillo es la ventana local.
 
 La ventana local es un presupuesto blando por agente (500 000 tokens) sobre una ventana rodante de 5 horas; los turnos salen del cómputo al envejecer, las lecturas de caché pesan una décima parte y los tokens de `@madre` pesan cero. Avisa al 80, 90 y 100 % y sugiere otros agentes. Una ventana cuya hora de reinicio ya pasó cuenta como vacía; el monitor relee las fuentes cada minuto y anuncia `limit.cleared` cuando una ventana llena vuelve a la normalidad.
 
-Un lector de cuota implementa `{ id, agent, read() }` y `read()` devuelve `null` o `{ usedPercent, resetAt, windows?, stale? }`. MADRE nunca infiere la cuota del proveedor a partir de tokens locales.
+Un lector de cuota implementa `{ id, agent, read() }` y `read()` devuelve `null` o `{ usedPercent, resetAt, windows?, stale? }`. ZM nunca infiere la cuota del proveedor a partir de tokens locales.
 
 ## Los adaptadores
 
-Cada agente corre como proceso en su propio grupo, con un home aislado que solo recibe sus credenciales existentes. Si no responde antes del timeout (180 s por defecto), MADRE termina el árbol completo: SIGTERM y, tras un periodo de gracia, SIGKILL.
+Cada agente corre como proceso en su propio grupo, con un home aislado que solo recibe sus credenciales existentes. Si no responde antes del timeout (180 s por defecto), ZM termina el árbol completo: SIGTERM y, tras un periodo de gracia, SIGKILL.
 
 - **Codex**: consulta de solo lectura; `-C <carpeta> --sandbox workspace-write` en CREATE; en CONTROL, sandbox de escritura sobre el proyecto. Genera imágenes con `image_generation` usando su cuenta de ChatGPT.
-- **Claude Code**: herramientas locales de lectura, sesiones no persistentes, MCP limitado a los servidores de MADRE. En CREATE, `--allowedTools Write(//<carpeta>/**),Edit(//<carpeta>/**)` bajo `dontAsk`: la doble barra es la forma absoluta; con una sola, Claude lee la ruta como relativa al proyecto y niega toda escritura. En CONTROL, escritura permitida en el proyecto y negada en las zonas prohibidas.
-- **Gemini CLI**: Plan Mode y una política efímera de solo lectura, ampliada en CREATE con reglas `allow` para `write_file` y `edit` cuyo `file_path` empiece por la carpeta. Corre con un `GEMINI_CLI_HOME` temporal: tokens OAuth y `~/.gemini/.env` sí, hooks, extensiones, servidores MCP y memoria del `~/.gemini` real no. Gemini lee `@algo` como un archivo a incluir, así que MADRE escapa cada mención como `\@nombre` y la desescapa en la respuesta. Bajo 503 o 429, el CLI reintenta con backoff durante minutos y solo escribe en stderr: MADRE lo lee en vivo, corta tras `PULSE_GEMINI_IDLE_MS`, reintenta una vez con `PULSE_GEMINI_FALLBACK_MODEL` y, si tampoco, lo dice con nombre y modelo probado.
+- **Claude Code**: herramientas locales de lectura, sesiones no persistentes, MCP limitado a los servidores de ZM. En CREATE, `--allowedTools Write(//<carpeta>/**),Edit(//<carpeta>/**)` bajo `dontAsk`: la doble barra es la forma absoluta; con una sola, Claude lee la ruta como relativa al proyecto y niega toda escritura. En CONTROL, escritura permitida en el proyecto y negada en las zonas prohibidas.
+- **Gemini CLI**: Plan Mode y una política efímera de solo lectura, ampliada en CREATE con reglas `allow` para `write_file` y `edit` cuyo `file_path` empiece por la carpeta. Corre con un `GEMINI_CLI_HOME` temporal: tokens OAuth y `~/.gemini/.env` sí, hooks, extensiones, servidores MCP y memoria del `~/.gemini` real no. Gemini lee `@algo` como un archivo a incluir, así que ZM escapa cada mención como `\@nombre` y la desescapa en la respuesta. Bajo 503 o 429, el CLI reintenta con backoff durante minutos y solo escribe en stderr: ZM lo lee en vivo, corta tras `PULSE_GEMINI_IDLE_MS`, reintenta una vez con `PULSE_GEMINI_FALLBACK_MODEL` y, si tampoco, lo dice con nombre y modelo probado.
 - **OpenCode**: permisos efímeros inyectados por corrida, sin tocar la configuración global; `permission.edit` por patrón en CREATE y CONTROL. Si tu configuración no fija modelo, `run` elige el proveedor por defecto, que puede no ser el que tiene sesión: `PULSE_OPENCODE_MODEL=proveedor/modelo` lo fija.
 - **@madre**: no es una CLI. Es un adaptador local sobre Ollama que recibe la transcripción reciente, lo que la memoria recuerda de la pregunta y la pregunta; nunca el briefing de las CLIs. Con una ventana de 8 192 tokens, porque la de 4 096 por defecto recorta el prompt de sistema. Lo que puede resolver sin modelo, lo resuelve: identidad, órdenes que no le corresponden, peticiones de guardar memoria y la mesa redonda, que es un plan escrito por la sala con un paso por CLI en línea y su turno de cierre.
 
@@ -86,7 +86,7 @@ En un plan, el modo de cada paso es el mínimo entre lo que pidió el orquestado
 
 ## CONTROL por dentro
 
-Antes del turno, MADRE fotografía el proyecto como un commit real bajo `refs/madre/checkpoints/` con un índice temporal (en un proyecto sin git, en un repositorio sombra bajo el directorio temporal del sistema, con el proyecto como árbol de trabajo): incluye archivos sin seguimiento, respeta `.gitignore`, no toca tu rama, tu índice ni tu stash, y funciona en repositorios sin commits. Mientras dura el turno, `.env*`, `.pulse/`, `.madre/` y `.claude/settings.local.json` quedan en solo lectura a nivel de sistema de archivos y recuperan sus permisos al terminar. Después, `git diff` contra el checkpoint da la lista de cambios; cualquier escritura en una zona prohibida que hubiera pasado se revierte desde el checkpoint y se nombra. `UNDO` restaura el checkpoint completo.
+Antes del turno, ZM fotografía el proyecto como un commit real bajo `refs/madre/checkpoints/` con un índice temporal (en un proyecto sin git, en un repositorio sombra bajo el directorio temporal del sistema, con el proyecto como árbol de trabajo): incluye archivos sin seguimiento, respeta `.gitignore`, no toca tu rama, tu índice ni tu stash, y funciona en repositorios sin commits. Mientras dura el turno, `.env*`, `.pulse/`, `.madre/` y `.claude/settings.local.json` quedan en solo lectura a nivel de sistema de archivos y recuperan sus permisos al terminar. Después, `git diff` contra el checkpoint da la lista de cambios; cualquier escritura en una zona prohibida que hubiera pasado se revierte desde el checkpoint y se nombra. `UNDO` restaura el checkpoint completo.
 
 ## Comandos que vuelven y el copiloto
 
@@ -96,7 +96,7 @@ El copiloto es una ventana del servidor (`/api/copilot`), en memoria como los pa
 
 ## Recuperación operativa
 
-Si MADRE se detiene a mitad de un turno, al arrancar detecta los `agent.started` sin cierre y registra un `message.failed` recuperado para cada uno. Al cerrar con Ctrl+C o `SIGTERM`, interrumpe los procesos de agente en curso, registra esos turnos como fallidos, entrega los eventos pendientes a las páginas abiertas y termina. Los planes se ejecutan en secuencia y los delegados no delegan. El orquestador revisa las respuestas y puede abrir otro tramo, hasta tres por petición; `STOPALL` corta cualquier cosa en curso.
+Si ZM se detiene a mitad de un turno, al arrancar detecta los `agent.started` sin cierre y registra un `message.failed` recuperado para cada uno. Al cerrar con Ctrl+C o `SIGTERM`, interrumpe los procesos de agente en curso, registra esos turnos como fallidos, entrega los eventos pendientes a las páginas abiertas y termina. Los planes se ejecutan en secuencia y los delegados no delegan. El orquestador revisa las respuestas y puede abrir otro tramo, hasta tres por petición; `STOPALL` corta cualquier cosa en curso.
 
 ## Empaquetado y pruebas
 

@@ -43,6 +43,8 @@ Requiere Node.js 22.5 o superior y al menos un asistente de IA configurado. No h
 
 Para organizaciones más grandes o para ofrecer ZM Studio como servicio, se requiere una licencia comercial.
 
+ZM Studio está **basado en [MADRE](https://madre.run) de [Jossue Alcalá](https://jossuealcala.com)**, bajo la [Business Source License 1.1](LICENSE). «MADRE» y su logo son marcas de Jossue Alcalá ([TRADEMARKS.md](TRADEMARKS.md)).
+
 ---
 
 [CHANGELOG](CHANGELOG.md) · [Documentación](docs/REFERENCE.md) · [Crear módulos](docs/SDK.md) · [Seguridad](SECURITY.md) · [Contribuir](CONTRIBUTING.md) · [Issues](https://github.com/zarzmra/ZM-Studio/issues)

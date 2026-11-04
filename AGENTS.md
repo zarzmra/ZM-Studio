@@ -1,6 +1,6 @@
-# MADRE · contexto para agentes
+# ZM · contexto para agentes
 
-MADRE es una sala local donde Codex, Claude Code, Gemini CLI y OpenCode trabajan sobre
+ZM es una sala local donde Codex, Claude Code, Gemini CLI y OpenCode trabajan sobre
 el mismo proyecto con una memoria compartida. Cero dependencias, Node ≥ 22.5, todo local.
 
 `npm test` · `npm run check` · `npm run pack:check`
@@ -28,14 +28,14 @@ destilador, lee `docs/ZONAS.md`.**
 
 ## Windows y licencia (desde 1.1.0)
 
-**En Windows, MADRE funciona dentro de WSL2.** Abierta en Windows nativo, explica en tres pasos cómo
+**En Windows, ZM funciona dentro de WSL2.** Abierta en Windows nativo, explica en tres pasos cómo
 llegar a WSL2 y se detiene (`bin/madre.mjs`, `PULSE_WINDOWS_NATIVE=1` solo para desarrollo).
 **Antes de tocar cualquier cosa que ejecute procesos, resuelva rutas o aplique permisos, lee
 `docs/WINDOWS.md`.**
 
 Lo que hay que saber sin abrir el documento:
 
-- **Desde 1.1.0 (2026-10-28) se dice que MADRE funciona en Windows con WSL2.** Ninguna copia
+- **Desde 1.1.0 (2026-10-28) se dice que ZM funciona en Windows con WSL2.** Ninguna copia
   (producto, README, sitio, interfaz) promete Windows nativo.
 - **Licencia:** desde 1.1.0, Business Source License 1.1 (`LICENSE`). Cada archivo fuente lleva
   `SPDX-License-Identifier: BUSL-1.1` en su cabecera (`test/attribution.test.mjs` lo exige). Las
@@ -47,7 +47,7 @@ Lo que hay que saber sin abrir el documento:
 - Cada hallazgo tiene id permanente (`WIN-001`…). Si encuentras uno nuevo, **añádelo a
   la tabla de `docs/WINDOWS.md` con id nuevo**; no renumeres ni borres filas.
 - Los commits del puerto nombran su id: `WIN-004 · los servidores MCP arrancan en Windows`.
-- `D-001` está resuelta (2026-10-28): en Windows, MADRE corre dentro de **WSL2**; nativo,
+- `D-001` está resuelta (2026-10-28): en Windows, ZM corre dentro de **WSL2**; nativo,
   después y solo si hay demanda. Sigue abierta `D-002` (Codex sin sandbox). **No cierres
   decisiones por tu cuenta**: son del humano.
 
@@ -62,7 +62,7 @@ Zonas donde ya se sabe que el código asume POSIX y por eso merecen doble cuidad
   la única que se edita.
 - Nunca propongas publicar. `npm publish` lo corre el humano.
 - Credenciales: se escriben solo donde ese CLI las busca, con `0o600`, y jamás en el
-  config, el ledger o un log de MADRE. La única llave propia de MADRE es la de los
+  config, el ledger o un log de ZM. La única llave propia de ZM es la de los
   teléfonos emparejados (`docs/MOBILE.md`, D-M01): vive en `~/.pulse/credentials/`, solo
   para el dueño, y de cada teléfono se guarda la huella, nunca el token.
 - La traducción al español se hace literal por literal, a mano. Nunca con un codemod.

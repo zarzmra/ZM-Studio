@@ -1,6 +1,6 @@
-# MADRE report collector
+# ZM report collector
 
-A Cloudflare Worker that receives the reports from MADRE's sentinel and turns them into GitHub issues. No database: one issue per fingerprint, and a comment when the same fingerprint comes back. The `docs/report-collector/` folder already includes `wrangler.toml`, so you deploy from there.
+A Cloudflare Worker that receives the reports from ZM's sentinel and turns them into GitHub issues. No database: one issue per fingerprint, and a comment when the same fingerprint comes back. The `docs/report-collector/` folder already includes `wrangler.toml`, so you deploy from there.
 
 ## Deployment
 
@@ -28,7 +28,7 @@ curl -X POST https://madre-reports.<cuenta>.workers.dev/v1/reports \
 
 It should answer `{"ok":true,"issue":N,"action":"created"}` and an issue with the `sentinel` label should appear in the repo. Delete it afterwards.
 
-## Connect MADRE
+## Connect ZM
 
 On the machine that reports, either of the two:
 
@@ -42,7 +42,7 @@ or in `~/.pulse/config.json`:
 { "telemetry": { "reportUrl": "https://madre-reports.<cuenta>.workers.dev/v1/reports", "autoReport": true } }
 ```
 
-With the URL set, MU/TH/UR shows `SEND` on each report and the `AUTO-REPORT` switch. For MADRE users to report without configuring anything, set the URL as the default value of `reportUrl` in `src/server.mjs` before publishing 0.2.1; the switch will stay off until each user turns it on.
+With the URL set, MU/TH/UR shows `SEND` on each report and the `AUTO-REPORT` switch. For ZM users to report without configuring anything, set the URL as the default value of `reportUrl` in `src/server.mjs` before publishing 0.2.1; the switch will stay off until each user turns it on.
 
 ## Free plan limits
 

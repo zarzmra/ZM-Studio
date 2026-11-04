@@ -1,4 +1,4 @@
-# MADRE · INTEGRACIONES · traer un servicio al proyecto
+# ZM · INTEGRACIONES · traer un servicio al proyecto
 
 Documento único de este trabajo. Todo lo que se decida, se construya o se descarte sobre
 integraciones —lo que trae datos de fuera y lo que manda algo hacia fuera— se anota aquí y
@@ -25,7 +25,7 @@ modelos de imagen de Gemini) y el servidor de memoria (el archivo del proyecto).
 que necesita; y qué ceremonia hace falta cuando una integración **manda** algo en vez de solo
 leer.
 
-**Fuera del alcance:** cualquier nube de MADRE. Una integración habla desde *esta* máquina con
+**Fuera del alcance:** cualquier nube de ZM. Una integración habla desde *esta* máquina con
 un servicio del *usuario*, con las credenciales del usuario. No hay intermediario.
 
 ---
@@ -62,7 +62,7 @@ Ahora un módulo declara `reaches: [{ id, host, to, what, when, where }]`, en la
 forma y contestando las mismas preguntas. Y:
 
 - **Se guarda aparte de las del núcleo y se marca con `module`.** Quién prometió qué es
-  parte de la promesa: MADRE responde por su lista y solo *reporta* las de un módulo.
+  parte de la promesa: ZM responde por su lista y solo *reporta* las de un módulo.
 - **Se reconstruye en cada carga de módulos**, nunca se acumula: desinstalar una integración
   se lleva su destino con ella.
 
@@ -70,10 +70,10 @@ forma y contestando las mismas preguntas. Y:
 
 Aquí hay una tensión real con una promesa escrita. Hoy `src/credentials.mjs` escribe una
 llave **solo donde ese CLI la busca** (`~/.gemini/.env`, el `auth.json` de OpenCode), con
-`0600`, y la ficha dice «MADRE no guarda copia». Para una integración **no hay CLI**: el
-módulo de MADRE necesita el token él mismo.
+`0600`, y la ficha dice «ZM no guarda copia». Para una integración **no hay CLI**: el
+módulo de ZM necesita el token él mismo.
 
-O sea: una integración obliga a decidir si **MADRE empieza a guardar secretos**. Es D-001 y no
+O sea: una integración obliga a decidir si **ZM empieza a guardar secretos**. Es D-001 y no
 se toma a la ligera.
 
 ### CN-003 · Mandar no es leer — **hecho**
@@ -82,7 +82,7 @@ Una integración que lee es reversible: en el peor caso trajo algo que no serví
 que **manda** —un correo, un mensaje, un registro en un sistema— no lo es. Y lo que sale
 lleva el nombre del usuario.
 
-MADRE ya tenía la escalera: en `#4` ACCESO TOTAL la regla es *«antes de que algo salga, dilo en
+ZM ya tenía la escalera: en `#4` ACCESO TOTAL la regla es *«antes de que algo salga, dilo en
 una línea: exactamente qué sale y a dónde, y luego hazlo»*. Una integración que manda vive ahí.
 
 Lo impone el núcleo en `toolsForTurn`, no cada módulo: una herramienta declarada en `sends`
@@ -119,7 +119,7 @@ cómo un mensaje se corta solo a la mitad.
 **Un agujero que apareció al hacerlo:** `defineModule` nunca llevaba `reaches` al objeto del
 módulo, así que `declareDestinations` en `modules/index.mjs` —escrito en CN-001— nunca recibía
 nada. CN-001 estaba a medias desde que se dio por hecho. Arreglado, y ahora la prueba de
-`outbound` exige a cada módulo las mismas cuatro respuestas que a MADRE.
+`outbound` exige a cada módulo las mismas cuatro respuestas que a ZM.
 
 **Lo que NO hace, dicho aquí para que no se descubra usándolo:** adjuntos, HTML, CC/BCC, colas,
 reintentos. Un mensaje de texto plano, o nada.
@@ -137,13 +137,13 @@ las salidas. `@madre`, con Ollama, no sale de la máquina.
 
 ## 4 · Decisiones abiertas
 
-**D-001 · ¿MADRE guarda secretos?** (CN-002) — **CERRADA 2026-10-02: (a), bodega propia.**
+**D-001 · ¿ZM guarda secretos?** (CN-002) — **CERRADA 2026-10-02: (a), bodega propia.**
 Hecha en `src/vault.mjs`. El razonamiento: el usuario sigue estando en local, así que una
 bodega en su máquina no mueve el secreto a ningún sitio nuevo — solo lo pone donde hace
 falta, porque una integración no tiene CLI al que entregárselo. Los términos están escritos en
 la cabecera del archivo y probados: `0600` dentro de `0700`, solo desde `127.0.0.1`, el
 ledger anota que se guardó una y con qué nombre pero nunca el valor, y `summary()` —lo
-único que sale de ahí para el resto de MADRE— lleva nombre y longitud, jamás el secreto.
+único que sale de ahí para el resto de ZM— lleva nombre y longitud, jamás el secreto.
 
 **D-002 · ¿Qué ceremonia pide una integración que manda?** (CN-003) — **CERRADA 2026-10-02: `#4`.**
 Mandar vive en ACCESO TOTAL y en ningún peldaño por debajo. Lo impone el núcleo, no la buena
@@ -201,7 +201,7 @@ significa lo mismo en los tres.
 
 1. ~~**Mandar primero, por SMTP con contraseña de aplicación.**~~ **Hecho** (CN-005). La
    estimación era «~150 líneas sin dependencias»; salieron 122 de cliente SMTP más 189 de
-   servidor MCP más 107 de módulo, sin dependencias. El valor inmediato («MADRE, mándale esto
+   servidor MCP más 107 de módulo, sin dependencias. El valor inmediato («ZM, mándale esto
    a X») y el caso que de verdad importa: lo que sale no vuelve.
 2. **Leer después.** Sigue pendiente y ahora es **D-004**. D-001 ya está resuelta, así que
    aquello de «para esa fecha la bodega ya estará» se cumplió: lo que queda es elegir entre el
@@ -211,7 +211,7 @@ significa lo mismo en los tres.
 
 ## 6 · Qué alcanza un módulo, y de quién es el muro
 
-Chocar con Gmail sirvió para algo: enseñó dónde está el límite de verdad. **No es de MADRE.**
+Chocar con Gmail sirvió para algo: enseñó dónde está el límite de verdad. **No es de ZM.**
 
 ### El SDK no es el límite
 
@@ -228,7 +228,7 @@ Esa es la única pregunta que decide si una integración es posible, y se contes
 
 El servicio le da al humano una credencial estática en minutos —token personal, API key,
 contraseña de aplicación—, revocable sola, sin registrar ninguna app y sin que nadie revise
-nada. **Una integración aquí funciona el día que se escribe, para cualquiera que instale MADRE.**
+nada. **Una integración aquí funciona el día que se escribe, para cualquiera que instale ZM.**
 Es el peldaño de CORREO y es donde vive casi todo lo útil:
 
 | | con qué llave |
@@ -249,7 +249,7 @@ Es el peldaño de CORREO y es donde vive casi todo lo útil:
 OAuth 2.0 donde los permisos **no** son restringidos y el servicio no exige revisión para uso
 personal. Es posible, pero el alta deja de ser «pega esta llave» y pasa a ser «crea una
 aplicación, copia dos valores, autoriza en el navegador». Y hay un costo del lado de acá:
-**MADRE nunca ha escrito un flujo OAuth.** `auth-probe.mjs` y `quota-sources.mjs` *leen* tokens
+**ZM nunca ha escrito un flujo OAuth.** `auth-probe.mjs` y `quota-sources.mjs` *leen* tokens
 que otras CLIs ya consiguieron; levantar un redirect local, canjear un código y refrescarlo son
 piezas que habría que escribir desde cero y mantener.
 
@@ -272,16 +272,16 @@ producto que pide eso no tiene integración: tiene tarea.
 
 ### Qué no puede hacer un módulo, aunque el servicio se deje
 
-Estas vallas son de MADRE y no las mueve ningún proveedor:
+Estas vallas son de ZM y no las mueve ningún proveedor:
 
-- Rutas solo bajo `/api/x/<id>/`. Jamás encima de una ruta de MADRE, jamás con el id de otro.
+- Rutas solo bajo `/api/x/<id>/`. Jamás encima de una ruta de ZM, jamás con el id de otro.
 - No escribe eventos `message.*` ni `agent.*`: el relato de lo que pasó en el proyecto no se edita
   desde fuera.
 - No lee el secreto de otro módulo. El id va cerrado dentro del SDK: no es que esté prohibido, es
   que no se puede escribir.
 - No se amplía su propio permiso. Lo que manda se retira por debajo de `#4` desde el núcleo.
 - Si se cae, se cae solo. Un fallo suyo no detiene un turno ni el proyecto.
-- Corre con los permisos de quien abrió MADRE. Eso no es una valla: es la razón de que instalar
+- Corre con los permisos de quien abrió ZM. Eso no es una valla: es la razón de que instalar
   el módulo de alguien más sea una decisión y no un clic.
 
 ### La regla para decidir si vale la pena
@@ -314,6 +314,6 @@ No lo copian.
 | 2026-10-14 | **Conectar MCP** (`src/modules/mcp-connect.mjs`, `src/mcp/connect.mjs`, `src/mcp/proxy.mjs`): servidores MCP que la persona agrega a un proyecto desde sus Ajustes, por comando o por dirección (token u OAuth con registro dinámico y PKCE). Hereda las tres piezas de 2026-10-02: los secretos en la bodega (módulo `mcp`), las herramientas que actúan bajo la regla de `sends` cuando se eligen para `#4`, y la declaración de destino del inicio de sesión, que el módulo hace en el momento porque el anfitrión lo elige la persona. Lo nuevo es el intermediario: las cuatro CLIs arrancan el mismo proceso, que lee los secretos, filtra `tools/list` y rechaza llamadas fuera de la lista, así que ningún secreto queda en un argv. Un servidor se revisa (handshake + `tools/list`) antes de entrar a un turno. |
 | 2026-10-02 | **SDK cerrado y comunicado.** El contrato son 36 campos, todos documentados, con una prueba que compara la guía contra el código en las dos direcciones. Ejemplo de integración que funciona tal cual, y la pregunta «¿se puede con X?» contestada dentro de la guía. En el proyecto: la tarjeta de desarrollo dice qué es un módulo y deja un botón a la caja de texto; `/modules` encuentra `/module` y ofrece cuatro instrucciones para editar. En el README, la declaración en lenguaje llano — y corregida la promesa «no guarda tus credenciales», que dejó de ser exacta el día que existió la bodega. |
 | 2026-10-02 | **D-004 cerrada: leer no se hace todavía**, y el muro quedó mapeado en §6. Gmail en lectura es scope restringido con evaluación CASA anual y tope de ~100 usuarios sin verificar, así que no hay integración que funcione al instalarla: habría que pedirle a cada usuario su propio proyecto en Google Cloud. De ahí salió lo que de verdad hacía falta: el límite de un módulo no es el SDK, es cómo cada servicio deja que un humano entregue su propia llave. Tres peldaños, con el catálogo de qué cae en cada uno. |
-| 2026-10-02 | **D-003 cerrada y fase 2 completa: CORREO manda.** SMTP+TLS sin dependencias (418 líneas, 278 de prueba). Con él, tres piezas nuevas de núcleo que cualquier integración futura hereda: `ctx.vault` acotado al módulo por construcción, `secrets` declarados que MADRE dibuja sola, y `reaches` validado en `defineModule`. Encontrado y arreglado de paso: `reaches` nunca llegaba al objeto del módulo, así que CN-001 llevaba desde su commit sin declarar nada. 386/386 pruebas. |
+| 2026-10-02 | **D-003 cerrada y fase 2 completa: CORREO manda.** SMTP+TLS sin dependencias (418 líneas, 278 de prueba). Con él, tres piezas nuevas de núcleo que cualquier integración futura hereda: `ctx.vault` acotado al módulo por construcción, `secrets` declarados que ZM dibuja sola, y `reaches` validado en `defineModule`. Encontrado y arreglado de paso: `reaches` nunca llegaba al objeto del módulo, así que CN-001 llevaba desde su commit sin declarar nada. 386/386 pruebas. |
 | 2026-10-02 | **D-001 cerrada: bodega propia** (`src/vault.mjs`) y **D-002 cerrada: mandar solo en `#4`**, impuesto por el núcleo. Con esto la fase 1 queda completa: declarar destino, guardar la llave y la escalera del envío. |
 | 2026-10-02 | Documento abierto. **CN-001 hecho**: un módulo declara sus destinos (`reaches`), se guardan aparte de los del núcleo y marcados, y se reconstruyen en cada carga. D-001 (dónde vive la llave), D-002 (ceremonia para mandar) y D-003 (la primera integración) abiertas. Medido: las dos integraciones que ya existen pesan 202 y 221 líneas. |
