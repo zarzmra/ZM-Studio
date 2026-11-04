@@ -43,7 +43,7 @@ Requires Node.js 22.5 or newer and at least one AI assistant set up. There is no
 
 Larger organizations, or anyone who wants to offer ZM Studio as a service, need a commercial license: write to hola@jossuealcala.com.
 
-The code is public ([Business Source License 1.1](LICENSE)). It is not an open source license, but each version becomes [GNU AGPL v3](https://www.gnu.org/licenses/agpl-3.0.html) four years after it is published. Versions up to 1.0.5 keep the license they were released with. ZM Studio is **based on [MADRE](https://madre.run) by [Jossue Alcalá](https://jossuealcala.com)**. "MADRE" and its logo are trademarks of Jossue Alcalá ([TRADEMARKS.en.md](TRADEMARKS.en.md)).
+The code is public ([Business Source License 1.1](LICENSE)). It is not an open source license, but each version becomes [GNU AGPL v3](https://www.gnu.org/licenses/agpl-3.0.html) four years after it is published. Versions up to 1.0.5 keep the license they were released with. ZM Studio is **based on [MADRE](https://madre.run) by [Jossue Alcalá](https://jossuealcala.com)**. "MADRE" and its logo are trademarks of Jossue Alcalá ([TRADEMARKS.en.md](TRADEMARKS.en.md)). About the ZM Studio name: [TRADEMARKS-ZM.md](TRADEMARKS-ZM.md).
 
 ---
 
