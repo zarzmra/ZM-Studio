@@ -36,10 +36,10 @@ try {
   await run('mkdir', ['-p', consumer]);
   await writeFile(join(consumer, 'package.json'), JSON.stringify({ name: 'pulse-consumer', private: true }));
   await run('npm', ['install', '--no-audit', '--no-fund', join(workspace, pack.filename)], { cwd: consumer });
-  const cli = join(consumer, 'node_modules', '.bin', 'madre');
+  const cli = join(consumer, 'node_modules', '.bin', 'zmstudio');
 
   const { stdout: help } = await run(cli, ['--help']);
-  check(/madre start/.test(help), 'installed CLI prints help');
+  check(/zmstudio start/.test(help), 'installed CLI prints help');
   const { stdout: doctor } = await run(cli, ['doctor', '--json', '--project', projectRoot]).catch((error) => error);
   const report = JSON.parse(doctor);
   // Codex, Claude, Gemini, OpenCode and, since 1.0.3, Cursor.
@@ -70,7 +70,7 @@ try {
     const state = await fetch(`http://127.0.0.1:${port}/api/state`).then((response) => response.json());
     check(state.projectRoot === projectRoot, 'server is bound to the requested project');
     const html = await fetch(`http://127.0.0.1:${port}/`).then((response) => response.text());
-    check(/MADRE/.test(html), 'server serves the room page');
+    check(/ZM Studio/.test(html) || /zm-app/.test(html), 'server serves the room page');
     const modules = await fetch(`http://127.0.0.1:${port}/api/extensions`).then((response) => response.json());
     check(modules.extensions.some((item) => item.id === 'ash' && item.kind === 'builtin'), 'installed server lists Ash');
     // No confirmation: Ash stopped being able to change the meaning of anything.
