@@ -1,1 +1,84 @@
-PLACEHOLDER
+{
+  "name": "@zarzmr/app",
+  "version": "2.0.0",
+  "description": "ZM Studio · AI collaboration platform that integrates Codex, Claude Code, Gemini CLI, and OpenCode into a unified workspace with shared memory, permission controls, and full local execution. All intelligence stays on your machine.",
+  "keywords": [
+    "ai-agents",
+    "codex",
+    "claude-code",
+    "gemini-cli",
+    "opencode",
+    "multi-agent",
+    "local-first",
+    "handoff",
+    "zm",
+    "memory",
+    "sqlite",
+    "mcp",
+    "pulse"
+  ],
+  "homepage": "https://github.com/zarzmra/ZM-Studio#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zarzmra/ZM-Studio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zarzmra/ZM-Studio/issues"
+  },
+  "author": {
+    "name": "ZM Studio",
+    "url": "https://github.com/zarzmra/ZM-Studio"
+  },
+  "type": "module",
+  "license": "BUSL-1.1",
+  "files": [
+    "bin",
+    "src",
+    "public",
+    "!public/assets/manual/*.pdf",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "NOTICE",
+    "TRADEMARKS.md",
+    "docs/room.png",
+    "docs/training",
+    "docs/SDK.md",
+    "docs/sdk",
+    "docs/INTERNALS.md",
+    "docs/REFERENCE.md",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "README.en.md",
+    "CHANGELOG.en.md",
+    "TRADEMARKS.en.md",
+    "TRADEMARKS-ZM.md",
+    "ADDITIONAL-TERMS.md",
+    "docs/en/REFERENCE.md",
+    "docs/en/SDK.md",
+    "docs/en/INTERNALS.md",
+    "docs/en/training"
+  ],
+  "bin": {
+    "zmstudio": "./bin/zmstudio.cjs",
+    "zm": "./bin/zmstudio.cjs"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node ./bin/zmstudio.mjs start",
+    "doctor": "node ./bin/zmstudio.mjs doctor",
+    "test": "node --import ./test/setup.mjs --test",
+    "check": "npm test && node ./bin/madre.mjs doctor --json",
+    "pack:check": "node ./scripts/pack-check.mjs",
+    "release": "node ./scripts/release.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    "./sdk": "./src/modules/sdk.mjs",
+    "./package.json": "./package.json"
+  }
+}
