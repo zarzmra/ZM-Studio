@@ -47,8 +47,8 @@ Todo con su fuente. Recomiendo que en la guía cada hecho conserve la cita: es l
 responder "según `docs/REFERENCE.md`" en vez de afirmar de memoria.
 
 **Identidad y distribución**
-- Paquete `@jossuealcala/madre`, licencia Apache-2.0, autor Jossué Alcalá. **[V]** `package.json:2,32,35`
-- Se corre con `npx @jossuealcala/madre start` desde la carpeta del proyecto. **[V]** `README.md:25,104`
+- Paquete `@zarzmr/app`, licencia Apache-2.0, autor Jossué Alcalá. **[V]** `package.json:2,32,35`
+- Se corre con `npx @zarzmr/app start` desde la carpeta del proyecto. **[V]** `README.md:25,104`
 - Node **≥ 22.5**. **[V]** `package.json:59`
 - **Cero dependencias** de runtime: `package.json` no declara `dependencies`. **[V]** `package.json`
 - Binarios `madre` y `pulse`; subcomandos verificables: `start`, `doctor`, `setup`, `dataset`.
@@ -156,7 +156,7 @@ WSL2 puede mencionarse: hoy es la **decisión abierta D-001** (`docs/WINDOWS.md:
 llama «Sin publicar». **[V]** `CHANGELOG.md:5`, `CONTRIBUTING.md:74`. Al cierre de este insumo la última
 publicada es **0.5.1 (2026-09-28)** y **0.5.2 está sin publicar**. **[V]** `CHANGELOG.md:7,29`.
 Por eso la guía debe instruir: *nunca digas cuál es la última versión; di cómo averiguarla*
-(`npm view @jossuealcala/madre version`, la alerta de `RELEASE CHANNEL`, o `madre doctor`).
+(`npm view @zarzmr/app version`, la alerta de `RELEASE CHANNEL`, o `madre doctor`).
 
 **Costo.** ZM es Apache-2.0 y no cobra; **el consumo lo factura cada proveedor** al usuario, porque
 ZM corre las CLIs que ya están firmadas en su máquina. Con Ollama, `@madre`, el archivista y los

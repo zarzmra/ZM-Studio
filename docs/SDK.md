@@ -249,7 +249,7 @@ Un módulo tuyo puede estar en el Mercado de ZM, gratis, con tu nombre. Es curad
 
 En el *pull request* corre la misma revisión y deja el resumen para quien lo lee. Ya firmado, aparece en el Mercado con la etiqueta **Comunidad** y **Desarrollado por** tu nombre; quien lo instala lee antes lo que declara. Para una versión nueva, sube `version` en el módulo y envíalo otra vez.
 
-Desde la terminal, la misma revisión: `npx @jossuealcala/madre check-module --file <id>.module.mjs --entry entrada.json`.
+Desde la terminal, la misma revisión: `npx @zarzmr/app check-module --file <id>.module.mjs --entry entrada.json`.
 
 ## La ficha
 

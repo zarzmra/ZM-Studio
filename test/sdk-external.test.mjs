@@ -127,7 +127,7 @@ test('the SDK says what it did not understand, and the import that never works e
   // relative path because they live inside the package. An agent reads ripley.mjs and copies it.
   // The file is checked alone in a scratch folder, so nothing resolves — and node's own message
   // says only that a file is missing, which sends the author looking for the wrong thing.
-  for (const line of ["import { defineModule } from './sdk.mjs';", "import { defineModule } from '@jossuealcala/madre/sdk';"]) {
+  for (const line of ["import { defineModule } from './sdk.mjs';", "import { defineModule } from '@zarzmr/app/sdk';"]) {
     const failed = await verifyModuleText({ text: `${line}\nexport default defineModule({ id: 'z', name: 'Z' });`, name: 'c.mjs' }).then(() => null, (error) => error);
     assert.ok(failed, `${line} resolved, which it cannot do from a scratch folder`);
     assert.match(failed.message, /a module imports nothing/);

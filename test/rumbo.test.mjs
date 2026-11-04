@@ -103,11 +103,11 @@ test('rumbo: npm is read by day and by version, and nothing comes back when npm 
     if (url.includes('/range/')) return new Response(JSON.stringify({ downloads: [{ day: '2026-10-30', downloads: 4 }, { day: '2026-10-31', downloads: 6 }] }));
     return new Response(JSON.stringify({ downloads: { '1.1.1': 205, '1.1.0': 291 } }));
   };
-  const npm = await readNpm({ name: '@jossuealcala/madre', fetchImpl, base: 'https://npm.test', now: Date.parse('2026-11-01T00:00:00Z') });
+  const npm = await readNpm({ name: '@zarzmr/app', fetchImpl, base: 'https://npm.test', now: Date.parse('2026-11-01T00:00:00Z') });
   assert.equal(npm.lastWeek, 496);
   assert.equal(npm.byVersion[0].version, '1.1.0');
   assert.equal(npm.days.length, 2);
-  assert.ok(asked.some((url) => url.endsWith('/versions/%40jossuealcala%2Fmadre/last-week')));
+  assert.ok(asked.some((url) => url.endsWith('/versions/%40zarzmr%2Fapp/last-week')));
   assert.equal(await readNpm({ name: 'x', fetchImpl: async () => new Response('', { status: 503 }), base: 'https://npm.test' }), null);
 });
 

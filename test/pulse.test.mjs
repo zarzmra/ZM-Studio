@@ -400,14 +400,14 @@ test('extracts Gemini response and aggregates per-model token usage', () => {
     { type: 'tool_use', tool_name: 'read_file', tool_id: 't1', parameters: { file_path: 'package.json' } },
     { type: 'tool_result', tool_id: 't1', status: 'success', output: '' },
     { type: 'message', role: 'assistant', content: 'The name is ', delta: true },
-    { type: 'message', role: 'assistant', content: '@jossuealcala/madre.', delta: true },
+    { type: 'message', role: 'assistant', content: '@zarzmr/app.', delta: true },
     { type: 'result', status: 'success', stats: { total_tokens: 21461, tool_calls: 1, models: {
       'gemini-3.1-pro-preview-customtools': { total_tokens: 0, input_tokens: 0, output_tokens: 0, cached: 0 },
       'gemini-3-flash-preview': { total_tokens: 21461, input_tokens: 21428, output_tokens: 33, cached: 8135 },
     } } },
   ].map((event) => JSON.stringify(event)).join('\n');
   const parsed = parseGeminiOutput(stream);
-  assert.equal(parsed.text, 'The name is @jossuealcala/madre.');
+  assert.equal(parsed.text, 'The name is @zarzmr/app.');
   assert.equal(parsed.toolCalls, 1);
   assert.deepEqual(parsed.usage, { inputTokens: 21428, cachedInputTokens: 8135, outputTokens: 33, reasoningTokens: 0, totalTokens: 21461, source: 'gemini-json' });
   const failed = parseGeminiOutput([JSON.stringify({ type: 'init' }), JSON.stringify({ type: 'result', status: 'error', error: { message: 'Quota exceeded' } })].join('\n'));
@@ -1074,11 +1074,11 @@ test('aborting the signal terminates the adapter process tree', async () => {
     signal: controller.signal,
   });
   setTimeout(() => controller.abort(), 100);
-  await assert.rejects(pending, /Fixture was interrupted: MADRE is shutting down/);
+  await assert.rejects(pending, /Fixture was interrupted: ZM is shutting down/);
   assert.ok(Date.now() - started < 3000);
   await assert.rejects(runReadonlyProcess({
     executable: process.execPath, args: ['-e', ''], cwd: process.cwd(), label: 'Fixture', parse: () => ({ text: '' }), signal: controller.signal,
-  }), /interrupted before it started: MADRE is shutting down/);
+  }), /interrupted before it started: ZM is shutting down/);
 });
 
 test('reads each agent session state from its CLI output', () => {
@@ -1326,7 +1326,7 @@ test('start without --port walks past a busy port; with --port it refuses', asyn
       child.stderr.on('data', (chunk) => { out += chunk; });
       // Generous on purpose: the room has to open on a busy laptop, not only on an idle one.
       const timer = setTimeout(() => child.kill('SIGTERM'), 30000);
-      const poll = setInterval(() => { if (/MADRE (?:is ready|está lista)/.test(out)) { clearInterval(poll); clearTimeout(timer); child.kill('SIGTERM'); } }, 100);
+      const poll = setInterval(() => { if (/ZM (?:is ready|está lista)/.test(out)) { clearInterval(poll); clearTimeout(timer); child.kill('SIGTERM'); } }, 100);
       child.on('close', (code) => { clearInterval(poll); clearTimeout(timer); resolve({ code, out }); });
     });
     const fallback = await run(['--port', String(port), '--auto']); // explicit port → refuse
@@ -1334,7 +1334,7 @@ test('start without --port walks past a busy port; with --port it refuses', asyn
     assert.match(fallback.out, new RegExp(`port ${port} is already in use`));
     const walked = await run([]);
     // default 4317 may or may not be busy on this machine; either way the room must come up
-    assert.match(walked.out, /MADRE (?:is ready|está lista)/);
+    assert.match(walked.out, /ZM (?:is ready|está lista)/);
   } finally {
     await new Promise((resolve) => busy.close(resolve));
     await rm(root, { recursive: true, force: true, maxRetries: 6, retryDelay: 60 });

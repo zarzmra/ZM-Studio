@@ -123,7 +123,7 @@ test('sentinel: the server records unknown failures, serves the issue link, send
 });
 
 test('the sentinel files what nobody can explain, and stops filing what MU/TH/UR learned', async () => {
-  const sentinel = new ErrorSentinel({ pkg: { name: '@jossuealcala/madre', version: '0.5.0', repository: { url: 'git+https://github.com/x/y.git' } }, agents: [] });
+  const sentinel = new ErrorSentinel({ pkg: { name: '@zarzmr/app', version: '0.5.0', repository: { url: 'git+https://github.com/x/y.git' } }, agents: [] });
   const failed = (error) => ({ type: 'message.failed', timestamp: new Date().toISOString(), payload: { target: 'codex', error } });
   {
 
@@ -178,7 +178,7 @@ test('sentinel: a turn cut because MADRE closes is not a fault, and nothing is w
 // (MU-023) and its words were lost; Codex's usage limit and Gemini without an account were unknown.
 test('the sentinel · a help card never explains a failure; usage limit and no account are known', async () => {
   const told = [];
-  const sentinel = new ErrorSentinel({ pkg: { name: '@jossuealcala/madre', version: '1.1.1' }, agents: [], told: (one) => told.push(one) });
+  const sentinel = new ErrorSentinel({ pkg: { name: '@zarzmr/app', version: '1.1.1' }, agents: [], told: (one) => told.push(one) });
   const failed = (target, error) => ({ type: 'message.failed', timestamp: new Date().toISOString(), payload: { target, error } });
   const odd = await sentinel.observe(failed('opencode', 'The model gpt-9 is not available for this provider'));
   assert.equal(odd?.kind, 'unknown');

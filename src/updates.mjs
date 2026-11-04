@@ -80,11 +80,12 @@ export function fetchCommand({ name, version }) {
 // One shell line that installs the version and starts the same room on the same port.
 // The room's own process runs it detached after closing its listener, then exits.
 const shq = (value) => `'${String(value).replace(/'/g, `'\\''`)}'`;
-export function applyCommand({ install, name, version, port, projectRoot }) {
+// `bin` is the package's command (package.json `bin`): @zarzmr/app installs `zmstudio`, not `app`.
+export function applyCommand({ install, name, version, port, projectRoot, bin: command = String(name).split('/').pop() }) {
   if (!PACKAGE_NAME.test(String(name)) || !isVersion(version)) return null;
   const start = `start --no-open --port ${Number(port) || 4317} --project ${shq(projectRoot)}`;
   const spec = shq(`${name}@${version}`);
-  const bin = shq(name.split('/').pop());
+  const bin = shq(command);
   switch (install) {
     case 'npx': return `exec npx -y ${spec} ${start}`;
     case 'project': return `npm install ${spec} --no-fund --no-audit && exec npx --no ${bin} ${start}`;

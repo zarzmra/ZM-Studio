@@ -10,7 +10,8 @@ import { ErrorSentinel } from '../src/sentinel-errors.mjs';
 
 
 test('telemetry: on unless the person or the environment said no', () => {
-  assert.equal(telemetryOn({}, {}), true);
+  assert.equal(telemetryOn({}, {}), false, 'ZM Studio has no collector: off with no address');
+  assert.equal(telemetryOn({}, { PULSE_TELEMETRY_URL: 'http://127.0.0.1:9/t' }), true);
   assert.equal(telemetryOn({ telemetry: { diagnostics: false } }, {}), false);
   assert.equal(telemetryOn({}, { PULSE_TELEMETRY: '0' }), false);
 });

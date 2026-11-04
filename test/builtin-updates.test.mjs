@@ -72,7 +72,7 @@ test('builtin · the catalog\'s list for MADRE\'s own is read apart, and a MADRE
     { id: 'reminders', version: '0.2.0', sdk: 2, file: { url: 'https://madre.run/mercado/modulos/reminders-0.2.0.builtin.mjs', sha256: 'a'.repeat(64), factory: 'c2ln' } },
     { id: 'reminders', version: '0.3.0', sdk: 2, file: { url: 'https://elsewhere.example/r.mjs', sha256: 'a'.repeat(64), factory: 'c2ln' } },
     { id: 'notes', version: '0.2.0', sdk: 2, file: { url: 'https://madre.run/mercado/modulos/notes.mjs', sha256: 'a'.repeat(64) } },
-  ], revoked: [{ id: 'saludo', version: '1.0.0', why: { es: 'Mandaba datos.' } }, { id: 'Bad Id' }] }));
+  ], revoked: [{ id: 'saludo', version: '1.0.0', why: { es: 'Mandaba datos.' } }, { id: 'Bad Id' }] }), { url: 'https://madre.run/mercado/catalogo.json' });
   assert.deepEqual(read.builtins.map((one) => one.version), ['0.2.0'], 'another host, or no factory signature: left out');
   assert.deepEqual(read.revoked, [{ id: 'saludo', version: '1.0.0', why: { es: 'Mandaba datos.' } }]);
   assert.deepEqual(read.modules, []);

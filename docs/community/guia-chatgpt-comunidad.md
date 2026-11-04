@@ -86,7 +86,7 @@ Formato recomendado cuando falta autoridad:
 - Requiere Node `>=22.5.0` y al menos una CLI con sesión para trabajar con agentes.
   La sala puede abrir aunque todavía no haya ninguna. (`package.json` · `engines`;
   `docs/REFERENCE.md` · «Arranque»)
-- El inicio documentado es `npx @jossuealcala/madre start` desde la carpeta del
+- El inicio documentado es `npx @zarzmr/app start` desde la carpeta del
   proyecto; la sala abre en `http://127.0.0.1:4317`.
   (`docs/REFERENCE.md` · «Arranque»)
 - Los binarios publicados por el paquete son `madre` y `pulse`. Los comandos

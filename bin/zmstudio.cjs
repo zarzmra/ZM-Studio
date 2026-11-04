@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // SPDX-License-Identifier: BUSL-1.1
 // MADRE · © 2026 Jossue Alcalá · Business Source License 1.1: LICENSE
-// The door `madre` and `npx @jossuealcala/madre` come in by (2026-10-18). It only asks which Node is
+// The door `madre` and `npx @zarzmr/app` come in by (2026-10-18). It only asks which Node is
 // running, in words any Node can read, and then hands over to bin/madre.mjs.
 //
 // madre.mjs is written for today's Node, and an old one (a server on Node 12, the first report)

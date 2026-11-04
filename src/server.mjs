@@ -678,7 +678,7 @@ export async function createPulseServer({
         return body?.ok ? body : null;
       });
       const github = await source('github', 600000, () => readGithub());
-      const npm = await source('npm', 1800000, () => readNpm({ name: PACKAGE.name ?? '@jossuealcala/madre', fetchImpl: reportFetch }));
+      const npm = await source('npm', 1800000, () => readNpm({ name: PACKAGE.name ?? '@zarzmr/app', fetchImpl: reportFetch }));
       const history = github.value && !github.failed && github.at > Date.now() - 1000 ? await keepHistory(root, github.value).catch(() => readHistory(root)) : await readHistory(root);
       const said = (one) => ({ at: one.at ? new Date(one.at).toISOString() : null, failed: Boolean(one.failed) });
       reading = funnel.value || github.value || npm.value
@@ -2358,7 +2358,7 @@ export async function createPulseServer({
       + '<body style="font:16px/1.5 system-ui,sans-serif;background:#0b0c0b;color:#e8eae6;margin:0;display:grid;place-items:center;min-height:100vh"><main style="max-width:34rem;padding:32px">'
       + `<h1 style="font-size:22px;margin:0 0 12px">${escape(t('This tab needs to be opened from MADRE'))}</h1>`
       + `<p>${escape(t('MADRE only answers to the browser it opened itself, so that no other program on this computer can read your projects or act in them.'))}</p>`
-      + `<p>${escape(t('Open it again from its shortcut, or with npx @jossuealcala/madre, or paste the full address MADRE wrote in the terminal (the one that ends in ?ficha=…).'))}</p>`
+      + `<p>${escape(t('Open it again from its shortcut, or with npx @zarzmr/app, or paste the full address MADRE wrote in the terminal (the one that ends in ?ficha=…).'))}</p>`
       + '</main></body></html>';
   };
 
@@ -4278,7 +4278,7 @@ export async function createPulseServer({
         const info = await versionView();
         if (!info.available) return sendJson(response, 409, { error: `Nothing to apply: ${info.current} is the latest MADRE knows of.` });
         if (install === 'source') return sendJson(response, 412, { error: t('This copy runs from source: pull the repository and start it again.') });
-        const command = applyCommand({ install, name: PACKAGE.name, version: info.latest, port: request.socket.localPort, projectRoot: canonicalProjectRoot });
+        const command = applyCommand({ install, name: PACKAGE.name, bin: Object.keys(PACKAGE.bin ?? {})[0], version: info.latest, port: request.socket.localPort, projectRoot: canonicalProjectRoot });
         const fetching = fetchCommand({ name: PACKAGE.name, version: info.latest });
         // Only a version semver would write reaches a shell, and the restart never runs without the
         // download first (src/updates.mjs): an unchecked one used to skip the download and run.

@@ -24,7 +24,8 @@ import { basename, join } from 'node:path';
 import { installId } from './heartbeat.mjs';
 import { compareVersions } from './updates.mjs';
 
-export const PRESENCE_URL = 'https://madre.run/api/presence';
+// ZM Studio says nothing about being on (PRIVACY.md): no address, nothing sent.
+export const PRESENCE_URL = '';
 export const PRESENCE_EVERY_MS = 5 * 60 * 1000;
 const KEY_PART = /^[a-z0-9][a-z0-9-]{0,30}$/;
 const CHANNELS = new Set(['npx', 'global', 'project', 'source']);
@@ -95,6 +96,7 @@ export const presenceBody = ({ id, version, platform = process.platform }) => ({
 
 // «Still here», at most once every few minutes per copy, whichever of its processes gets there first.
 export async function sayPresent({ root, version, fetchImpl = globalThis.fetch, url = presenceUrl(), now = Date.now() }) {
+  if (!url) return { sent: false, reason: 'off' };
   const mark = join(root, 'presence-at');
   const last = Number((await readFile(mark, 'utf8').catch(() => '')).trim()) || 0;
   if (now - last < PRESENCE_EVERY_MS - 30_000) return { sent: false, reason: 'recent' };

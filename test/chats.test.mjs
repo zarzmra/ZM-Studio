@@ -1256,7 +1256,7 @@ test('the manual starts with «Start here»: the way in for each system, then th
     const first = MANUAL[lang].sections[0];
     assert.equal(first.title, title);
     assert.equal(first.systems.length, 4, `${lang}: Mac, Linux, Windows with WSL, SSH or a virtual machine`);
-    for (const system of first.systems.filter((one) => one.id !== 'windows')) assert.deepEqual(system.code, ['npx @jossuealcala/madre']);
+    for (const system of first.systems.filter((one) => one.id !== 'windows')) assert.deepEqual(system.code, ['npx @zarzmr/app']);
     // Windows says what docs/WINDOWS.md says: inside WSL2, and from 1.1.1 with its installer
     // (WIN-033): a double click, no terminal; the terminal way stays in its tip. Its card is #windows,
     // where the message on Windows itself and the mail to the waiting list point.
@@ -1266,7 +1266,7 @@ test('the manual starts with «Start here»: the way in for each system, then th
     assert.equal(first.systems[2].code, undefined);
     assert.ok(first.systems[2].steps.some((step) => step.includes(lang === 'es' ? 'madre.run/windows' : 'madre.run/en/windows')));
     assert.ok(first.systems[2].steps.some((step) => step.includes('MADRE-Instalador.exe')));
-    assert.match(first.systems[2].tip, /npx @jossuealcala\/madre/);
+    assert.match(first.systems[2].tip, /npx @zarzmr\/app/);
     // Said plainly: why Windows warns, what to press, and that the signature is on its way.
     assert.ok(first.systems[2].steps.some((step) => (lang === 'es' ? /Windows protegió tu PC.*Más información.*Ejecutar de todas formas.*certificado/ : /Windows protected your PC.*More info.*Run anyway.*certificate/).test(step)));
     // The intro points to it by its new name.

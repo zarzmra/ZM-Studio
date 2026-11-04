@@ -249,7 +249,7 @@ A module of yours can be in ZM's Market, free, with your name on it. It is curat
 
 The same check runs on the pull request and leaves its summary for whoever reads it. Once signed, it shows in the Market tagged **Community** and **Developed by** your name; whoever installs it reads what it declares first. For a new version, raise `version` in the module and send it again.
 
-From the terminal, the same check: `npx @jossuealcala/madre check-module --file <id>.module.mjs --entry entrada.json`.
+From the terminal, the same check: `npx @zarzmr/app check-module --file <id>.module.mjs --entry entrada.json`.
 
 ## The module page
 

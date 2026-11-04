@@ -432,7 +432,7 @@ function showUninstalled(plan) {
   } else if (plan?.program?.install === 'source') {
     screen.append(node('p', null, t('This copy runs from its source folder; delete it yourself if you no longer want it: {folder}', { folder: plan.program.folder ?? '' })));
   } else {
-    screen.append(node('p', null, t('If you ever want it back: npx @jossuealcala/madre')));
+    screen.append(node('p', null, t('If you ever want it back: npx @zarzmr/app')));
   }
   document.body.append(screen);
   document.documentElement.classList.add('madre-is-off');

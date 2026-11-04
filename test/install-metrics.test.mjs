@@ -44,7 +44,7 @@ test('install metrics: installed once, updated once per newer version, never for
 
 test('install metrics: presence says only the id, the version and the system, once every few minutes, and never to madre.run from a test or a QA house', async () => {
   assert.deepEqual(Object.keys(presenceBody({ id: 'x', version: '1.1.0', platform: 'darwin' })), ['id', 'version', 'os']);
-  assert.equal(presenceUrl({}), 'https://madre.run/api/presence');
+  assert.equal(presenceUrl({}), '', 'ZM Studio says nothing about being on');
   assert.equal(presenceUrl({ PULSE_TELEMETRY_URL: 'http://127.0.0.1:9/api/telemetry' }), 'http://127.0.0.1:9/api/presence');
   assert.equal(presenceUrl({ PULSE_PRESENCE_URL: 'http://127.0.0.1:9/p', PULSE_TELEMETRY_URL: 'x' }), 'http://127.0.0.1:9/p');
   const root = await mkdtemp(join(tmpdir(), 'madre-here-'));

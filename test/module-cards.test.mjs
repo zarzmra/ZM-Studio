@@ -194,7 +194,7 @@ test('a module declares where a newer version would come from, and the check is 
 
     // A module that ships with MADRE cannot update on its own: what can be newer is MADRE.
     const ash = await moduleUpdate({ id: 'ash', version: '1.0.0', tracks: null }, {
-      stateRoot: dir, madre: { name: '@jossuealcala/madre', version: '0.4.0' }, fetchImpl, force: true,
+      stateRoot: dir, madre: { name: '@zarzmr/app', version: '0.4.0' }, fetchImpl, force: true,
     });
     assert.equal(ash.via, 'madre');
     assert.equal(ash.ships, '0.4.0');

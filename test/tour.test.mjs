@@ -351,6 +351,7 @@ test('a project\'s first message is counted once, in any of its chats and across
     const say = (text) => fetch(`${base}/api/messages`, { method: 'POST', headers: { 'content-type': 'application/json', origin: base }, body: JSON.stringify({ target: 'codex', text }) });
     return { server, say };
   };
+  process.env.PULSE_TELEMETRY_URL = 'http://127.0.0.1:9/telemetry';   // counting is local; nothing listens there
   let opened;
   try {
     opened = await open();
@@ -364,6 +365,7 @@ test('a project\'s first message is counted once, in any of its chats and across
     await new Promise((resolve) => setTimeout(resolve, 300));
     assert.equal(await counted(), 1, 'a project opened again counted a first message again');
   } finally {
+    delete process.env.PULSE_TELEMETRY_URL;
     await new Promise((resolve) => (opened?.server ? opened.server.close(() => resolve()) : resolve()));
     await rm(state, { recursive: true, force: true });
     await rm(project, { recursive: true, force: true });

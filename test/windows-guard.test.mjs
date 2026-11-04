@@ -14,7 +14,7 @@ test('windows · started on Windows itself, MADRE explains WSL2 in three steps a
   assert.equal(spanish.status, 1);
   assert.match(spanish.stdout, /https:\/\/madre\.run\/windows/);
   assert.match(spanish.stdout, /doble clic/);
-  assert.match(spanish.stdout, /npx @jossuealcala\/madre/);
+  assert.match(spanish.stdout, /npx @zarzmr\/app/);
   const english = run({ LANG: 'en_US.UTF-8', LC_ALL: 'en_US.UTF-8' });
   assert.equal(english.status, 1);
   assert.match(english.stdout, /On Windows, MADRE installs with its installer/);

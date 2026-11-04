@@ -19,7 +19,8 @@ import { randomUUID } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-export const HEARTBEAT_URL = 'https://madre.run/api/ping';
+// ZM Studio sends no daily notice (PRIVACY.md): no address, nothing sent. PULSE_HEARTBEAT_URL turns it on.
+export const HEARTBEAT_URL = '';
 const ID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 
 export async function installId(root) {
@@ -40,6 +41,7 @@ export const heartbeatBody = ({ id, version, platform = process.platform, node =
 // Once per UTC day per copy, whichever of its processes gets there first; a day that failed is
 // tried again on the next call.
 export async function heartbeat({ root, version, fetchImpl = globalThis.fetch, url = process.env.PULSE_HEARTBEAT_URL ?? HEARTBEAT_URL, now = new Date() }) {
+  if (!url) return { sent: false, reason: 'off' };
   const day = now.toISOString().slice(0, 10);
   const stamp = join(root, 'heartbeat.json');
   try {

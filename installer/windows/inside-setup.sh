@@ -68,7 +68,7 @@ node --version
 say "MADRE"
 # In the user's own npm folder: MADRE updates itself later without sudo. ~/.local/bin is on the
 # PATH of every login shell Ubuntu starts (~/.profile), and the Start menu shortcut starts one.
-su - "$name" -c 'mkdir -p "$HOME/.local" && npm config set prefix "$HOME/.local" && npm install --global --no-fund --no-audit @jossuealcala/madre@latest'
+su - "$name" -c 'mkdir -p "$HOME/.local" && npm config set prefix "$HOME/.local" && npm install --global --no-fund --no-audit @zarzmr/app@latest'
 su - "$name" -c '"$HOME/.local/bin/madre" --version'
 
 say "Ready"

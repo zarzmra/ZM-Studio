@@ -115,7 +115,7 @@ test('ficha · the page keeps it in a cookie, a tab without it is told where to 
     const tab = await ask(port, { path: '/' });
     assert.equal(tab.status, 401);
     assert.match(tab.headers['content-type'], /text\/html/);
-    assert.match(tab.text, /npx @jossuealcala\/madre/);
+    assert.match(tab.text, /npx @zarzmr\/app/);
     assert.doesNotMatch(tab.text, new RegExp(root.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
     assert.equal((await ask(port, { path: '/', headers: { cookie: `${FICHA_COOKIE}=${ficha}` } })).status, 200);
     assert.equal((await ask(port, { path: '/app.js' })).status, 200, 'the page\'s code needs no ficha');

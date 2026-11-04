@@ -268,8 +268,11 @@ test('a report has two doors, and the one a person sees is the one they can open
   const { REPORT_FORM, HOME_SITE } = await import('../src/sentinel-errors.mjs');
 
   // The address a human reads in the outbound log is part of what they are being asked to trust.
-  assert.equal(new URL(DEFAULT_REPORT_URL).hostname, 'madre.run');
-  assert.equal(DESTINATIONS.find((one) => one.id === 'reports').host, 'madre.run');
+  // ZM Studio has no collector: reports stay on this computer, and MADRE's are refused.
+  assert.equal(DEFAULT_REPORT_URL, '');
+  assert.equal(DESTINATIONS.find((one) => one.id === 'reports').host, null);
+  const { blockedHost } = await import('../src/outbound.mjs');
+  assert.ok(blockedHost('https://madre.run/v1/reports') && blockedHost(LEGACY_REPORT_URL) && !blockedHost('https://registry.npmjs.org/'));
 
   // And the address it had before must keep existing in the record: every room on 0.4.0 and
   // earlier carries it compiled in, so switching it off would stop their reports in silence.

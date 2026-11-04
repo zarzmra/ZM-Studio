@@ -8,7 +8,7 @@
 // Everything is optional except id and name.
 //
 // A module imports nothing. MADRE loads your file from a scratch folder to check it before
-// installing, and there is no node_modules there: `import … from '@jossuealcala/madre/sdk'`
+// installing, and there is no node_modules there: `import … from '@zarzmr/app/sdk'`
 // cannot resolve and the install fails. If you need defineModule, export a function and MADRE
 // hands it to you: ({ defineModule }) => defineModule({ … }).
 //

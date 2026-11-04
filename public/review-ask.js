@@ -11,7 +11,7 @@
 import { language, t } from './i18n.js';
 import { trazo } from './icons.js';
 
-export const STAR_URL = 'https://github.com/jossuealcacao-exe/madre';
+export const STAR_URL = 'https://github.com/zarzmra/ZM-Studio';
 // GitHub keeps no commission on Sponsors (.github/FUNDING.yml); Settings › Version links it too.
 export const SPONSORS_URL = 'https://github.com/sponsors/jossuealcacao-exe';
 export const REVIEW_URLS = { es: 'https://madre.run/resenas/', en: 'https://madre.run/en/reviews/' };

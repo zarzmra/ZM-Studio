@@ -15,26 +15,26 @@ test('updates: versions compare as releases, the launch mode picks the command, 
   assert.equal(compareVersions('1.1.0-alpha.9', '1.1.0-beta.1'), -1);
   assert.equal(compareVersions('1.1.0-rc.1', '1.1.0-rc.1'), 0);
   assert.equal(compareVersions('1.0.0+build.7', '1.0.0'), 0, 'build metadata does not count');
-  assert.equal(detectInstall({ script: '/Users/x/.npm/_npx/abc/node_modules/@jossuealcala/madre/bin/madre.mjs', projectRoot: '/Users/x/amethyst' }), 'npx');
-  assert.equal(detectInstall({ script: '/Users/x/amethyst/node_modules/@jossuealcala/madre/bin/madre.mjs', projectRoot: '/Users/x/amethyst' }), 'project');
-  assert.equal(detectInstall({ script: '/opt/homebrew/lib/node_modules/@jossuealcala/madre/bin/madre.mjs', projectRoot: '/Users/x/amethyst' }), 'global');
+  assert.equal(detectInstall({ script: '/Users/x/.npm/_npx/abc/node_modules/@zarzmr/app/bin/madre.mjs', projectRoot: '/Users/x/amethyst' }), 'npx');
+  assert.equal(detectInstall({ script: '/Users/x/amethyst/node_modules/@zarzmr/app/bin/madre.mjs', projectRoot: '/Users/x/amethyst' }), 'project');
+  assert.equal(detectInstall({ script: '/opt/homebrew/lib/node_modules/@zarzmr/app/bin/madre.mjs', projectRoot: '/Users/x/amethyst' }), 'global');
   assert.equal(detectInstall({ script: '/Users/x/pulse/bin/madre.mjs', projectRoot: '/Users/x/pulse' }), 'source');
-  assert.equal(updateCommand('npx', '@jossuealcala/madre', '0.3.2'), 'npx @jossuealcala/madre@0.3.2 start');
-  assert.equal(updateCommand('project', '@jossuealcala/madre', '0.3.2'), 'npm install @jossuealcala/madre@0.3.2');
-  assert.equal(applyCommand({ install: 'npx', name: '@jossuealcala/madre', version: '0.3.2', port: 4317, projectRoot: '/Users/x/Pangea OS' }), "exec npx -y '@jossuealcala/madre@0.3.2' start --no-open --port 4317 --project '/Users/x/Pangea OS'");
-  assert.match(applyCommand({ install: 'project', name: '@jossuealcala/madre', version: '0.3.2', port: 4319, projectRoot: '/p' }), /^npm install '@jossuealcala\/madre@0\.3\.2' --no-fund --no-audit && exec npx --no 'madre' start --no-open --port 4319 --project '\/p'$/);
-  assert.match(applyCommand({ install: 'global', name: '@jossuealcala/madre', version: '0.3.2', port: 4317, projectRoot: '/p' }), /^npm install -g .* && exec 'madre' start/);
+  assert.equal(updateCommand('npx', '@zarzmr/app', '0.3.2'), 'npx @zarzmr/app@0.3.2 start');
+  assert.equal(updateCommand('project', '@zarzmr/app', '0.3.2'), 'npm install @zarzmr/app@0.3.2');
+  assert.equal(applyCommand({ install: 'npx', name: '@zarzmr/app', version: '0.3.2', port: 4317, projectRoot: '/Users/x/Pangea OS' }), "exec npx -y '@zarzmr/app@0.3.2' start --no-open --port 4317 --project '/Users/x/Pangea OS'");
+  assert.match(applyCommand({ install: 'project', name: '@zarzmr/app', bin: 'zmstudio', version: '0.3.2', port: 4319, projectRoot: '/p' }), /^npm install '@zarzmr\/app@0\.3\.2' --no-fund --no-audit && exec npx --no 'zmstudio' start --no-open --port 4319 --project '\/p'$/);
+  assert.match(applyCommand({ install: 'global', name: '@zarzmr/app', bin: 'zmstudio', version: '0.3.2', port: 4317, projectRoot: '/p' }), /^npm install -g .* && exec 'zmstudio' start/);
   // A version is semver or nothing (SRV-07): one from a cache someone wrote never reaches a shell.
   for (const version of ['9.9.9;touch${IFS}/tmp/x;#', '1.0.0 && rm -rf ~', '$(id)', '1.0', 'latest']) {
-    assert.equal(applyCommand({ install: 'npx', name: '@jossuealcala/madre', version, port: 4317, projectRoot: '/p' }), null, version);
-    assert.equal(fetchCommand({ name: '@jossuealcala/madre', version }), null, version);
+    assert.equal(applyCommand({ install: 'npx', name: '@zarzmr/app', version, port: 4317, projectRoot: '/p' }), null, version);
+    assert.equal(fetchCommand({ name: '@zarzmr/app', version }), null, version);
   }
-  assert.ok(applyCommand({ install: 'npx', name: '@jossuealcala/madre', version: '1.1.0-alpha.1', port: 4317, projectRoot: '/p' }), 'a pre-release is a version');
+  assert.ok(applyCommand({ install: 'npx', name: '@zarzmr/app', version: '1.1.0-alpha.1', port: 4317, projectRoot: '/p' }), 'a pre-release is a version');
   assert.equal(applyCommand({ install: 'source', name: 'x', version: '1', port: 1, projectRoot: '/p' }), null, 'from source the human pulls');
   // The version is fetched while the room is still open; a room that closed first and found
   // nothing to start was simply gone. Only a name and a version a registry would give reach npm.
-  assert.deepEqual(fetchCommand({ name: '@jossuealcala/madre', version: '0.7.2' }), { command: 'npm', args: ['cache', 'add', '@jossuealcala/madre@0.7.2', '--no-fund', '--no-audit'] });
-  assert.equal(fetchCommand({ name: '@jossuealcala/madre', version: '0.7.2; rm -rf ~' }), null);
+  assert.deepEqual(fetchCommand({ name: '@zarzmr/app', version: '0.7.2' }), { command: 'npm', args: ['cache', 'add', '@zarzmr/app@0.7.2', '--no-fund', '--no-audit'] });
+  assert.equal(fetchCommand({ name: '@zarzmr/app', version: '0.7.2; rm -rf ~' }), null);
   assert.equal(fetchCommand({ name: 'x && y', version: '1.0.0' }), null);
   // What a version brought is read in the product's own house, in the room's language. A release
   // page on a code host is written for people who already work there; whoever pressed this button
@@ -51,17 +51,17 @@ test('updates: versions compare as releases, the launch mode picks the command, 
     const cacheFile = join(root, 'updates.json');
     const calls = [];
     const fetchImpl = async (url) => { calls.push(url); return { ok: true, json: async () => ({ version: '0.3.2' }) }; };
-    const first = await checkForUpdate({ name: '@jossuealcala/madre', current: '0.3.1', cacheFile, fetchImpl, now: 1000 });
+    const first = await checkForUpdate({ name: '@zarzmr/app', current: '0.3.1', cacheFile, fetchImpl, now: 1000 });
     assert.deepEqual({ available: first.available, latest: first.latest, source: first.source, enabled: first.enabled }, { available: true, latest: '0.3.2', source: 'registry', enabled: true });
-    assert.equal(calls[0], 'https://registry.npmjs.org/@jossuealcala%2Fmadre/latest');
-    assert.deepEqual(JSON.parse(await readFile(cacheFile, 'utf8')), { name: '@jossuealcala/madre', latest: '0.3.2', checkedAt: 1000 });
-    const second = await checkForUpdate({ name: '@jossuealcala/madre', current: '0.3.1', cacheFile, fetchImpl, now: 1000 + 60 * 60 * 1000 });
+    assert.equal(calls[0], 'https://registry.npmjs.org/@zarzmr%2Fapp/latest');
+    assert.deepEqual(JSON.parse(await readFile(cacheFile, 'utf8')), { name: '@zarzmr/app', latest: '0.3.2', checkedAt: 1000 });
+    const second = await checkForUpdate({ name: '@zarzmr/app', current: '0.3.1', cacheFile, fetchImpl, now: 1000 + 60 * 60 * 1000 });
     assert.deepEqual([second.source, calls.length], ['cache', 1], 'within a day the cache answers');
-    const third = await checkForUpdate({ name: '@jossuealcala/madre', current: '0.3.1', cacheFile, fetchImpl, now: 1000 + 25 * 60 * 60 * 1000 });
+    const third = await checkForUpdate({ name: '@zarzmr/app', current: '0.3.1', cacheFile, fetchImpl, now: 1000 + 25 * 60 * 60 * 1000 });
     assert.deepEqual([third.source, calls.length], ['registry', 2], 'after a day it asks again');
-    const off = await checkForUpdate({ name: '@jossuealcala/madre', current: '0.3.2', cacheFile, fetchImpl, now: 1000 + 50 * 60 * 60 * 1000, enabled: false });
+    const off = await checkForUpdate({ name: '@zarzmr/app', current: '0.3.2', cacheFile, fetchImpl, now: 1000 + 50 * 60 * 60 * 1000, enabled: false });
     assert.deepEqual([off.source, off.available, calls.length], ['cache', false, 2], 'disabled: cache only, never the network, and equal versions are not an update');
-    const down = await checkForUpdate({ name: '@jossuealcala/madre', current: '0.3.1', cacheFile: join(root, 'none.json'), fetchImpl: async () => { throw new Error('offline'); }, now: 5 });
+    const down = await checkForUpdate({ name: '@zarzmr/app', current: '0.3.1', cacheFile: join(root, 'none.json'), fetchImpl: async () => { throw new Error('offline'); }, now: 5 });
     assert.deepEqual([down.source, down.latest, down.available, down.error], ['error', null, false, 'offline']);
   } finally {
     await rm(root, { recursive: true, force: true, maxRetries: 6, retryDelay: 60 });
@@ -107,8 +107,8 @@ test('updates: a cache with something that is not a version is not believed (SRV
   const dir = await mkdtemp(join(tmpdir(), 'madre-update-cache-'));
   try {
     const cacheFile = join(dir, 'updates.json');
-    await writeFile(cacheFile, JSON.stringify({ name: '@jossuealcala/madre', latest: '9.9.9;touch${IFS}/tmp/x;#', checkedAt: Date.now() }));
-    const seen = await checkForUpdate({ name: '@jossuealcala/madre', current: '1.0.0', cacheFile, enabled: false });
+    await writeFile(cacheFile, JSON.stringify({ name: '@zarzmr/app', latest: '9.9.9;touch${IFS}/tmp/x;#', checkedAt: Date.now() }));
+    const seen = await checkForUpdate({ name: '@zarzmr/app', current: '1.0.0', cacheFile, enabled: false });
     assert.equal(seen.latest, null);
     assert.equal(seen.available, false);
   } finally {

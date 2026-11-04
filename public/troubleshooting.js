@@ -164,8 +164,8 @@ export const CONDITIONS = [
     diagnosis: 'Without a model in its config, `opencode run` falls back to its default provider. On this machine that provider holds a stale or invalid key.',
     remedy: 'Tell MADRE which provider/model OpenCode should use in the project, or remove the stale credential so the default changes.',
     fixes: {
-      darwin: ['npx @jossuealcala/madre setup', '# press [m] and pick a provider/model that has a session, e.g. openai/gpt-5.6-sol', '# one-off alternative:', 'PULSE_OPENCODE_MODEL=openai/gpt-5.6-sol npx @jossuealcala/madre start', '# or drop the stale key:', 'opencode auth logout anthropic'],
-      linux: ['npx @jossuealcala/madre setup', '# press [m] and pick a provider/model that has a session', 'PULSE_OPENCODE_MODEL=openai/gpt-5.6-sol npx @jossuealcala/madre start', 'opencode auth logout anthropic']
+      darwin: ['npx @zarzmr/app setup', '# press [m] and pick a provider/model that has a session, e.g. openai/gpt-5.6-sol', '# one-off alternative:', 'PULSE_OPENCODE_MODEL=openai/gpt-5.6-sol npx @zarzmr/app start', '# or drop the stale key:', 'opencode auth logout anthropic'],
+      linux: ['npx @zarzmr/app setup', '# press [m] and pick a provider/model that has a session', 'PULSE_OPENCODE_MODEL=openai/gpt-5.6-sol npx @zarzmr/app start', 'opencode auth logout anthropic']
     },
   },
   {
@@ -238,7 +238,7 @@ export const CONDITIONS = [
     match: /not logged in|sign in required|Error authenticating|unauthorized|please (?:log|sign) ?in|no credentials|set an Auth method/i,
     diagnosis: 'The CLI is on this computer but has no session for its provider. MADRE never stores credentials; each agent keeps its own.',
     remedy: 'This agent has no session yet. Connect it once in Settings › Agents (MADRE runs its sign-in for you, nothing to type in a terminal), or ask the same of an agent that is connected.',
-    fixes: same(['npx @jossuealcala/madre setup', '# or directly:', 'codex login', 'claude auth login', 'opencode auth login', 'gemini   # then /auth']),
+    fixes: same(['npx @zarzmr/app setup', '# or directly:', 'codex login', 'claude auth login', 'opencode auth login', 'gemini   # then /auth']),
     perAgent: loginAgent,
   },
   {
@@ -260,7 +260,7 @@ export const CONDITIONS = [
     match: /adapter is not enabled yet|does not have a supported MADRE adapter/i,
     diagnosis: 'Your MADRE build predates the adapter for this agent, or a newer CLI changed its interface.',
     remedy: 'Run the latest MADRE.',
-    fixes: same(['npx @jossuealcala/madre@latest doctor', 'npx @jossuealcala/madre@latest start']),
+    fixes: same(['npx @zarzmr/app@latest doctor', 'npx @zarzmr/app@latest start']),
   },
   {
     id: 'claude-args',
@@ -271,7 +271,7 @@ export const CONDITIONS = [
     match: /Invalid MCP configuration|ENAMETOOLONG/i,
     diagnosis: 'Older MADRE builds placed the prompt right after a variadic flag, so Claude tried to open the prompt text as a file.',
     remedy: 'Fixed in MADRE 0.1.0. Run the latest build.',
-    fixes: same(['npx @jossuealcala/madre@latest start']),
+    fixes: same(['npx @zarzmr/app@latest start']),
   },
   {
     id: 'timeout',
@@ -344,8 +344,8 @@ export const CONDITIONS = [
     diagnosis: 'Another process, often another MADRE, is listening on the port.',
     remedy: 'Use a different port, or find and stop the process holding it.',
     fixes: {
-      darwin: ['npx @jossuealcala/madre start --port 4318', '# who holds 4317?', 'lsof -nP -iTCP:4317 -sTCP:LISTEN'],
-      linux: ['npx @jossuealcala/madre start --port 4318', 'ss -ltnp | grep 4317']
+      darwin: ['npx @zarzmr/app start --port 4318', '# who holds 4317?', 'lsof -nP -iTCP:4317 -sTCP:LISTEN'],
+      linux: ['npx @zarzmr/app start --port 4318', 'ss -ltnp | grep 4317']
     },
   },
   {
@@ -356,7 +356,7 @@ export const CONDITIONS = [
     match: /reconnecting|EventSource|ECONNREFUSED/i,
     diagnosis: 'The page lost the server. MADRE exited, the laptop slept, or the port changed.',
     remedy: 'Start MADRE again from the project folder and reload. The transcript is on disk; nothing is lost.',
-    fixes: same(['cd /path/to/project', 'npx @jossuealcala/madre start']),
+    fixes: same(['cd /path/to/project', 'npx @zarzmr/app start']),
   },
   {
     id: 'opencode-server-error',
@@ -656,7 +656,7 @@ export const CONDITIONS = [
     match: /by association|cascade|spreading activation|keeps arriving with|memory used/i,
     diagnosis: 'Under a reply, MADRE says what the archive handed that turn. Most of it was matched to what you asked, by words and by meaning. A note marked "related" came along for a different reason: this project keeps carrying it in the same turn as one of the others, so the archive brings it too, however differently it reads. The strength is a ratio over the turns where each was found on its own merits — a memory the project reaches for constantly does not end up attached to everything, and a pair that stops meeting fades on its own. Related notes add and never displace: recall keeps two slots for them and hands back the ones it does not use.',
     remedy: 'Click a note to see it in the Memory map, where the wires it travels on are drawn. It is the one part of recall that owes nothing to how a memory reads, so it can be switched off in Settings → Memory, with Related.',
-    fixes: same(['# Settings → Memory → Related', 'PULSE_RECALL_CASCADE=0 npx @jossuealcala/madre start']),
+    fixes: same(['# Settings → Memory → Related', 'PULSE_RECALL_CASCADE=0 npx @zarzmr/app start']),
   },
   {
     id: 'memory-cold',
@@ -908,7 +908,7 @@ export const CONDITIONS = [
       darwin: ['# this is for Windows'],
       linux: ['# this is for Windows'],
       wsl: ['# you are already in WSL: MADRE runs here as on any Linux'],
-      win32: ['# the installer, a double click and no terminal:', 'https://madre.run/windows', '# or by hand: in PowerShell, as administrator, once:', 'wsl --install', '# restart, open «Ubuntu» from the Start menu, and in it:', 'curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -', 'sudo apt install -y nodejs zstd', 'npx @jossuealcala/madre'],
+      win32: ['# the installer, a double click and no terminal:', 'https://madre.run/windows', '# or by hand: in PowerShell, as administrator, once:', 'wsl --install', '# restart, open «Ubuntu» from the Start menu, and in it:', 'curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -', 'sudo apt install -y nodejs zstd', 'npx @zarzmr/app'],
     },
   },
 ];

@@ -37,8 +37,18 @@ const LOCAL = new Set(['127.0.0.1', 'localhost', '::1', '0.0.0.0', '[::1]']);
 // part of what they are being asked to trust, and a workers.dev subdomain with an account name in
 // it reads like somebody's scratch endpoint. The old address must keep answering: every room on
 // 0.4.0 and earlier carries it compiled in, and turning it off would stop their reports silently.
-export const DEFAULT_REPORT_URL = 'https://madre.run/v1/reports';
+// ZM Studio has no error collector of its own yet: empty means reports are kept on this computer.
+export const DEFAULT_REPORT_URL = '';
 export const LEGACY_REPORT_URL = 'https://madre-reports.jossue-alcala-o.workers.dev/v1/reports';
+
+// ZM Studio sends nothing to MADRE's servers (PRIVACY.md): madre.run, its subdomains and its old
+// collector are refused by the wrapper below, whichever module or setting asks for them.
+const BLOCKED = new Set(['madre.run', new URL(LEGACY_REPORT_URL).hostname]);
+export function blockedHost(rawUrl) {
+  let host;
+  try { host = new URL(rawUrl).hostname; } catch { return false; }
+  return BLOCKED.has(host) || host.endsWith('.madre.run');
+}
 
 // The declaration. `what` is the honest sentence: what a request carries, not what it is called.
 export const DESTINATIONS = [
@@ -136,7 +146,7 @@ export const DESTINATIONS = [
     inside: true,
   },
   {
-    id: 'reports', host: new URL(DEFAULT_REPORT_URL).hostname, to: "the author's error collector",
+    id: 'reports', host: DEFAULT_REPORT_URL ? new URL(DEFAULT_REPORT_URL).hostname : null, to: "the author's error collector",
     what: 'An unknown condition: what broke, where in MADRE, and the version. Paths are cut back and your words are not in it.',
     when: 'you press SEND — or on its own, only while auto-report is on',
     where: 'Settings › Version and reports › Report automatically · or PULSE_REPORT_URL',
@@ -328,6 +338,11 @@ export class OutboundLog {
       const url = typeof resource === 'string' ? resource : (resource?.url ?? String(resource));
       const method = init?.method ?? resource?.method ?? 'GET';
       const bytes = typeof init?.body === 'string' ? Buffer.byteLength(init.body) : null;
+      // Refused before anything leaves, and written down as refused (PRIVACY.md).
+      if (blockedHost(url)) {
+        log.record({ url, method, bytes, ok: false, ms: 0, error: 'blocked' });
+        throw Object.assign(new Error('ZM Studio sends nothing to madre.run'), { code: 'ZM_BLOCKED' });
+      }
       const started = Date.now();
       try {
         const response = await fetchImpl(resource, init);

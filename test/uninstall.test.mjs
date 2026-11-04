@@ -56,12 +56,12 @@ test('uninstall · only a folder MADRE made is ever taken away whole', async () 
 
 test('uninstall · the plan says what goes and what stays, and MADRE takes away only what it said', async () => {
   const { state, project, shadow } = await used();
-  const plan = await uninstallPlan({ stateRoot: state, install: 'global', name: '@jossuealcala/madre' });
+  const plan = await uninstallPlan({ stateRoot: state, install: 'global', name: '@zarzmr/app' });
   assert.equal(plan.ok, true);
   assert.deepEqual(plan.projects.map((one) => [one.root, one.made, Boolean(one.pulse), one.shadow]), [[project, 1, true, shadow]]);
   assert.deepEqual(plan.tools, ['codex']);
   assert.deepEqual(plan.modules, [plan.projects[0].name]);
-  assert.equal(plan.program.command, 'npm uninstall -g @jossuealcala/madre');
+  assert.equal(plan.program.command, 'npm uninstall -g @zarzmr/app');
   const view = planView(plan, { home: state });
   assert.equal(view.stateRoot, '~');
   assert.equal(view.projects[0].made, 1);
@@ -93,14 +93,14 @@ test('uninstall · the copies npx downloaded of MADRE, and no other package of n
     await mkdir(join(cache, '_npx', hash, 'node_modules'), { recursive: true });
     await writeFile(join(cache, '_npx', hash, 'package.json'), JSON.stringify({ dependencies }));
   };
-  await make('a1b2c3d4e5f6a7b8', { '@jossuealcala/madre': '1.1.0' });
-  await make('b1b2c3d4e5f6a7b8', { '@jossuealcala/madre': '1.0.5' });
+  await make('a1b2c3d4e5f6a7b8', { '@zarzmr/app': '1.1.0' });
+  await make('b1b2c3d4e5f6a7b8', { '@zarzmr/app': '1.0.5' });
   await make('c1b2c3d4e5f6a7b8', { 'other-tool': '1.0.0' });
-  await make('d1b2c3d4e5f6a7b8', { '@jossuealcala/madre': '1.1.0', 'other-tool': '1.0.0' });
+  await make('d1b2c3d4e5f6a7b8', { '@zarzmr/app': '1.1.0', 'other-tool': '1.0.0' });
   const script = join(cache, '_npx', 'a1b2c3d4e5f6a7b8', 'node_modules', '@jossuealcala', 'madre', 'bin', 'madre.mjs');
-  const found = await npxFolders({ script, name: '@jossuealcala/madre' });
+  const found = await npxFolders({ script, name: '@zarzmr/app' });
   assert.deepEqual(found.map((one) => one.slice(-16)).sort(), ['a1b2c3d4e5f6a7b8', 'b1b2c3d4e5f6a7b8']);
-  assert.deepEqual(await npxFolders({ script: '/usr/local/lib/node_modules/@jossuealcala/madre/bin/madre.mjs', name: '@jossuealcala/madre' }), []);
+  assert.deepEqual(await npxFolders({ script: '/usr/local/lib/node_modules/@zarzmr/app/bin/madre.mjs', name: '@zarzmr/app' }), []);
 });
 
 test('uninstall · only from Home, from a page of this computer, once every project closed', async () => {

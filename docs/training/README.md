@@ -7,7 +7,7 @@ Roadmap 2c. El proyecto exporta lo que recuerda como pares de chat; tú entrenas
 Desde **Ajustes › Lo que recuerda › Entrena tu propia IA › Exportar** (al terminar te dice en qué carpeta quedó), o en terminal:
 
 ```
-npx @jossuealcala/madre dataset   # en la carpeta del proyecto
+npx @zarzmr/app dataset   # en la carpeta del proyecto
 ```
 
 Escribe `~/.pulse/rooms/<proyecto>/dataset/{train.jsonl, valid.jsonl, manifest.json}`. Cada línea es `{"messages":[{role:"system"},{role:"user"},{role:"assistant"}]}`: las respuestas reales del proyecto, redactados (sin rutas, nombres, correos ni claves), más las notas resumidas como pares de recuerdo. Lo que se envió en #0 INCÓGNITO nunca está.

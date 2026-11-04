@@ -148,7 +148,7 @@ export async function uninstallPlan({ stateRoot, install = 'npx', script = proce
 }
 
 function packageName() {
-  try { return JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).name; } catch { return '@jossuealcala/madre'; }
+  try { return JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).name; } catch { return '@zarzmr/app'; }
 }
 const sourceFolder = (script) => (script ? dirname(dirname(resolve(script))) : null);
 

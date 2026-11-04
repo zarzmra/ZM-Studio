@@ -44,7 +44,7 @@ y deja «MADRE» en el menú Inicio. Sin terminal.
 ¿Prefieres la terminal? Dentro de Ubuntu (WSL2):
   curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
   sudo apt install -y nodejs zstd
-  npx @jossuealcala/madre
+  npx @zarzmr/app
 ` : `
 On Windows, MADRE installs with its installer: download it and open it with a double click.
 
@@ -56,7 +56,7 @@ MADRE's Linux and leaves «MADRE» in the Start menu. No terminal.
 Prefer the terminal? Inside Ubuntu (WSL2):
   curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
   sudo apt install -y nodejs zstd
-  npx @jossuealcala/madre
+  npx @zarzmr/app
 `);
   process.exit(1);
 }

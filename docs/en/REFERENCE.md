@@ -13,16 +13,16 @@ Everything ZM does, with the exact numbers. To get started in five minutes, see 
 
 You need Node 22.5 or later and at least one of these CLIs with a signed-in session: **Codex**, **Claude Code**, **Gemini CLI**, **OpenCode**. If **Ollama** is also running with a chat model, the project gets a fifth, local agent.
 
-1. Run `npx @jossuealcala/madre` from any folder: it opens Home, with all your projects and the Coordinator at the top. The first time, a three-step assistant walks you through it: connect the agents (each with its own button to install it and sign in, right there; once for all projects), add the projects (you choose folders inside your user folder; adding does not open them) and open the ones you are going to use. `npx @jossuealcala/madre start` inside a folder still opens that project directly; if there are no agents, the project opens anyway on Connect your agents so you can install them and sign in.
+1. Run `npx @zarzmr/app` from any folder: it opens Home, with all your projects and the Coordinator at the top. The first time, a three-step assistant walks you through it: connect the agents (each with its own button to install it and sign in, right there; once for all projects), add the projects (you choose folders inside your user folder; adding does not open them) and open the ones you are going to use. `npx @zarzmr/app start` inside a folder still opens that project directly; if there are no agents, the project opens anyway on Connect your agents so you can install them and sign in.
 2. The project opens at `http://127.0.0.1:4317`. ZM opens the browser with its ficha in the address (`?ficha=…`): the browser keeps it and the address is left clean. Pick an agent in the selector or type `@claude …`. The chip next to `to @agente` says which mode the message goes out in; `#1 CHAT ONLY`, read-only, is the default.
 3. To add or reconnect an AI later: Settings → Agents (the settings button in the bar, or ⌘, / Ctrl+,), where the agents live alongside the rest of the settings. Codex, Claude Code, Gemini (with your Google account) and OpenCode (with GitHub Copilot) sign in with one click; Gemini and OpenCode also accept their key right there. Under each agent, "Prefer your terminal?" unfolds the same step written as a command, for whoever prefers to do it by hand. ZM does not store provider credentials: each session and each key goes to its own CLI's file.
 4. With Ollama, the Local AI module (Modules, in the bar) is already on: memory is embedded locally and `@madre` appears in the row.
 5. Settings → Memory decides who distills the memory and how often. The Memory map, from the Diagnostics header, shows what the project remembers.
 
 ```bash
-npx @jossuealcala/madre doctor      # which agents exist, who is signed in, whether there is a new version
-npx @jossuealcala/madre setup       # the same setup, from the terminal, if you prefer it
-npx @jossuealcala/madre start --no-open --project RUTA
+npx @zarzmr/app doctor      # which agents exist, who is signed in, whether there is a new version
+npx @zarzmr/app setup       # the same setup, from the terminal, if you prefer it
+npx @zarzmr/app start --no-open --project RUTA
 ```
 
 **On a server, with no screen.** ZM listens only on `127.0.0.1` of the machine it runs on, and on purpose: whoever reached it could set the agents to work there. Do not open its ports to the network. To use it on a server, open it through an SSH tunnel from your computer. Home uses 4317 and every project you open takes the next free port (4318, 4319…), so the tunnel carries several; if you open more projects, add more `-L`.
@@ -31,7 +31,7 @@ npx @jossuealcala/madre start --no-open --project RUTA
 # on your computer: reach the server with the tunnel
 ssh -L 4317:127.0.0.1:4317 -L 4318:127.0.0.1:4318 -L 4319:127.0.0.1:4319 -L 4320:127.0.0.1:4320 user@server
 # now on the server
-npx @jossuealcala/madre --no-open
+npx @zarzmr/app --no-open
 ```
 
 Then open, in your computer's browser, the address ZM wrote in the server's terminal, the one that ends in `?ficha=…`. The agents are installed on the server and connected from Settings › Agents: Claude gives you a link and a code you paste right there, and Gemini and OpenCode take their key. Use your own user, not root: the agents work with the permissions of whoever runs ZM.
@@ -335,7 +335,7 @@ In **Home › Settings › Version › Uninstall ZM** (`src/uninstall.mjs`, `pub
 | ZM's folder (`~/.pulse` or `PULSE_HOME`): chats, memory, settings, modules, catalog, this copy's identifier and the AIs it installed in its own folder (`tools/`) | Your projects and their files |
 | `.pulse/` inside each project ZM knows, except `.pulse/out/` (what the AIs created at #2) unless you tick the box | `.madre/` inside a project: the modules you wrote |
 | Those projects' restore points (`$TMPDIR/madre-shadow-<uid>/…`) | Your AIs and their sign-ins, Ollama and its models, npm's cache |
-| The copy `npx` downloaded (`~/.npm/_npx/<hash>` holding only ZM) | With `npm -g` or inside a project, the program: the last screen gives the command (`npm uninstall -g @jossuealcala/madre`). From source, its folder |
+| The copy `npx` downloaded (`~/.npm/_npx/<hash>` holding only ZM) | With `npm -g` or inside a project, the program: the last screen gives the command (`npm uninstall -g @zarzmr/app`). From source, its folder |
 
 ZM's folder is only taken away whole when it is ZM's beyond doubt: an absolute path, never your home folder or one holding it, and with something ZM always writes (`install-id`, `config.json`, `rooms`, `salas`).
 

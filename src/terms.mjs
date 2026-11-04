@@ -28,3 +28,9 @@ export async function acceptTerms(root, { now = new Date() } = {}) {
   await writeFile(join(root, 'terms.json'), `${JSON.stringify(kept)}\n`);
   return { accepted: true, ...kept };
 }
+
+// Whether this copy was in use before 1.1.0 (src/install-metrics.mjs, lifecycle.json `before`): it
+// is told what changed instead of being welcomed as new.
+export async function cameFromBefore(root) {
+  try { return JSON.parse(await readFile(join(root, 'lifecycle.json'), 'utf8'))?.before === true; } catch { return false; }
+}

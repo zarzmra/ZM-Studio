@@ -27,7 +27,9 @@ import { t } from './i18n.mjs';
 import { MARKET_PUBLIC_KEY } from './market-key.mjs';
 import { mayInstall } from './market-license.mjs';
 
-export const MARKET_URL = 'https://madre.run/mercado/catalogo.json';
+// ZM Studio has no remote catalog yet: the Market shows the modules it comes with. PULSE_MARKET_URL
+// points it at a catalog signed with MARKET_PUBLIC_KEY.
+export const MARKET_URL = '';
 const MAX_CATALOG = 1024 * 1024;
 const MAX_SIGNATURE = 1024;
 export const MAX_MODULE = 512 * 1024;
@@ -180,6 +182,7 @@ export async function refreshCatalog({ stateRoot, env = process.env, fetchImpl =
   const kept = await keptCatalog({ stateRoot, publicKey });
   if (!force && kept && state.checkedAt && now() - Date.parse(state.checkedAt) < FRESH_MS) return { catalog: kept, fresh: false };
   const url = marketUrl(env);
+  if (!url) return { catalog: kept, fresh: false };
   try {
     // Both answers are waited for, also when one fails: the other one used to be still out when
     // the ask was over, and was written in the outbound log of a room already closed (2026-10-21).

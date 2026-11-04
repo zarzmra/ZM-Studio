@@ -7,7 +7,7 @@ Roadmap 2c. The project exports what it remembers as chat pairs; you train a sma
 From **Settings › What it remembers › Train your own AI › Export** (when it finishes it tells you which folder it used), or in the terminal:
 
 ```
-npx @jossuealcala/madre dataset   # in the project folder
+npx @zarzmr/app dataset   # in the project folder
 ```
 
 It writes `~/.pulse/rooms/<project>/dataset/{train.jsonl, valid.jsonl, manifest.json}`. Each line is `{"messages":[{role:"system"},{role:"user"},{role:"assistant"}]}`: the project's real answers, redacted (no paths, names, emails or keys), plus the summarized notes as recall pairs. Messages sent in #0 INCOGNITO are never there.
