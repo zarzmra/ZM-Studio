@@ -8,8 +8,8 @@ ZM is one local room where several AI coding CLIs work on a project together. Ch
 node --version          # ≥ 22.5
 npm test                # the whole suite, no model calls
 npm run pack:check      # packs, installs, exercises the CLI
-node ./bin/madre.mjs doctor --catalog   # what MU/TH/UR already knows
-node ./bin/madre.mjs start --no-open    # the room from source, URL in the terminal
+node ./bin/zmstudio.mjs doctor --catalog   # what MU/TH/UR already knows
+node ./bin/zmstudio.mjs start --no-open    # the room from source, URL in the terminal
 ```
 
 ## Sign your work
@@ -54,7 +54,7 @@ Three layers that never mix: the dialogue reads like a chat (system font, bubble
 ## Where things live
 
 ```
-bin/madre.mjs        the CLI · start, doctor, setup
+bin/zmstudio.mjs        the CLI · start, doctor, setup
 src/server.mjs       HTTP + SSE, settings, modules, sentinel routes
 src/room.mjs         the turn engine: send, dispatch, turns, plans, handoff, scopes
 src/room/            its pieces: prompt (what an agent reads), context (transcript + recall),

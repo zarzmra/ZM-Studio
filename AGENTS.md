@@ -29,7 +29,7 @@ destilador, lee `docs/ZONAS.md`.**
 ## Windows y licencia (desde 1.1.0)
 
 **En Windows, ZM funciona dentro de WSL2.** Abierta en Windows nativo, explica en tres pasos cómo
-llegar a WSL2 y se detiene (`bin/madre.mjs`, `PULSE_WINDOWS_NATIVE=1` solo para desarrollo).
+llegar a WSL2 y se detiene (`bin/zmstudio.mjs`, `PULSE_WINDOWS_NATIVE=1` solo para desarrollo).
 **Antes de tocar cualquier cosa que ejecute procesos, resuelva rutas o aplique permisos, lee
 `docs/WINDOWS.md`.**
 

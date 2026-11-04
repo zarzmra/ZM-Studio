@@ -29,7 +29,7 @@ import { installTrouble, loginTrouble } from './setup-trouble.mjs';
 import { MODULES, moduleById, describeModules, findModuleRoute, toolsForTurn as modulesToolsForTurn, loadExternalModules, loadFailures, moduleFolders, moduleCommands, installModuleFile, installModuleText, verifyModuleText, moduleOrigin, removeExternalModule, adoptBuiltinUpdates, packagedVersions } from './modules/index.mjs';
 import { understandsSdk } from './modules/sdk.mjs';
 import { updateBuiltins } from './builtin-updates.mjs';
-import { madreAgent, madreInvoker, MADRE_AGENT_ID, MADRE_ADAPTER } from './adapters/zmstudio.mjs';
+import { madreAgent, madreInvoker, MADRE_AGENT_ID, MADRE_ADAPTER } from './adapters/madre.mjs';
 import { exportDataset, forgetCorpus, keepCorpus, keptCorpus, pruneCorpora, readiness as datasetReadiness } from './dataset.mjs';
 import { OutboundLog, outboundView, DEFAULT_REPORT_URL } from './outbound.mjs';
 import { Telemetry, telemetryOn } from './telemetry.mjs';

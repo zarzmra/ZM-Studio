@@ -70,7 +70,7 @@
     "start": "node ./bin/zmstudio.mjs start",
     "doctor": "node ./bin/zmstudio.mjs doctor",
     "test": "node --import ./test/setup.mjs --test",
-    "check": "npm test && node ./bin/madre.mjs doctor --json",
+    "check": "npm test && node ./bin/zmstudio.mjs doctor --json",
     "pack:check": "node ./scripts/pack-check.mjs",
     "release": "node ./scripts/release.mjs"
   },

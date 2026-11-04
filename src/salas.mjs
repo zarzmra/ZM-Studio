@@ -4,7 +4,7 @@
 // what one room may ask of another — to open, to close. The list is read from what each room
 // leaves beside its record; nothing here touches a room's ledger or its memory.
 //
-// A room opened from here is opened the way `madre start` opens it, by the same `bin/madre.mjs`,
+// A room opened from here is opened the way `madre start` opens it, by the same `bin/zmstudio.mjs`,
 // without a shell: the folder is an argument, never a line for `sh` or `cmd.exe` to read
 // (docs/WINDOWS.md, WIN-016), and the script is found with fileURLToPath, never `.pathname`
 // (WIN-004). A room is closed by asking it to close, the way a signal closes it; nothing here
@@ -20,7 +20,7 @@ import { fileURLToPath } from 'node:url';
 import { oneAtATime, writeWhole } from './json-file.mjs';
 import { defaultStateRoot, fichaHeaders } from './ficha.mjs';
 
-const MADRE_BIN = fileURLToPath(new URL('../bin/madre.mjs', import.meta.url));
+const MADRE_BIN = fileURLToPath(new URL('../bin/zmstudio.mjs', import.meta.url));
 
 const alive = (pid) => { try { process.kill(pid, 0); return true; } catch (error) { return error.code === 'EPERM'; } };
 const readJson = (file) => readFile(file, 'utf8').then((raw) => JSON.parse(raw)).catch(() => null);

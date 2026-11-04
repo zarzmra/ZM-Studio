@@ -38,10 +38,10 @@ jobs:
         run: npm run pack:check
       - name: doctor answers in JSON without any agent installed
         run: |
-          node ./bin/madre.mjs doctor --json > doctor.json || true
+          node ./bin/zmstudio.mjs doctor --json > doctor.json || true
           node -e "const r = JSON.parse(require('fs').readFileSync('doctor.json', 'utf8')); if (!Array.isArray(r.agents) || r.agents.length !== 5) process.exit(1); console.log('doctor ok ·', r.node)"
       - name: Known conditions print for this platform
-        run: node ./bin/madre.mjs doctor --catalog node-version
+        run: node ./bin/zmstudio.mjs doctor --catalog node-version
   # The Windows installer (installer/windows, 1.1.1): it builds, and what it runs inside MADRE's
   # Linux leaves MADRE ready on a clean Ubuntu 24.04, the one WSL installs. The installer itself is
   # tried by hand on Windows 10 and 11: GitHub's Windows machines cannot run WSL2.

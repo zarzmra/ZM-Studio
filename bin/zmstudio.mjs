@@ -89,17 +89,17 @@ const has = (name) => cli.has(name.replace(/^--/, ''));
 // to then refuse is a wait nobody needed. The real bind below stays the authority: this only
 // saves the waiting.
 // What `madre --help` says, in the language MADRE speaks (src/i18n.mjs).
-const HELP_TEXT = `MADRE
+const HELP_TEXT = `ZM Studio
 
-  madre       [--port 4317] [--no-open]
+  zmstudio       [--port 4317] [--no-open]
               Opens Home: every project on this computer, in one place.
-  madre start [--project PATH] [--port 4317] [--no-open] [--setup]
+  zmstudio start [--project PATH] [--port 4317] [--no-open] [--setup]
               Opens the project in this folder (or PATH) directly.
               Without --port, a busy 4317 falls through to the next free port.
-  madre lobby [--port 4317] [--no-open]   (also: madre salas; opens Home)
-  madre setup [--project PATH] [--port 4317] [--no-open]
-  madre doctor [--project PATH] [--json]
-  madre check-module --file <module.mjs> [--entry <entrada.json>] [--json] [--lang es]
+  zmstudio lobby [--port 4317] [--no-open]   (also: zmstudio salas; opens Home)
+  zmstudio setup [--project PATH] [--port 4317] [--no-open]
+  zmstudio doctor [--project PATH] [--json]
+  zmstudio check-module --file <module.mjs> [--entry <entrada.json>] [--json] [--lang es]
 
   (none)  Opens Home. From there you add projects, connect the agents
           and enter any project. The Coordinator lives there.
@@ -127,7 +127,7 @@ async function openRoom(options) {
   const explicit = cli.explicit('port');
   let port = options.port;
   if (explicit && await portTaken(port)) {
-    console.error(`\n  MADRE › port ${port} is already in use. Another MADRE may be open there; try --port ${port + 1} or omit --port to pick one automatically.\n`);
+    console.error(`\n  ZM › port ${port} is already in use. Another ZM may be open there; try --port ${port + 1} or omit --port to pick one automatically.\n`);
     process.exit(2);
   }
   for (let attempt = 0; attempt < 20; attempt += 1) {
@@ -135,17 +135,17 @@ async function openRoom(options) {
       return await startPulse({ ...options, port });
     } catch (error) {
       // The room itself says it is taken, whatever port this attempt used.
-      if (error.code === 'ROOM_IN_USE') { console.error(`\n  MADRE › ${error.message}\n`); process.exit(2); }
+      if (error.code === 'ROOM_IN_USE') { console.error(`\n  ZM › ${error.message}\n`); process.exit(2); }
       if (error.code !== 'EADDRINUSE') throw error;
       if (explicit) {
-        console.error(`\n  MADRE › port ${port} is already in use. Another MADRE may be open there; try --port ${port + 1} or omit --port to pick one automatically.\n`);
+        console.error(`\n  ZM › port ${port} is already in use. Another ZM may be open there; try --port ${port + 1} or omit --port to pick one automatically.\n`);
         process.exit(2);
       }
-      console.error(`  MADRE › port ${port} in use, trying ${port + 1}.`);
+      console.error(`  ZM › port ${port} in use, trying ${port + 1}.`);
       port += 1;
     }
   }
-  console.error(`\n  MADRE › no free port between ${options.port} and ${port}. Pass --port explicitly.\n`);
+  console.error(`\n  ZM › no free port between ${options.port} and ${port}. Pass --port explicitly.\n`);
   process.exit(2);
 }
 
@@ -160,7 +160,7 @@ const projectRoot = projectRootFor({ command, named: cli.named, project: option(
 const openPath = isSalasRoom(projectRoot, salasHome) ? '/salas' : '';
 const [nodeMajor, nodeMinor] = process.versions.node.split('.').map(Number);
 if (nodeMajor < 22 || (nodeMajor === 22 && nodeMinor < 5)) {
-  console.error(`\n  MADRE › MADRE needs Node 22.5 or newer (found ${process.version}): the room's memory runs on node:sqlite.\n`);
+  console.error(`\n  ZM › ZM needs Node 22.5 or newer (found ${process.version}): the room's memory runs on node:sqlite.\n`);
   process.exit(2);
 }
 if (has('--version') || has('-v') || command === 'version') {
@@ -168,7 +168,7 @@ if (has('--version') || has('-v') || command === 'version') {
   const pkg = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
   let commit = '';
   try { commit = execFileSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: new URL('..', import.meta.url).pathname, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { /* installed from npm: no repo */ }
-  console.log(`madre ${pkg.version}${commit ? ` · ${commit}` : ''} · node ${process.version}`);
+  console.log(`zmstudio ${pkg.version}${commit ? ` · ${commit}` : ''} · node ${process.version}`);
   process.exit(0);
 }
 // A command that only reads leaves nothing behind (QA 1.1.0, NUE-37): after uninstalling, `madre
@@ -177,10 +177,10 @@ const onlyReads = command === 'doctor' || command === 'check-module';
 if (command !== 'help' && !(onlyReads && isSalasRoom(projectRoot, salasHome))) {
   // The notebook of Salas is MADRE's own folder: made here, empty, the first time it is opened
   // (D-S08). If it cannot be made, the check below says so, as for any folder that is not there.
-  if (isSalasRoom(projectRoot, salasHome)) await ensureSalasProject(salasHome).catch((error) => console.error(`  MADRE › could not make the folder of Salas at ${projectRoot}: ${error.message}`));
+  if (isSalasRoom(projectRoot, salasHome)) await ensureSalasProject(salasHome).catch((error) => console.error(`  ZM › could not make the folder of Salas at ${projectRoot}: ${error.message}`));
   const stats = await stat(projectRoot).catch(() => null);
   if (!stats?.isDirectory()) {
-    console.error(`\n  MADRE › project folder not found: ${projectRoot}\n  Pass an existing directory with --project, or run MADRE from inside the project.\n`);
+    console.error(`\n  ZM › project folder not found: ${projectRoot}\n  Pass an existing directory with --project, or run ZM from inside the project.\n`);
     process.exit(2);
   }
 }
@@ -227,7 +227,7 @@ if (command === 'doctor' && (has('--catalog') || has('--conditions'))) {
   const result = await exportDataset({ events: await store.readAll(), notes: memory ? memory.memories({ limit: 5000 }) : [], dir: join(roomDir, 'dataset'), project: basename(canonical), home: homedir() });
   memory?.close();
   if (has('--json')) console.log(JSON.stringify(result, null, 2));
-  else console.log(`\nMADRE dataset · ${result.project}\n\n  pairs      ${result.pairs} (${result.turns} turns · ${result.notes} notes)\n  train      ${result.train}\n  valid      ${result.valid}\n  by agent   ${Object.entries(result.byAgent).map(([id, n]) => `@${id} ${n}`).join(' · ') || '-'}\n  folder     ${result.dir}\n\n  Train it: docs/training/README.md (mlx-lm on Apple Silicon), then \`ollama create madre-${result.project.toLowerCase().replace(/[^a-z0-9]+/g, '-')}\` and @madre picks it up.\n`);
+  else console.log(`\nZM dataset · ${result.project}\n\n  pairs      ${result.pairs} (${result.turns} turns · ${result.notes} notes)\n  train      ${result.train}\n  valid      ${result.valid}\n  by agent   ${Object.entries(result.byAgent).map(([id, n]) => `@${id} ${n}`).join(' · ') || '-'}\n  folder     ${result.dir}\n\n  Train it: docs/training/README.md (mlx-lm on Apple Silicon), then \`ollama create madre-${result.project.toLowerCase().replace(/[^a-z0-9]+/g, '-')}\` and @madre picks it up.\n`);
   process.exitCode = 0;
 } else if (command === 'doctor') {
   const agents = await detectAgents();
@@ -262,7 +262,7 @@ if (command === 'doctor' && (has('--catalog') || has('--conditions'))) {
       console.log(`  ${agent.label.padEnd(10)} ${mark}${agent.version ? ` · ${agent.version}` : ''}${session}`);
     }
     console.log(`  ${'Ollama'.padEnd(10)} ${ollama.disabled ? t('ignored (PULSE_OLLAMA=0)') : ollama.running ? `${t('running')}${ollama.chatModel ? ` · ${t('@madre with {model}', { model: ollama.chatModel })}` : ` · ${t('no chat model yet')}`}${ollama.embedModel ? ` · ${t('embeddings {model}', { model: ollama.embedModel })}` : ''}` : t('not running · optional')}`);
-    console.log(`  ${'MADRE'.padEnd(10)} ${update.current}${update.available ? ` · ${t('{version} available', { version: update.latest })} · ${update.command}` : update.latest ? ` · ${t('up to date')}` : update.enabled ? ` · ${t('npm not reachable')}` : ` · ${t('update check off (PULSE_UPDATE_CHECK=0)')}`}`);
+    console.log(`  ${'ZM'.padEnd(10)} ${update.current}${update.available ? ` · ${t('{version} available', { version: update.latest })} · ${update.command}` : update.latest ? ` · ${t('up to date')}` : update.enabled ? ` · ${t('npm not reachable')}` : ` · ${t('update check off (PULSE_UPDATE_CHECK=0)')}`}`);
     console.log(`\n  ${t('Project').padEnd(10)} ${result.project}`);
     console.log(result.ok ? `\n${t('Ready to start. Known conditions and fixes: `madre doctor --catalog [query]`.')}\n` : `\n${t('No agent is online yet. Run `madre`: Home opens anyway and walks you through installing and connecting one. Known conditions and fixes: `madre doctor --catalog`.')}\n`);
   }
@@ -290,7 +290,7 @@ if (command === 'doctor' && (has('--catalog') || has('--conditions'))) {
   const running = await roomAlreadyOpen(port, projectRoot);
   if (running) {
     const address = withFicha(`${running.url}${openPath}`, await readFicha(salasHome));
-    console.log(`\nMADRE is already open for this project\n\n  ${address}\n  Project: ${projectRoot}\n  Close that room first if you want a fresh one.\n`);
+    console.log(`\nZM is already open for this project\n\n  ${address}\n  Project: ${projectRoot}\n  Close that room first if you want a fresh one.\n`);
     if (!noOpen) await openUrl(address);
     process.exit(0);
   }
@@ -300,7 +300,7 @@ if (command === 'doctor' && (has('--catalog') || has('--conditions'))) {
   // every pull request, and what anyone can run before sending one.
   const file = option('--file', null);
   const entryFile = option('--entry', null);
-  if (!file) { console.error('Usage: madre check-module --file <module.mjs> [--entry <entrada.json>] [--json] [--lang es]'); process.exit(2); }
+  if (!file) { console.error('Usage: zmstudio check-module --file <module.mjs> [--entry <entrada.json>] [--json] [--lang es]'); process.exit(2); }
   // In English unless asked otherwise, whatever MADRE speaks elsewhere: this check runs in the
   // madre-mercado repository's CI, whose pull requests' summary is asked for in Spanish (--lang es).
   (await import('../src/i18n.mjs')).setLanguage(option('--lang', 'en'));

@@ -3,7 +3,7 @@
 Lee `AGENTS.md`: es el contexto completo del proyecto y vale igual para ti.
 
 **Windows (desde 1.1.0):** ZM funciona en Windows **dentro de WSL2**; abierta en Windows
-nativo, explica cómo llegar a WSL2 y se detiene (`bin/madre.mjs`). Ninguna copia promete Windows
+nativo, explica cómo llegar a WSL2 y se detiene (`bin/zmstudio.mjs`). Ninguna copia promete Windows
 nativo. Antes de tocar nada que ejecute procesos, resuelva rutas o aplique permisos, lee
 `docs/WINDOWS.md`.
 
