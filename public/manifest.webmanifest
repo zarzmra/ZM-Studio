@@ -1,6 +1,6 @@
 {
-  "name": "MADRE",
-  "short_name": "MADRE",
+  "name": "ZM Studio",
+  "short_name": "ZM Studio",
   "start_url": "/salas",
   "scope": "/",
   "display": "standalone",

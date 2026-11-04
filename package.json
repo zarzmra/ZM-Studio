@@ -1,7 +1,7 @@
 {
-  "name": "@zarzmra/zm",
-  "version": "1.1.2",
-  "description": "ZM · one local room where the AI coding agents already on your machine (Codex, Claude Code, Gemini CLI, OpenCode) work on your project together, share one memory you can see and explore, and answer to you. Read-only by default, with per-message permission modes and checkpoints you can undo. Nothing leaves your machine on its own. Based on MADRE by Jossue Alcalá.",
+  "name": "@zmstudio/app",
+  "version": "2.0.0",
+  "description": "ZM Studio · AI collaboration platform that integrates Codex, Claude Code, Gemini CLI, and OpenCode into a unified workspace with shared memory, permission controls, and full local execution. All intelligence stays on your machine.",
   "keywords": [
     "ai-agents",
     "codex",
@@ -17,17 +17,17 @@
     "mcp",
     "pulse"
   ],
-  "homepage": "https://github.com/zarzmra/ZM-Studio#readme",
+  "homepage": "https://zmstudio.dev#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zarzmra/ZM-Studio.git"
+    "url": "git+https://github.com/zmstudio/app.git"
   },
   "bugs": {
-    "url": "https://github.com/zarzmra/ZM-Studio/issues"
+    "url": "https://github.com/zmstudio/app/issues"
   },
   "author": {
-    "name": "ZM",
-    "url": "https://github.com/zarzmra"
+    "name": "ZM Studio",
+    "url": "https://zmstudio.dev"
   },
   "type": "module",
   "license": "BUSL-1.1",
@@ -60,15 +60,15 @@
     "docs/en/training"
   ],
   "bin": {
-    "zm": "./bin/madre.cjs",
-    "pulse": "./bin/madre.cjs"
+    "zmstudio": "./bin/zmstudio.cjs",
+    "zm": "./bin/zmstudio.cjs"
   },
   "engines": {
     "node": ">=22.5.0"
   },
   "scripts": {
-    "start": "node ./bin/madre.mjs start",
-    "doctor": "node ./bin/madre.mjs doctor",
+    "start": "node ./bin/zmstudio.mjs start",
+    "doctor": "node ./bin/zmstudio.mjs doctor",
     "test": "node --import ./test/setup.mjs --test",
     "check": "npm test && node ./bin/madre.mjs doctor --json",
     "pack:check": "node ./scripts/pack-check.mjs",
