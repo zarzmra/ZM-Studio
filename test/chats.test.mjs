@@ -1154,7 +1154,7 @@ test('Local AI and connectors are MADRE\'s own; restart lives in the power key; 
   assert.match(neural, /const shift = mac \? '⇧' : 'Shift';/);
   assert.match(app, /if \(chatShellOn\(\)\) help\.replaceChildren\(mapKeys\('memory'\)\);/);
   assert.match(home, /hint: homeShellOn\(\) \? mapKeys\('projects'\) :/);
-  assert.match(es, /'Restart or turn off MADRE': 'Reiniciar o apagar MADRE',/);
+  assert.match(es, /'Restart or turn off MADRE': 'Reiniciar o apagar ZM',/);
 });
 
 test('Home says why an install or a sign-in failed, in plain words, where it happened', async () => {

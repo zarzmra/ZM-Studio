@@ -46,7 +46,7 @@ test('market check · what is wrong is said field by field, and the network with
   assert.equal(result.undeclared.length, 1);
   // A file that does not load says why, and the entry is still checked.
   const broken = await checkSubmission({ text: 'export default 3;', entry: ENTRY });
-  assert.match(broken.problems[0], /does not load as MADRE loads one/);
+  assert.match(broken.problems[0], /does not load as ZM loads one/);
   assert.deepEqual(entryProblems(null), ['The entry is missing: entrada.json, beside the module.']);
   assert.deepEqual(reachesOf("import { spawn } from 'node:child_process'; process.env.HOME").map((one) => one.id), ['commands', 'environment']);
 });

@@ -494,7 +494,7 @@ test('an install walled out of the system folders takes MADRE\'s own, and the ag
       assert.equal(tried.length, 2, 'the system folder first, MADRE\'s own second');
       assert.ok(tried[1].includes('--prefix'));
       const said = (await store.readAll()).filter((event) => event.type === 'connection.install.output').map((event) => event.payload.line).join('\n');
-      assert.match(said, /does not let npm install in its system folder without an administrator[\s\S]*Installing in MADRE's own folder instead/);
+      assert.match(said, /does not let npm install in its system folder without an administrator[\s\S]*Installing in ZM's own folder instead/);
     } finally {
       await new Promise((resolve) => server.close(resolve));
     }
