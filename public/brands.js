@@ -70,8 +70,8 @@ BRANDS.madre = {
   color: '#9bff66',
   colorLight: '#2f8a1c',
   ink: '#0a1405',
-  // The brand kit's compact pulse, the one drawn for 64 px and under (favicon, icon), with its dot.
-  mark: () => glyph('<path d="M3.5 16h5.5l2.3-5.5 4 11 3.2-7.5 1.8 2h2.2" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="26.4" cy="16" r="2.4" fill="currentColor"/>'),
+  // The compact ZM monogram, the one drawn for 64 px and under (favicon, icon).
+  mark: () => glyph('<path d="M5 9H14L5 23H18V9L22.5 15.5L27 9V23" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>'),
 };
 
 BRANDS.ollama = {

@@ -2445,9 +2445,9 @@ export async function createPulseServer({
         ['/assets/brand/OFL-GeistMono.txt', 'text/plain; charset=utf-8'],
         ['/assets/brand/OFL-Sora.txt', 'text/plain; charset=utf-8'],
         ['/assets/brand/OFL-JetBrainsMono.txt', 'text/plain; charset=utf-8'],
-        ['/assets/brand/madre-favicon.svg', 'image/svg+xml'],
+        ['/assets/brand/zm-favicon.svg', 'image/svg+xml'],
         // The app's mark, on the user manual's cover (public/manual.js).
-        ['/assets/brand/madre-app.svg', 'image/svg+xml'],
+        ['/assets/brand/zm-app.svg', 'image/svg+xml'],
         // The conversation's wallpapers (Appearance): twelve pictures, encoded by hand from their
         // masters (cwebp), whose light and dark, layer or mesh and intensity are layers in the CSS.
         ['/assets/wallpapers/jarrito.webp', 'image/webp'],

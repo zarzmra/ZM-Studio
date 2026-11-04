@@ -34,7 +34,7 @@ async function drawIcon() {
   const images = [];
   for (const size of sizes) {
     const file = join(work, `${size}.png`);
-    execFileSync('sips', ['-z', String(size), String(size), join(root, 'public', 'assets', 'brand', 'madre-app-512.png'), '--out', file], { stdio: 'pipe' });
+    execFileSync('sips', ['-z', String(size), String(size), join(root, 'public', 'assets', 'brand', 'zm-app-512.png'), '--out', file], { stdio: 'pipe' });
     images.push(await readFile(file));
   }
   const head = Buffer.alloc(6 + 16 * images.length);
