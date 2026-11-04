@@ -1,7 +1,7 @@
 {
-  "name": "@jossuealcala/madre",
+  "name": "@zarzmra/zm",
   "version": "1.1.2",
-  "description": "MADRE · one local room where the AI coding agents already on your machine (Codex, Claude Code, Gemini CLI, OpenCode) work on your project together, share one memory you can see and explore, and answer to you. Read-only by default, with per-message permission modes and checkpoints you can undo. Nothing leaves your machine on its own.",
+  "description": "ZM · one local room where the AI coding agents already on your machine (Codex, Claude Code, Gemini CLI, OpenCode) work on your project together, share one memory you can see and explore, and answer to you. Read-only by default, with per-message permission modes and checkpoints you can undo. Nothing leaves your machine on its own. Based on MADRE by Jossue Alcalá.",
   "keywords": [
     "ai-agents",
     "codex",
@@ -11,29 +11,23 @@
     "multi-agent",
     "local-first",
     "handoff",
-    "madre",
-    "mother",
-    "mu-th-ur",
+    "zm",
     "memory",
     "sqlite",
     "mcp",
     "pulse"
   ],
-  "homepage": "https://github.com/jossuealcacao-exe/madre#readme",
-  "funding": {
-    "type": "github",
-    "url": "https://github.com/sponsors/jossuealcacao-exe"
-  },
+  "homepage": "https://github.com/zarzmra/madre#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jossuealcacao-exe/madre.git"
+    "url": "git+https://github.com/zarzmra/madre.git"
   },
   "bugs": {
-    "url": "https://github.com/jossuealcacao-exe/madre/issues"
+    "url": "https://github.com/zarzmra/madre/issues"
   },
   "author": {
-    "name": "Jossue Alcalá",
-    "url": "https://jossuealcala.com/en/"
+    "name": "ZM",
+    "url": "https://github.com/zarzmra"
   },
   "type": "module",
   "license": "BUSL-1.1",
@@ -66,7 +60,7 @@
     "docs/en/training"
   ],
   "bin": {
-    "madre": "./bin/madre.cjs",
+    "zm": "./bin/madre.cjs",
     "pulse": "./bin/madre.cjs"
   },
   "engines": {
