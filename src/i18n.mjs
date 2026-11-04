@@ -18,6 +18,7 @@
 import { hostname } from 'node:os';
 import { ES } from '../public/es.js';
 import { EN } from '../public/en.js';
+import { brandWords } from '../public/i18n.js';
 
 const CATALOGUES = { es: ES, en: EN };
 let current = 'es';
@@ -72,7 +73,7 @@ export function inLanguage(text, lang) {
 
 export function t(text, vars = null) {
   if (typeof text !== 'string' || !text) return text;
-  const said = hostWords(CATALOGUES[current]?.[text] ?? text);
+  const said = hostWords(CATALOGUES[current]?.[text] ?? brandWords(text));
   if (!vars) return said;
   return said.replace(/\{(\w+)\}/g, (whole, name) => (Object.hasOwn(vars, name) ? String(vars[name]) : whole));
 }

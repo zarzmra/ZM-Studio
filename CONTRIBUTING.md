@@ -1,6 +1,6 @@
 # Contributing · CREW MANUAL
 
-MADRE is one local room where several AI coding CLIs work on a project together. Changes land through pull requests against `main`; CI runs the suite, packs the tarball and installs it on Ubuntu and macOS with Node 22 and 24.
+ZM is one local room where several AI coding CLIs work on a project together. Changes land through pull requests against `main`; CI runs the suite, packs the tarball and installs it on Ubuntu and macOS with Node 22 and 24.
 
 ## Before you start
 
@@ -14,7 +14,7 @@ node ./bin/madre.mjs start --no-open    # the room from source, URL in the termi
 
 ## Sign your work
 
-Every commit carries a `Signed-off-by:` line (`git commit -s`). It is the [Developer Certificate of Origin](https://developercertificate.org): you wrote the change, or have the right to submit it, and it goes in under the project's licence, the [Business Source License 1.1](LICENSE). Because MADRE also offers a commercial license, a change from someone other than its author can only be merged after that person signs the [contributor agreement](CLA.md) (CLA.md) that lets the author license it the same way: a comment on the pull request saying so, as the agreement explains. CI refuses a pull request whose commits lack the sign-off (`scripts/dco-check.mjs`), and every change is reviewed by the author (`.github/CODEOWNERS`). Contributions are credited in the history; MADRE's name, logo, NOTICE and the author's attribution on screen stay as they are ([TRADEMARKS.md](TRADEMARKS.md)).
+Every commit carries a `Signed-off-by:` line (`git commit -s`). It is the [Developer Certificate of Origin](https://developercertificate.org): you wrote the change, or have the right to submit it, and it goes in under the project's licence, the [Business Source License 1.1](LICENSE). Because ZM also offers a commercial license, a change from someone other than its author can only be merged after that person signs the [contributor agreement](CLA.md) (CLA.md) that lets the author license it the same way: a comment on the pull request saying so, as the agreement explains. CI refuses a pull request whose commits lack the sign-off (`scripts/dco-check.mjs`), and every change is reviewed by the author (`.github/CODEOWNERS`). Contributions are credited in the history; ZM's name, logo, NOTICE and the author's attribution on screen stay as they are ([TRADEMARKS.md](TRADEMARKS.md)).
 
 ## What a good change looks like
 
@@ -26,14 +26,14 @@ Every commit carries a `Signed-off-by:` line (`git commit -s`). It is the [Devel
 
 ## Writing a module
 
-For a module of your own, outside this repository, read `docs/SDK.md`: one `.mjs` file in `~/.pulse/modules/` or `<project>/.madre/modules/`, no build, reloaded from MODULES. What follows is for modules that ship inside MADRE.
+For a module of your own, outside this repository, read `docs/SDK.md`: one `.mjs` file in `~/.pulse/modules/` or `<project>/.madre/modules/`, no build, reloaded from MODULES. What follows is for modules that ship inside ZM.
 
 A module is one file in `src/modules/`, registered in `src/modules/index.mjs`:
 
 ```js
 import { defineModule } from './sdk.mjs';
 export default defineModule({
-  id: 'night-vision', name: 'Night Vision', vendor: 'MADRE', summary: '…',
+  id: 'night-vision', name: 'Night Vision', vendor: 'ZM', summary: '…',
   settings: { enabled: false, gain: 2 },        // lives in ~/.pulse/config.json → modules.nightVision
   confirm: 'Send { "confirm": true }…',         // optional: the switch asks first
   async status(ctx) { return { detail: '…' }; },// optional: what MODULES shows
@@ -45,11 +45,11 @@ export default defineModule({
 `ctx` carries `projectRoot`, `config`, `settings`, `agents`, `room`, `readConfig()`, `updateConfig(patch)`, `record(type, payload)` and `services` (what the server offers: `imageKey`, `setImageModule`, `ollama`). A builtin gets a default switch that flips `enabled`, persists and records `extension.toggled`. Add a card branch in `public/app.js` only if the generic switch is not enough, and a condition in `public/troubleshooting.js` so MU/TH/UR knows it.
 
 
-A module may hand tools to every turn: declare `toolsForTurn(ctx, turn)` and return MCP server specs `{ name, command, args, env, tools, brief }`. MADRE attaches them to the CLI of that turn only, in its isolated run, for all four agents, and puts `brief` in the agent's briefing. `turn` carries `agent`, `mode`, `lease`, the absolute `scratchDir` and the room's `port`. Return `[]` when there is nothing to hand; throw and MADRE hands nothing for you. `src/modules/playwright.mjs` is the reference.
+A module may hand tools to every turn: declare `toolsForTurn(ctx, turn)` and return MCP server specs `{ name, command, args, env, tools, brief }`. ZM attaches them to the CLI of that turn only, in its isolated run, for all four agents, and puts `brief` in the agent's briefing. `turn` carries `agent`, `mode`, `lease`, the absolute `scratchDir` and the room's `port`. Return `[]` when there is nothing to hand; throw and ZM hands nothing for you. `src/modules/playwright.mjs` is the reference.
 
 ## Look and voice
 
-Three layers that never mix: the dialogue reads like a chat (system font, bubbles), the metadata reads like a terminal (mono, 10px, uppercase, grey), and MOTHER's screens (diagnosis, memory, control) are phosphor on black. One colour per meaning: phosphor is MADRE, amber is CREATE, red is CONTROL, each provider keeps its own colour. Toasts speak as `MU/TH/UR › …`. A new component that needs a new colour is a sign the component is wrong, not the palette.
+Three layers that never mix: the dialogue reads like a chat (system font, bubbles), the metadata reads like a terminal (mono, 10px, uppercase, grey), and MOTHER's screens (diagnosis, memory, control) are phosphor on black. One colour per meaning: phosphor is ZM, amber is CREATE, red is CONTROL, each provider keeps its own colour. Toasts speak as `MU/TH/UR › …`. A new component that needs a new colour is a sign the component is wrong, not the palette.
 
 ## Where things live
 
@@ -66,7 +66,7 @@ src/modules/         one file per module on the SDK (sdk.mjs): ahp, image-studio
 src/adapters/        one file per CLI: Codex, Claude Code, Gemini CLI, OpenCode
 src/memory.mjs       SQLite index, distilled notes, vectors, recall
 src/distiller.mjs    the archivist's prompt and parsing
-src/mcp/             MADRE's own MCP servers: pulse-image, pulse-memory
+src/mcp/             ZM's own MCP servers: pulse-image, pulse-memory
 src/mother.mjs       MOTHER's coded channel, CODE000
 src/sentinel-errors.mjs   unknown conditions and crashes → redacted reports
 public/              the room UI; troubleshooting.js is MU/TH/UR's knowledge base

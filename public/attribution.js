@@ -14,6 +14,7 @@ export const AUTHOR = 'Jossue Alcalá';
 export const AUTHOR_URL = 'https://jossuealcala.com';
 export const YEAR = 2026;
 export const LICENSE_NAME = 'Business Source License 1.1';
+export const builtWith = (lang = language()) => (lang === 'en' ? `Built with MADRE by ${AUTHOR}` : `Desarrollado con MADRE de ${AUTHOR}`);
 const REPO = 'https://github.com/jossuealcacao-exe/madre';
 export const LEGAL_LINKS = {
   license: `${REPO}/blob/main/LICENSE`,
@@ -28,8 +29,9 @@ export function drawAttribution(host, version) {
   link.target = '_blank';
   link.rel = 'noopener';
   const name = document.createElement('b');
-  name.textContent = `MADRE ${version}`;
-  link.append(name, document.createTextNode(` · © ${YEAR} ${AUTHOR}`));
+  // ZM is a renamed MADRE: NOTICE asks a work under another name to say «Built with MADRE by …».
+  name.textContent = `ZM ${version}`;
+  link.append(name, document.createTextNode(` · ${builtWith()}`));
   host.replaceChildren(link);
   host.hidden = false;
   return link;

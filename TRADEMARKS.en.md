@@ -43,6 +43,16 @@ the README, the "About" screen or the footer.
 - Domains, npm packages, accounts or repositories whose name suggests they belong to MADRE.
 - The MADRE logo on anything that is not unmodified MADRE.
 
+## Other people's marks inside MADRE
+
+The names and logos of the services that appear in Settings › Outside tools (MCP) — Notion,
+GitHub, Stripe and the rest — are their owners' trademarks. MADRE shows them only to say which
+service each connector reaches (nominative use), not because those owners endorse MADRE or are
+affiliated with it. The drawings come from [Simple Icons](https://simpleicons.org) (CC0 1.0) with
+their official colors; the ones Simple Icons does not draw, from CoreUI Brands and SVG Logos
+(CC0 1.0) and from VSCode Icons (MIT). If you own one of those marks and would rather it not
+appear, write and it is taken off.
+
 ## If in doubt
 
 Write to Jossue Alcalá at [jossuealcala.com](https://jossuealcala.com) before publishing. This

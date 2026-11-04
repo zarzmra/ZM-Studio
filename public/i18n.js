@@ -92,8 +92,15 @@ export function keyWords(text) {
   return text.replace(/⌘\s?/g, 'Ctrl+');
 }
 
+// The product is called ZM; the catalogue's keys still say MADRE, the project it is based on.
+// A sentence with no entry (English, mostly) is shown with the product's name; the handle
+// @madre, file names and the «based on MADRE» credit stay as they are.
+const BRAND = /(?<![@\/\w-])MADRE(?![\w-]|\.[A-Za-z])/g;
+const CREDIT = /(Basado en|Based on|Built with|Desarrollado con) MADRE|MADRE (by|de) Jossue|MADRE's code is public/i;
+export const brandWords = (text) => (typeof text !== 'string' || CREDIT.test(text) ? text : text.replace(BRAND, 'ZM'));
+
 export function t(text, vars = null) {
-  const said = CATALOGUES[current]?.[text] ?? text;
+  const said = CATALOGUES[current]?.[text] ?? brandWords(text);
   return fill(keyWords(hostWords(said)), vars);
 }
 

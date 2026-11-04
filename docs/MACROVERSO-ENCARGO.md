@@ -1,4 +1,4 @@
-# MADRE · ENCARGO · Enlaces, BISHOP y el Macroverso como flota de NOSTROMOs
+# ZM · ENCARGO · Enlaces, BISHOP y el Macroverso como flota de NOSTROMOs
 
 Este documento **es el prompt**. Está escrito para quien lo ejecute: una sesión de Claude
 Code que orquesta, sola o con agentes en paralelo. Se lee entero, y después se lee
@@ -45,7 +45,7 @@ Cada afirmación de este encargo lleva una etiqueta. Respétalas al leer y al es
    verde. **Nada de push, nada de deploy, nada de `npm publish`**; ni siquiera lo propongas.
 6. **Windows.** Antes de tocar algo que ejecute procesos, resuelva rutas o aplique permisos, lee
    `docs/WINDOWS.md`. Sin shell (WIN-016), `fileURLToPath` y no `.pathname` (WIN-004/006), sin matar
-   grupos de proceso (WIN-007). MADRE no declara soporte ni no-soporte de Windows en ninguna copia.
+   grupos de proceso (WIN-007). ZM no declara soporte ni no-soporte de Windows en ninguna copia.
 7. **El teléfono no entra.** Toda ruta nueva de Salas, enlaces o BISHOP responde 403 cuando la
    petición viene del puente, verificado en la sala y no solo en el puente, como las de
    `src/server.mjs:1423-1425` [V]. Salas en el teléfono se queda como está.
@@ -53,7 +53,7 @@ Cada afirmación de este encargo lleva una etiqueta. Respétalas al leer y al es
    sin la medición que lo produjo (qué máquina, qué tamaño, cuántas muestras).
 9. **Reporta en el formato de §9.** Nunca «debería funcionar»: o lo verificaste y dices cómo, o
    dices que no lo verificaste.
-10. **Voz MADRE.** Lo que ve el humano se escribe como producto: descubrible en la sala, sin
+10. **Voz ZM.** Lo que ve el humano se escribe como producto: descubrible en la sala, sin
     comandos que teclear, sin mencionar el proceso de desarrollo. Nada flota sobre la conversación;
     legibilidad primero. Nombres nuevos solo los de §1 (D-S07).
 
@@ -78,7 +78,7 @@ Palabras del humano del 2026-10-08, y su lectura operativa. La lectura es la que
 | ID | Decisión | Recomendación | ¿Se puede asumir? |
 |---|---|---|---|
 | **D-S07** | Nombre del super agente en la interfaz | **BISHOP**: el sintético de *Aliens* que protege a la tripulación, en la misma familia que ASH, RIPLEY, NOSTROMO y MU/TH/UR. Se escribe en mayúsculas y no se traduce, como los demás | Sí. Es una cadena en un solo lugar; renombrar cuesta un commit |
-| **D-S08** | Dónde vive el proyecto de la sala de Salas (el «cuaderno» de BISHOP: planes y contratos como archivos) | `~/.pulse/salas/`, carpeta de MADRE, creada al primer `madre salas`. El checkpoint funciona sin repo propio: usa un repo sombra (`src/checkpoint.mjs:33-43,54` [V]). Las zonas prohibidas de CONTROL son relativas al proyecto (`src/checkpoint.mjs:20-27` [V]), no `~/.pulse` entero. **Riesgo a anotar, no nuevo:** un CLI en cualquier sala ya puede leer `~/.pulse/credentials/*` porque corre como el usuario; el briefing de BISHOP no nombra `~/.pulse` | Sí, con la carpeta mostrada en Ajustes de esa sala para cambiarla después |
+| **D-S08** | Dónde vive el proyecto de la sala de Salas (el «cuaderno» de BISHOP: planes y contratos como archivos) | `~/.pulse/salas/`, carpeta de ZM, creada al primer `madre salas`. El checkpoint funciona sin repo propio: usa un repo sombra (`src/checkpoint.mjs:33-43,54` [V]). Las zonas prohibidas de CONTROL son relativas al proyecto (`src/checkpoint.mjs:20-27` [V]), no `~/.pulse` entero. **Riesgo a anotar, no nuevo:** un CLI en cualquier sala ya puede leer `~/.pulse/credentials/*` porque corre como el usuario; el briefing de BISHOP no nombra `~/.pulse` | Sí, con la carpeta mostrada en Ajustes de esa sala para cambiarla después |
 | **D-S09** | Disparador de D-S02 | Nuevo comando `madre salas`. Además, `madre` sin `--project` abre Salas **solo cuando el directorio actual es `$HOME`**; dentro de cualquier otra carpeta sigue abriendo la sala de esa carpeta (`bin/madre.mjs:80` [V]). Ninguna heurística de «¿esto es un proyecto?» | Sí, con esa regla y ninguna otra |
 | **D-S10** | Cómo queda en el registro una orden de BISHOP: ¿`role: 'you'` con `via: 'bishop'`, o un rol propio? | Ver §4C.4. Es una decisión técnica del orquestador, dentro de las excepciones de §6, con una prueba que la fije y una línea en la bitácora | Sí, dentro de §6 |
 
@@ -222,7 +222,7 @@ Cuatro entregables. Cada uno dice qué es, cómo se ve, qué no hace y cómo se 
 
 **Los candados, en la sala que entrega (nunca en la que pide)** [P]:
 
-- Ruta en cada sala `GET /api/enlace/memories?contract=<id>&q=<texto>&limit=<n>`, de servidor a servidor: 403 si hay `Origin`, 403 si `viaPhone`, 404 si el contrato no existe, no incluye a esta sala, está revocado o caducado, o el sentido no permite entregar a quien pide. Quien pide dice su id de sala y presenta la llave del canal (abajo); la llave prueba «un proceso de MADRE en esta Mac», no qué sala, y eso se anota como límite [I].
+- Ruta en cada sala `GET /api/enlace/memories?contract=<id>&q=<texto>&limit=<n>`, de servidor a servidor: 403 si hay `Origin`, 403 si `viaPhone`, 404 si el contrato no existe, no incluye a esta sala, está revocado o caducado, o el sentido no permite entregar a quien pide. Quien pide dice su id de sala y presenta la llave del canal (abajo); la llave prueba «un proceso de ZM en esta Mac», no qué sala, y eso se anota como límite [I].
 - Entrega **solo** filas con `travels()` y `kind ∈ contract.kinds`, hasta `limit ≤ 20`, cada texto pasado por `Privacy.redact` de la sala que entrega; nunca `memory_recall` ni entradas del ledger; nunca adjuntos, archivos ni la bodega.
 - Registra `enlace.read` en su ledger `{ contract, to, count, kinds, query: hash }` y la sala que recibe registra `enlace.received` `{ contract, from, count, turn }`. Son contadores, no burbujas.
 - 423 si CODE000 la selló.

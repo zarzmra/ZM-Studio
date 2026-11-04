@@ -1,4 +1,4 @@
-# MADRE AI · entrenar el modelo del proyecto
+# ZM AI · entrenar el modelo del proyecto
 
 Roadmap 2c. El proyecto exporta lo que recuerda como pares de chat; tú entrenas un modelo pequeño con ellos en tu máquina; Ollama lo sirve; `@madre` lo usa en cuanto existe. Todo local.
 
@@ -40,7 +40,7 @@ Si dice `True`, los comandos de entrenamiento de arriba (desde `cd ~/.pulse/room
 
 ### Qué tamaño entrenar
 
-No depende de una máquina en particular, sino de la memoria de la tuya. MADRE la mide (Módulos › IA local › Tu equipo) y propone el tamaño más grande que tu computadora entrena y luego corre. Los mínimos son para la computadora completa, con el sistema y el navegador abiertos:
+No depende de una máquina en particular, sino de la memoria de la tuya. ZM la mide (Módulos › IA local › Tu equipo) y propone el tamaño más grande que tu computadora entrena y luego corre. Los mínimos son para la computadora completa, con el sistema y el navegador abiertos:
 
 | Modelo | Base para entrenar | Para correrlo | Para entrenarlo |
 |---|---|---|---|
@@ -69,7 +69,7 @@ Ollama lee GGUF. Para Llama y Mistral `mlx_lm.fuse` acepta `--export-gguf`; para
 ```
 git clone --depth 1 https://github.com/ggml-org/llama.cpp && pip install -r llama.cpp/requirements.txt
 python3 llama.cpp/convert_hf_to_gguf.py fused --outfile madre.gguf --outtype q8_0
-cp <carpeta de MADRE>/docs/training/Modelfile . && ollama create madre-<proyecto> -f Modelfile
+cp <carpeta de ZM>/docs/training/Modelfile . && ollama create madre-<proyecto> -f Modelfile
 ```
 
 Con una base en 4 bits (3B en adelante) el paso cambia en tres puntos:
@@ -77,9 +77,9 @@ Con una base en 4 bits (3B en adelante) el paso cambia en tres puntos:
 2. La conversión usa `--outtype f16`.
 3. `ollama create` lleva `--quantize q4_K_M`, que lo deja en 4 bits, el tamaño que cuenta la tabla.
 
-La pantalla de entrenamiento de MADRE ya escribe así los comandos para el tamaño que elijas.
+La pantalla de entrenamiento de ZM ya escribe así los comandos para el tamaño que elijas.
 
-El nombre importa: `madre-<proyecto>` en minúsculas, con guiones. Al siguiente **REVISAR OTRA VEZ** en Módulos › IA local, `@madre` cambia a ese modelo y Lo que recuerda lo dice. El `Modelfile` viene en `docs/training/` del repositorio de MADRE y del paquete de npm.
+El nombre importa: `madre-<proyecto>` en minúsculas, con guiones. Al siguiente **REVISAR OTRA VEZ** en Módulos › IA local, `@madre` cambia a ese modelo y Lo que recuerda lo dice. El `Modelfile` viene en `docs/training/` del repositorio de ZM y del paquete de npm.
 
 ## 4 · Evaluar antes de confiar
 

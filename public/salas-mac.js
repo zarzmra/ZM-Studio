@@ -5342,7 +5342,7 @@ function setStatus(id) {
   }
   if (id === 'release') {
     if (!versionSeen) return { line: t('Reading…') };
-    return { line: `MADRE ${versionSeen.current} · ${versionSeen.available ? t('{version} available', { version: versionSeen.latest }) : versionSeen.enabled === false ? t('not checked') : t('up to date')}`, warn: versionSeen.available ? t('{version} is out', { version: versionSeen.latest }) : null };
+    return { line: `ZM ${versionSeen.current} · ${versionSeen.available ? t('{version} available', { version: versionSeen.latest }) : versionSeen.enabled === false ? t('not checked') : t('up to date')}`, warn: versionSeen.available ? t('{version} is out', { version: versionSeen.latest }) : null };
   }
   return { line: '' };
 }
@@ -5880,7 +5880,7 @@ function fillRelease(host) {
     drawTopbar();
     settingsSheet?.sync({ detail: true });
   }) : null;
-  sxRow(block, `MADRE ${info?.current ?? ''}`.trim(), info ? (info.available ? t('{version} available', { version: info.latest }) : info.enabled === false ? t('not checked') : t('up to date')) : t('Reading…'), check);
+  sxRow(block, `ZM ${info?.current ?? ''}`.trim(), info ? (info.available ? t('{version} available', { version: info.latest }) : info.enabled === false ? t('not checked') : t('up to date')) : t('Reading…'), check);
   // The one thing the daily usage notice says about this copy (src/heartbeat.mjs), in sight.
   if (info?.copyId) {
     const copy = sxButton(t('Copy'), async () => {
@@ -5895,7 +5895,7 @@ function fillRelease(host) {
     notes.href = info.release ?? 'https://madre.run';
     notes.target = '_blank';
     notes.rel = 'noopener';
-    sxRow(block, `MADRE ${info.latest}`, t('MADRE {version} is out.', { version: info.latest }), notes);
+    sxRow(block, `ZM ${info.latest}`, t('MADRE {version} is out.', { version: info.latest }), notes);
     // Home restarts with it, as a project does (app.js, drawRelease): the whole page waits on the
     // curtain with MADRE's loader through the version arriving, Home closed, and Home back.
     if (info.install !== 'source') {
@@ -5912,7 +5912,7 @@ function fillRelease(host) {
   const behind = behindRooms();
   if (behind.length) {
     const late = sxBlock(host, t('Projects on an older MADRE'), t('They keep running the version they started with until you restart them. What is running in them stops.'), { aside: behind.length > 1 ? sxButton(t('Restart all'), () => void restartAll(), { tone: 'primary' }) : null });
-    for (const room of behind) sxRow(late, roomLabel(room), `MADRE ${room.open.version}`, sxButton(t('Restart'), () => { settingsSheet?.close(); void restartRoom(room); }));
+    for (const room of behind) sxRow(late, roomLabel(room), `ZM ${room.open.version}`, sxButton(t('Restart'), () => { settingsSheet?.close(); void restartRoom(room); }));
   }
   // Uninstalling MADRE (2026-10-29): what goes and what stays is said before anything happens
   // (public/power.js, askUninstall).
@@ -6145,7 +6145,7 @@ powerButton.id = 'sm-power';
 ui.gear.after(powerButton);
 
 function translateStatic() {
-  document.title = `MADRE · ${t('Home')}`;
+  document.title = `ZM · ${t('Home')}`;
   ui.title.textContent = t('Home');
   ui.add.textContent = t('Add a project');
   ui.bar.crumb.textContent = t('Home');
@@ -6278,7 +6278,7 @@ function buildHomeShell() {
   });
   const foot = el('div', 'side-foot');
   const who = el('div', 'side-who');
-  homeShell.version = el('b', null, 'MADRE');
+  homeShell.version = el('b', null, 'ZM');
   const copy = el('a', 'side-copy', `© ${YEAR} ${AUTHOR}`);
   copy.href = AUTHOR_URL;
   copy.target = '_blank';
@@ -6321,7 +6321,7 @@ function buildHomeShell() {
 // wakes it and goes in; ⌘-press opens it in a new tab. The rest are one row away, on Home itself.
 function drawSideProjects() {
   if (!homeShell.list || !data) return;
-  if (data.version) homeShell.version.textContent = `MADRE ${data.version}`;
+  if (data.version) homeShell.version.textContent = `ZM ${data.version}`;
   const ids = pinsShown();
   const rooms = ids.map((id) => data.rooms.find((one) => one.id === id)).filter(Boolean);
   const said = JSON.stringify([language, rooms.map((room) => [room.id, room.name, room.open?.port ?? 0, busy.get(room.id) ?? stateOf(room).key, room.glance?.waitingCount ?? 0])]);

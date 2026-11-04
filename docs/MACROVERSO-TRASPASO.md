@@ -61,9 +61,9 @@ decisión vive en `docs/MACROVERSO.md` (§3, §7, §8, §9) y aquí solo se señ
 | `64e0120` | Claude | Nombres claros en toda la interfaz (ver §1·c); #4 pide la misma llave dos veces en vez de AIRLOCK |
 | `70371bc` | Claude | Docs: los nombres nuevos en el README y en las guías |
 | `b6ecf5f` | Claude | Agregar proyecto y la bienvenida en mosaicos por páginas, sin desbordarse; resumen del Coordinador alineado; el Coordinador en #5C255E con robot blanco; desde 6 proyectos la barra de Inicio pasa a teclas cuadradas; tecla para cambiar de proyecto en la sala, con el estado de los demás |
-| `766f4fa` | Claude | Quitar un proyecto de MADRE (`POST /api/salas/forget`); transición entre páginas de MADRE; aviso al agregar; conexiones en los dos sentidos sin dirección; chevron propio de los desplegables; etiquetas bajo las burbujas a su medida; el conmutador sin parpadeo y con fondo de malla; teclas de los dos mapas según tema y acento |
+| `766f4fa` | Claude | Quitar un proyecto de ZM (`POST /api/salas/forget`); transición entre páginas de ZM; aviso al agregar; conexiones en los dos sentidos sin dirección; chevron propio de los desplegables; etiquetas bajo las burbujas a su medida; el conmutador sin parpadeo y con fondo de malla; teclas de los dos mapas según tema y acento |
 | `90d66e1` | Claude | El Mapa de proyectos lleva el encabezado del Mapa de memoria (`.nostromo-head`: nombre en mono, línea al lado, leyenda de estrellas, teclas al final); `dwarfChip` y `collapsedChip` pasan a `nostromo-engine.js` |
-| `29e6191` | Claude | Versión y autor al pie de Inicio; invitación a dejar estrella o reseña (`src/review-ask.mjs`, `public/review-ask.js`); carga con el pulso de MADRE (`public/loader.js`) en recargas, idioma, actualización, hoja de trabajos y tarjetas de Inicio |
+| `29e6191` | Claude | Versión y autor al pie de Inicio; invitación a dejar estrella o reseña (`src/review-ask.mjs`, `public/review-ask.js`); carga con el pulso de ZM (`public/loader.js`) en recargas, idioma, actualización, hoja de trabajos y tarjetas de Inicio |
 | `bf6cd98` | Claude | Conexiones: el servidor no firma un par que ya está conectado (409), los planes del Coordinador lo marcan como vigente |
 | `fa13bf4` | Claude | Recorrido 1.0, fase 1: `src/tour.mjs`, `~/.pulse/tour.json`, `/api/tour*`, proyectos de 0.7.2 de vuelta en Inicio, la invitación a reseñar callada el día del bonjour |
 | `e871f12` | Claude | Recorrido 1.0: bonjour, 12 capítulos (`public/tour.js`, `public/tour-chapters.js`), `?` para los gestos y pistas en Cambiar de proyecto, Conexiones y #4 |
@@ -121,7 +121,7 @@ panel oculto del navegador no avanzan transiciones, `requestAnimationFrame` ni `
 
 ### 1·c · Nombres claros (2026-10-10)
 
-El dueño eligió nombres sencillos para que la gente entienda MADRE sin jerga (catálogo con tres
+El dueño eligió nombres sencillos para que la gente entienda ZM sin jerga (catálogo con tres
 opciones por nombre en una página de claude.ai; elecciones guardadas en su base). Se aplicaron a
 todo lo que se lee: catálogo (`public/es.js`, clave en inglés + valor en español), el código que
 dice esas claves, los textos del servidor que llegan a la pantalla, el HTML, los nombres de los
@@ -325,7 +325,7 @@ D-S13 (BISHOP firma enlaces de lectura de 7 días como máximo; con órdenes, el
   por tipo cruzándolo y los términos. Cabe en una vista (≥ 760 px de alto) sin scroll.
   Todas las hojas del lobby llevan el material de `dialog.settings-window` (`--bg-2` al 94 %).
   Valores seguros por defecto: **una semana** (antes 30 días), decisiones y hechos, sin recuerdo,
-  sin órdenes; avisa si la que entrega duerme o corre una MADRE vieja; con órdenes exige la
+  sin órdenes; avisa si la que entrega duerme o corre una ZM vieja; con órdenes exige la
   designación; la revisión dice el contrato en frases. El cuerpo del POST no cambió.
 - **Elegir carpetas** (`projectPicker`, `foldPages`, `foldTile`; 2026-10-10): mosaicos de 54 px en
   tres columnas, una página a la vez. Las filas se miden: de 5 a 2, las que dejan la hoja dentro de la
@@ -340,12 +340,12 @@ D-S13 (BISHOP firma enlaces de lectura de 7 días como máximo; con órdenes, el
   (`sessionStorage` `madre.switch`): una sala vista trabajando que paró, por 30 min o hasta ir a ella.
   El ícono de un proyecto son sus dos letras (`monogram` en brands.js), el mismo de las teclas
   cuadradas de Inicio desde 6 proyectos (`PINS_SQUARE`).
-- **Quitar de MADRE** (`forgetProject` en `src/salas.mjs`, `POST /api/salas/forget`): renombra
-  `project.json` a `project.forgotten.json`; la carpeta del proyecto y lo que MADRE guarda de él
+- **Quitar de ZM** (`forgetProject` en `src/salas.mjs`, `POST /api/salas/forget`): renombra
+  `project.json` a `project.forgotten.json`; la carpeta del proyecto y lo que ZM guarda de él
   (conversaciones, memoria) no se tocan, y volver a agregarlo da el mismo id. Abierto, se cierra
   primero (espera hasta 10 s a que su proceso termine); sus conexiones en vigor se revocan. La ruta
   vive después de `tellRooms` (que es un `const` del manejador) y repite la guarda del lobby.
-- **De una página de MADRE a otra** (`leaveTo` en app.js y salas-mac.js, `madre-leaving` /
+- **De una página de ZM a otra** (`leaveTo` en app.js y salas-mac.js, `madre-leaving` /
   `madre-arriving` al final de styles.css): un velo del fondo del tema sube 200 ms y la página nueva
   lo levanta. La llegada se marca antes del primer cuadro con un script en el `<head>` de
   index.html y salas-mac.html (referrer local, navegación nueva, no recarga ni Atrás). Las páginas son
@@ -363,8 +363,8 @@ D-S13 (BISHOP firma enlaces de lectura de 7 días como máximo; con órdenes, el
   `role: user` en su registro (`events.jsonl` o `chats/<id>/events.jsonl`). Tener la sala no basta:
   una sala se crea con su registro y su memoria al abrirse, también el primer `madre start` de una
   instalación nueva. Cada camino tiene su recorrido (`ORDER` en `public/tour-chapters.js`): el nuevo,
-  «Conoce MADRE», lo esencial en el orden en que se usa (11 capítulos); el de vuelta, «El recorrido de
-  MADRE 1.0», empieza por «Qué se movió» y cada capítulo abre con su línea `news` («Nuevo en 1.0» o
+  «Conoce ZM», lo esencial en el orden en que se usa (11 capítulos); el de vuelta, «El recorrido de
+  ZM 1.0», empieza por «Qué se movió» y cada capítulo abre con su línea `news` («Nuevo en 1.0» o
   «Cambió en 1.0»), cotejada con la etiqueta `v0.7.2` (ahí no existían BISHOP, Inicio, la segunda
   barra, Ajustes ni el teléfono; sí MU/TH/UR, NOSTROMO, ⚙ CONNECTIONS, AIRLOCK, ash, EN y tema).
   `public/tour.js` lo usa Inicio y cada proyecto: cada página le pasa `go` (qué hace «Llévame ahí»
@@ -374,7 +374,7 @@ D-S13 (BISHOP firma enlaces de lectura de 7 días como máximo; con órdenes, el
   temporal (salas con un mensaje de persona en `events.jsonl` y cuyo id coincida con carpetas de
   esa casa), y
   `POST /api/tour {"reset": true}` para empezar otra vez.
-- **Carga de MADRE** (`public/loader.js`: `makeLoader`, `setLoader`, `creep`, `finishLoader`,
+- **Carga de ZM** (`public/loader.js`: `makeLoader`, `setLoader`, `creep`, `finishLoader`,
   `LOADER_MARK`): la barra nunca retrocede. La recarga guarda en `sessionStorage['madre.curtain']` el
   porcentaje alcanzado; index.html y salas-mac.html reponen el telón con ese porcentaje antes del
   primer cuadro (el marcado está copiado en el script del `<head>`, igual que `LOADER_MARK`) y se
@@ -420,7 +420,7 @@ D-S13 (BISHOP firma enlaces de lectura de 7 días como máximo; con órdenes, el
 - Español neutro mexicano, conciso; cada clave nueva de la interfaz con su español a mano en
   `public/es.js`; lo que lee un agente, en inglés.
 - Credenciales nunca en `config.json`, ledger ni logs.
-- Antes de tocar procesos, rutas o permisos, leer `docs/WINDOWS.md`; MADRE no declara soporte ni
+- Antes de tocar procesos, rutas o permisos, leer `docs/WINDOWS.md`; ZM no declara soporte ni
   no-soporte de Windows.
 - Nada de esto llega al teléfono: cada ruta nueva niega `x-madre-device` y el puente no la lista.
 - **Antes de empezar, comprobar que nadie más trabaja en el árbol** (`git status`, sesiones de

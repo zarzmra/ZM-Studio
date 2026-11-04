@@ -1,6 +1,6 @@
-# MADRE report collector
+# ZM report collector
 
-Un Worker de Cloudflare que recibe los reportes del sentinel de MADRE y los convierte en issues de GitHub. Sin base de datos: un issue por huella, y un comentario cuando la misma huella vuelve. La carpeta ya trae `wrangler.toml`, así que se despliega desde aquí.
+Un Worker de Cloudflare que recibe los reportes del sentinel de ZM y los convierte en issues de GitHub. Sin base de datos: un issue por huella, y un comentario cuando la misma huella vuelve. La carpeta ya trae `wrangler.toml`, así que se despliega desde aquí.
 
 ## Despliegue
 
@@ -28,7 +28,7 @@ curl -X POST https://madre-reports.<cuenta>.workers.dev/v1/reports \
 
 Debe responder `{"ok":true,"issue":N,"action":"created"}` y aparecer un issue con etiqueta `sentinel` en el repo. Bórralo después.
 
-## Conectar MADRE
+## Conectar ZM
 
 En la máquina que reporta, cualquiera de las dos:
 
@@ -42,7 +42,7 @@ o en `~/.pulse/config.json`:
 { "telemetry": { "reportUrl": "https://madre-reports.<cuenta>.workers.dev/v1/reports", "autoReport": true } }
 ```
 
-Con la URL puesta, MU/TH/UR muestra `SEND` en cada reporte y el interruptor `AUTO-REPORT`. Para que los usuarios de MADRE reporten sin configurar nada, fija la URL como valor por defecto de `reportUrl` en `src/server.mjs` antes de publicar 0.2.1; el interruptor seguirá apagado hasta que cada usuario lo encienda.
+Con la URL puesta, MU/TH/UR muestra `SEND` en cada reporte y el interruptor `AUTO-REPORT`. Para que los usuarios de ZM reporten sin configurar nada, fija la URL como valor por defecto de `reportUrl` en `src/server.mjs` antes de publicar 0.2.1; el interruptor seguirá apagado hasta que cada usuario lo encienda.
 
 ## Límites del plan gratuito
 

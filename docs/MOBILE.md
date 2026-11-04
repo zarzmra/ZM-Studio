@@ -1,6 +1,6 @@
-# MADRE · EN TU TELÉFONO
+# ZM · EN TU TELÉFONO
 
-Documento único del trabajo para usar MADRE desde el teléfono. Ids `MOV-xxx` para el trabajo,
+Documento único del trabajo para usar ZM desde el teléfono. Ids `MOV-xxx` para el trabajo,
 `D-Mxx` para las decisiones. Nada aquí está construido todavía; el estado de cada id vive en la
 tabla de la sección 6.
 
@@ -15,7 +15,7 @@ sin perder el hilo, como Handoff en los equipos de Apple.
 
 Qué no es:
 
-- **No es MADRE en la nube.** Ningún servidor nuestro corre agentes, guarda proyectos ni lee
+- **No es ZM en la nube.** Ningún servidor nuestro corre agentes, guarda proyectos ni lee
   conversaciones.
 - **No es una app nativa.** Es la misma interfaz, instalable en la pantalla de inicio (PWA).
   Una app de tienda queda fuera de este plan.
@@ -29,14 +29,14 @@ El listón: **dos pasos para empezar, cero comandos, nada que configurar despué
 
 ### 2.1 · Emparejar: dos pasos
 
-1. En MADRE, una tecla nueva en la barra, **MADRE en tu teléfono**, abre una tarjeta con un QR y una sola
+1. En ZM, una tecla nueva en la barra, **ZM en tu teléfono**, abre una tarjeta con un QR y una sola
    frase: «Escanéalo con la cámara de tu teléfono».
-2. La persona apunta la cámara. Se abre MADRE en el teléfono, ya dentro: «Listo. Tu Mac está en tu
+2. La persona apunta la cámara. Se abre ZM en el teléfono, ya dentro: «Listo. Tu Mac está en tu
    teléfono». Una segunda pantalla le enseña, con un dibujo del propio sistema, cómo añadirla a la
    pantalla de inicio (en iOS es lo que habilita los avisos).
 
 No hay cuenta, ni correo, ni contraseña, ni código que teclear. El QR vale una sola vez y caduca en
-diez minutos. La tecla MADRE en tu teléfono también entra en «Primeros pasos» como un paso opcional.
+diez minutos. La tecla ZM en tu teléfono también entra en «Primeros pasos» como un paso opcional.
 
 ### 2.2 · Todos los proyectos, en una pantalla
 
@@ -46,9 +46,9 @@ algo de ti (un permiso, una elección, una pregunta). Tocar una fila abre ese pr
 la lista sin perder lo que pasa en los demás. El botón **STOPALL** está siempre a la mano: frenar
 todo desde cualquier lugar es la función de seguridad más valiosa del teléfono.
 
-### 2.3 · Continuidad (el Handoff de MADRE)
+### 2.3 · Continuidad (el Handoff de ZM)
 
-- **De la Mac al teléfono.** Al abrir MADRE en el teléfono, arriba aparece «Seguir donde ibas ·
+- **De la Mac al teléfono.** Al abrir ZM en el teléfono, arriba aparece «Seguir donde ibas ·
   Gumball · prueba de multitarea»: el mismo proyecto, la misma conversación, a la altura donde estabas
   leyendo y con el borrador que dejaste en la caja.
 - **Del teléfono a la Mac.** Cuando vuelves a la computadora, una píldora en la barra (donde vive
@@ -65,7 +65,7 @@ elección, Diagnóstico detectó un problema. Nada de un aviso por cada línea d
 
 ## 3 · Arquitectura
 
-### 3.1 · Lo que ya hay en MADRE y se respeta
+### 3.1 · Lo que ya hay en ZM y se respeta
 
 | Pieza | Dónde | Qué implica |
 |---|---|---|
@@ -121,7 +121,7 @@ en lugar de Postgres:
   se guarda su HMAC-SHA256: `~/.pulse/devices.json`, con `{id, nombre, creado, visto, hmac}`.
 - **La llave del HMAC** (y en la fase 2 la identidad de la Mac) vive en
   `~/.pulse/credentials/bridge.key`, solo para el dueño. Nunca en `config.json`, en el registro ni
-  en un log. **Ver D-M01:** contradice hoy la regla «MADRE no guarda credenciales propias».
+  en un log. **Ver D-M01:** contradice hoy la regla «ZM no guarda credenciales propias».
 - **En Ajustes › Privacidad › Teléfonos**, la lista de teléfonos emparejados y de redes de
   confianza, cada uno con «Olvidar», y un interruptor que apaga el acceso de todos. Olvidar revoca
   al instante: la siguiente petición del teléfono ya no entra.
@@ -148,7 +148,7 @@ en una red desconocida el teléfono no se ofrece.
   (no se instala como app de verdad, no hay avisos) ni `crypto.subtle` (la frase de #3/#4 no se
   puede comprobar en el teléfono).
 - La primera vez, macOS puede preguntar si permite conexiones entrantes a `node`. La tarjeta
-  MADRE en tu teléfono lo anticipa con una frase.
+  ZM en tu teléfono lo anticipa con una frase.
 - No funciona fuera de esa red.
 
 Por eso la fase 1 se ofrece **solo en redes que la persona marca como de confianza** («Esta es mi
@@ -195,7 +195,7 @@ Lo que decide D-M03:
 | Deshacer un cambio (DESHACER) | Sí |
 | **STOPALL** y detener un turno | Sí, siempre |
 | Ajustes: apariencia, proyecto, memoria, privacidad, versión | Sí |
-| Encender o apagar los módulos de MADRE | Sí |
+| Encender o apagar los módulos de ZM | Sí |
 | Archivos y servidores | Para ver; «se ve mejor en la Mac» |
 | Permisos y la llave de #3/#4 | No: se leen, se cambian en la Mac |
 | #3 EDITAR | Llega con la fase 2 (su frase necesita `crypto.subtle`) |
@@ -215,7 +215,7 @@ Safari esconda sus barras, y el Mapa de memoria es un mapa plano que se dibuja s
 - MOV-003 Política del teléfono.
 - MOV-004 Pantalla Inicio.
 - MOV-005 Continuidad: borrador, conversación y posición; píldora «Continuar desde…».
-- MOV-006 Tecla MADRE en tu teléfono y emparejamiento en dos pasos.
+- MOV-006 Tecla ZM en tu teléfono y emparejamiento en dos pasos.
 - MOV-007 Teléfonos en Ajustes › Privacidad.
 - MOV-008 Origen «desde iPhone» en el registro.
 - MOV-009 Pruebas, incluido un recorrido de punta a punta con un navegador en tamaño teléfono.
@@ -245,7 +245,7 @@ La versión de cada fase se decide al cerrarla (D-M06). Windows llegó en `1.1.0
 | MOV-003 | Lista de rutas permitidas y política por modo (sección 4), tope de peticiones, cabeceras | `src/bridge/policy.mjs` | 1 | HECHO · 2026-10-07 |
 | MOV-004 | Pantalla Inicio: estado por proyecto, quién trabaja, «Te espera» (elecciones y comandos propuestos desde el último mensaje del humano, modos pedidos por un plan) con el proyecto que espera arriba y abierto en esa conversación, Detener todo (con segundo toque) | `public/salas.*`, `/api/glance` | 1 | HECHO · 2026-10-07 |
 | MOV-005 | Continuidad en ambos sentidos | `public/app.js`, puente | 1 | HECHO · 2026-10-07 |
-| MOV-006 | Tecla MADRE en tu teléfono, QR, pantalla «Listo» y guía de «Añadir a inicio» | `public/` | 1 | HECHO · 2026-10-07 |
+| MOV-006 | Tecla ZM en tu teléfono, QR, pantalla «Listo» y guía de «Añadir a inicio» | `public/` | 1 | HECHO · 2026-10-07 |
 | MOV-007 | Teléfonos emparejados y «Olvidar» | Ajustes › Privacidad | 1 | HECHO · 2026-10-07 |
 | MOV-008 | `x-madre-device` → «desde iPhone» en el registro | `src/room.mjs` | 1 | HECHO · 2026-10-07 |
 | MOV-009 | Pruebas de puente, política, emparejamiento, red, continuidad y QR | `test/phone-bridge.test.mjs`, `test/qr.test.mjs` | 1 | HECHO · 2026-10-07 |
@@ -259,7 +259,7 @@ La versión de cada fase se decide al cerrarla (D-M06). Windows llegó en `1.1.0
 ## 7 · Qué se toma de Apex OS
 
 Revisión del 2026-10-07 de `~/Developer/apex-os`. Apex no tiene túnel, relevo, SSE ni avisos, y
-es de un solo dueño. **No se usan sus servidores ni su base de datos para MADRE.** Se toman
+es de un solo dueño. **No se usan sus servidores ni su base de datos para ZM.** Se toman
 patrones, reescritos sin dependencias:
 
 | Patrón | En Apex | Para |
@@ -273,13 +273,13 @@ patrones, reescritos sin dependencias:
 
 | Id | Pregunta | Bloquea | Estado |
 |---|---|---|---|
-| **D-M01** | La regla decía que MADRE no guarda credenciales propias (`src/credentials.mjs:3-6`). Emparejar exige al menos una llave propia. Se enmienda: MADRE no guarda credenciales de proveedores; la llave de sus teléfonos vive solo en `~/.pulse/credentials/`, solo para el dueño, y de cada teléfono se guarda la huella, nunca el token (`AGENTS.md`). En Windows `0o600` no protege nada (WIN-014): la función no se ofrece allí hasta que ese id se cierre. | Fase 1 | **RESUELTA · 2026-10-07** |
+| **D-M01** | La regla decía que ZM no guarda credenciales propias (`src/credentials.mjs:3-6`). Emparejar exige al menos una llave propia. Se enmienda: ZM no guarda credenciales de proveedores; la llave de sus teléfonos vive solo en `~/.pulse/credentials/`, solo para el dueño, y de cada teléfono se guarda la huella, nunca el token (`AGENTS.md`). En Windows `0o600` no protege nada (WIN-014): la función no se ofrece allí hasta que ese id se cierre. | Fase 1 | **RESUELTA · 2026-10-07** |
 | **D-M02** | La fase 1 sale como avance, limitada a las redes que la persona marca como de confianza. | Fase 1 | **RESUELTA · 2026-10-07** |
-| **D-M03** | La política de la sección 4. El 2026-10-07, ya con el teléfono en la mano, se abrieron Ajustes (salvo permisos), los módulos de MADRE, conceder un modo hasta #2 y DESHACER. #3 desde el teléfono pide la frase, que se comprueba con `crypto.subtle`; en la fase 1 (`http`) el navegador no lo ofrece, así que #3 desde el teléfono llega con la fase 2. | Fase 1 | **RESUELTA · 2026-10-07** |
+| **D-M03** | La política de la sección 4. El 2026-10-07, ya con el teléfono en la mano, se abrieron Ajustes (salvo permisos), los módulos de ZM, conceder un modo hasta #2 y DESHACER. #3 desde el teléfono pide la frase, que se comprueba con `crypto.subtle`; en la fase 1 (`http`) el navegador no lo ofrece, así que #3 desde el teléfono llega con la fase 2. | Fase 1 | **RESUELTA · 2026-10-07** |
 | **D-M04** | Costos y límites del relevo: plan de Cloudflare, tope por buzón, caducidad. | Fase 2 | **RESUELTA · 2026-10-11** · Por ahora solo para las Macs del dueño, en su cuenta. El modelo para el público (gratis con tope, de pago fuera de casa o un relevo propio por persona) se decide cuando haya más usuarios. Referencia: una hora de teléfono activo cuesta unos 450 GB-s y unas 125 peticiones de Durable Object (unos 0.006 USD en plan de pago); un buzón sin teléfono hiberna y no cuesta. |
 | **D-M05** | ¿`app.madre.run` como subdominio del sitio actual, o proyecto aparte en Cloudflare? | Fase 2 | **RESUELTA · 2026-10-11** · Un Worker propio, `madre-relay`, en una carpeta del repo de la landing, que sirve `app.madre.run` con la app y el relevo en el mismo dominio. La landing no se toca. |
 | **D-M06** | Número de versión de cada fase. | Cierre de cada fase | **ABIERTA** |
-| **D-M08** | ¿El teléfono sale en MADRE 1.0? Safari con su advertencia de conexiones no seguras está en modo solo HTTPS y rechaza el `http` del puente. | 1.0 | **RESUELTA · 2026-10-11** · No: queda como vista previa. En una Mac sin `phone.preview` en `config.json` (o `PULSE_PHONE=1`) el puente no abre, `/api/phone` no empareja, la tecla no está en la barra, y Ajustes y el recorrido dicen «Próximamente». La Mac del dueño la tiene encendida. |
+| **D-M08** | ¿El teléfono sale en ZM 1.0? Safari con su advertencia de conexiones no seguras está en modo solo HTTPS y rechaza el `http` del puente. | 1.0 | **RESUELTA · 2026-10-11** · No: queda como vista previa. En una Mac sin `phone.preview` en `config.json` (o `PULSE_PHONE=1`) el puente no abre, `/api/phone` no empareja, la tecla no está en la barra, y Ajustes y el recorrido dicen «Próximamente». La Mac del dueño la tiene encendida. |
 | **D-M07** | ¿Mantener la Mac despierta mientras un agente trabaja y hay un teléfono conectado? Lanza un proceso del sistema; revisar `docs/WINDOWS.md` antes. | Fase 2 | **ABIERTA** |
 
 ## Anexo · Lo que se dirá al público cuando se publique
@@ -288,20 +288,20 @@ El 2026-10-12 el teléfono se ocultó de la versión pública: solo se ofrece en
 
 #### Tu Mac en tu teléfono (avance)
 
-- **Tus salas, en el teléfono, por tu Wi-Fi.** Una tecla nueva en la barra, **Teléfono**, muestra un QR. Lo escaneas con la cámara y listo: sin cuenta, sin contraseña, sin nada que teclear. El código sirve una vez y durante diez minutos. La primera vez, MADRE pregunta si la red es de confianza, porque el teléfono llega a la Mac por tu red local; solo se ofrece en la de tu casa u oficina.
+- **Tus salas, en el teléfono, por tu Wi-Fi.** Una tecla nueva en la barra, **Teléfono**, muestra un QR. Lo escaneas con la cámara y listo: sin cuenta, sin contraseña, sin nada que teclear. El código sirve una vez y durante diez minutos. La primera vez, ZM pregunta si la red es de confianza, porque el teléfono llega a la Mac por tu red local; solo se ofrece en la de tu casa u oficina.
 - **Salas: todas a la vez.** El teléfono abre en una lista de todas las salas abiertas en tu Mac, con lo último que se dijo y quién está trabajando. La que **te espera** sube arriba, en tu acento, con lo que espera dicho en una línea («@claude te pregunta…», «@codex quiere correr npm test», «@gemini pide #2 CREATE»), y al tocarla abre justo esa conversación. Un toque abre la sala con su conversación en vivo; *Detener todo*, con un segundo toque para confirmar, frena a todos los agentes de todas las salas. Se agrega a la pantalla de inicio como una app.
 - **Continuidad, como Handoff.** Lo que dejaste en la caja, la conversación y el mensaje donde ibas pasan de un lado al otro: en el teléfono, *Seguir donde ibas* arriba de Salas; en la Mac, *Continuar · proyecto* en la barra. Lo que escribes desde el teléfono queda en el registro con su origen.
-- **Desde el teléfono se conversa como en la Mac, hasta #2.** Preguntas con modelo y esfuerzo, `/image`, `/module` e Intenciones; respondes lo que un agente pregunta, apruebas lo que quiere correr, deshaces y detienes. También cambias los ajustes (apariencia, sala, memoria, privacidad) y enciendes o apagas los módulos de MADRE. Archivos y servidores se ven y avisan que se trabajan mejor en la Mac. #3 CONTROL, #4 AIRLOCK, los permisos, las llaves y lo que instala código se quedan en la Mac; la sala lo verifica por su lado aunque el puente ya lo haya filtrado.
+- **Desde el teléfono se conversa como en la Mac, hasta #2.** Preguntas con modelo y esfuerzo, `/image`, `/module` e Intenciones; respondes lo que un agente pregunta, apruebas lo que quiere correr, deshaces y detienes. También cambias los ajustes (apariencia, sala, memoria, privacidad) y enciendes o apagas los módulos de ZM. Archivos y servidores se ven y avisan que se trabajan mejor en la Mac. #3 CONTROL, #4 AIRLOCK, los permisos, las llaves y lo que instala código se quedan en la Mac; la sala lo verifica por su lado aunque el puente ya lo haya filtrado.
 - **Hecho para el pulgar.** En el teléfono no hay ventanas: Ajustes, MU/TH/UR, Módulos, conversaciones y el visor suben como hojas redondeadas, una a la vez, con su asa arriba; se cierran deslizando hacia abajo, tocando fuera o con su ×. Abrir una hoja ya no enfoca la búsqueda ni levanta el teclado. La página entera hace scroll para que Safari esconda sus barras, los campos tienen 16 px para que tocar uno no acerque la pantalla, la caja de texto tiene más aire y sube con el teclado, y tu fondo de pantalla y tu acento se ven al cambiarlos.
 - **NOSTROMO en el teléfono es un mapa.** MOTHER al centro, cada memoria un punto del color de su tipo en el sector de su tipo, y las redes trazadas entre ellas. Mientras más se apoya la sala en una memoria, más cerca de MOTHER está. Un dedo lo mueve, dos lo acercan, y tocar un punto ilumina sus enlaces, lo desliza a la vista y sube su ficha desde abajo, como en un mapa; Recentrar regresa al mapa completo. Solo se dibuja cuando algo cambia, así que leerlo no gasta el teléfono. Olvidar una memoria sigue siendo de la Mac, y su botón ya no aparece en el teléfono.
 - **Nada se sale de la pantalla ni flota encima de la conversación.** Las respuestas ya no se cortan a la derecha: la línea de arriba de cada burbuja conserva quién habló y cede lo demás, y los tokens quedan abajo, donde ya estaban. Los chips de modo, modelo y esfuerzo caben en una fila sin deslizarse de lado. La barra pasa a «•••» lo que no cabe, también en Safari, donde «‹ Salas» se cortaba y Ajustes quedaba pegado al borde. Las conversaciones son una tecla en la barra, junto a «‹ Salas», en vez de un botón flotando sobre los mensajes. Con el teclado abierto, la barra se queda arriba y la caja justo encima del teclado, también en una hoja. Un toque hace solo lo que tocó: sin destello gris, sin acercar con doble toque y sin que la sala se mueva detrás de una hoja abierta.
 - **Cómo está hecho.** Las salas siguen escuchando solo en tu Mac. Un puente, que vive dentro de la primera sala que lo toma, es lo único que el teléfono alcanza: acepta direcciones privadas, el nombre de esta Mac y un teléfono con su llave. De cada teléfono se guarda una huella, nunca su llave, y la llave del puente vive solo en `~/.pulse/credentials/`. Los teléfonos y las redes se olvidan en Ajustes › Privacidad › Teléfonos.
 
-#### MADRE EN TU TELÉFONO · AVANCE
+#### ZM EN TU TELÉFONO · AVANCE
 
 Tus proyectos siguen en tu Mac; el teléfono es otra ventana a ellos, por tu Wi-Fi. El plan completo vive en `docs/MOBILE.md`.
 
-1. En la barra, **MADRE en tu teléfono** (el ícono del teléfono). La primera vez pregunta si la red es de confianza: el teléfono llega a la Mac por `http` en tu red, así que solo se ofrece en la de tu casa u oficina.
+1. En la barra, **ZM en tu teléfono** (el ícono del teléfono). La primera vez pregunta si la red es de confianza: el teléfono llega a la Mac por `http` en tu red, así que solo se ofrece en la de tu casa u oficina.
 2. Escanea el QR con la cámara. El código sirve una vez y durante diez minutos. El teléfono abre **Inicio**: todos los proyectos abiertos en tu Mac, quién trabaja en cada uno y *Seguir donde ibas* con tu conversación, tu lugar y tu borrador. Agrégalo a la pantalla de inicio para abrirlo como una app.
 
 | Desde el teléfono | |
@@ -309,16 +309,16 @@ Tus proyectos siguen en tu Mac; el teléfono es otra ventana a ellos, por tu Wi-
 | Leer, buscar, abrir archivos en el visor | Sí |
 | Escribir en `#0`, `#1` y `#2` · responder elecciones · correr lo que un agente propuso | Sí |
 | `STOPALL` en un proyecto, o **Detener todo** en todos desde Inicio | Sí, siempre |
-| Ajustes (salvo permisos) · encender o apagar los módulos de MADRE | Sí |
+| Ajustes (salvo permisos) · encender o apagar los módulos de ZM | Sí |
 | Archivos y servidores | Para ver; se trabajan mejor en la Mac |
 | `#3 EDITAR`, `#4 ACCESO TOTAL`, permisos, llaves, instalar módulos de terceros, olvidar memorias, emparejar otro teléfono | En la Mac |
 
 - **Continuidad.** Lo que dejas en la caja, la conversación y el mensaje donde ibas viajan de un lado al otro. En la Mac aparece *Continuar · proyecto* en la barra; en el teléfono, arriba de Inicio.
 - **Quién lo dijo.** Lo que se escribe desde el teléfono queda en el registro con su origen («desde tu iPhone»).
 - **Teléfonos y redes** en Ajustes › Privacidad › Teléfonos: cada uno con *Olvidar*, y un interruptor que apaga el acceso de todos.
-- **La red** se reconoce por la dirección de hardware de su router. Si MADRE no puede leerla, la red es desconocida y el teléfono no se ofrece ahí.
+- **La red** se reconoce por la dirección de hardware de su router. Si ZM no puede leerla, la red es desconocida y el teléfono no se ofrece ahí.
 
-- **El teléfono entra, no sale nada.** Con un teléfono emparejado, MADRE en tu teléfono escucha en tu Wi-Fi (puerto 4316) solo mientras la Mac está en una red que marcaste de confianza. Acepta únicamente direcciones privadas, el nombre de esta Mac y un teléfono con su llave. Es tráfico de tu red local; nada viaja a internet.
+- **El teléfono entra, no sale nada.** Con un teléfono emparejado, ZM en tu teléfono escucha en tu Wi-Fi (puerto 4316) solo mientras la Mac está en una red que marcaste de confianza. Acepta únicamente direcciones privadas, el nombre de esta Mac y un teléfono con su llave. Es tráfico de tu red local; nada viaja a internet.
 
 #### Otras líneas del CHANGELOG de 1.0
 

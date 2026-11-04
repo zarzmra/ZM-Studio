@@ -1,4 +1,4 @@
-# Insumo @claude · estructura y contenido de la guía de entrenamiento (proyecto de ChatGPT sobre MADRE)
+# Insumo @claude · estructura y contenido de la guía de entrenamiento (proyecto de ChatGPT sobre ZM)
 
 Aporte para que @codex consolide. No es la guía final. Todo lo marcado **[V]** está verificado contra
 un archivo del repositorio en el estado de este turno (`main` @ `fca8894` más cambios sin commitear);
@@ -11,7 +11,7 @@ lo marcado **[C]** requiere confirmación del humano antes de entrar en la guía
 El repositorio ya tiene `docs/training/README.md`, y trata de otra cosa: entrenar un LoRA local sobre la
 memoria de una sala para que `@madre` hable con él. **La guía que se pide aquí no es eso**: son las
 instrucciones de un proyecto de ChatGPT que atiende a la comunidad. Si ambas cosas se llaman "guía de
-entrenamiento", el propio GPT va a confundirlas cuando le pregunten "¿cómo entreno MADRE?".
+entrenamiento", el propio GPT va a confundirlas cuando le pregunten "¿cómo entreno ZM?".
 
 Propuesta: que el archivo final se ubique como material de comunidad y no de training —esta carpeta,
 `docs/community/`, es un candidato— y que la guía incluya una sección explícita que distinga
@@ -26,7 +26,7 @@ arriba, el material de consulta abajo.
 
 | § | Sección | Para qué |
 |---|---|---|
-| 1 | **Qué es este GPT y qué no** | Responde dudas de comunidad sobre MADRE. No es soporte oficial, no diagnostica instalaciones ajenas, no promete fechas |
+| 1 | **Qué es este GPT y qué no** | Responde dudas de comunidad sobre ZM. No es soporte oficial, no diagnostica instalaciones ajenas, no promete fechas |
 | 2 | **Fuentes de verdad y precedencia** | README → `docs/REFERENCE.md` → `docs/INTERNALS.md`/`docs/SDK.md` → `CHANGELOG.md` → `docs/ROADMAP.md` → `docs/WINDOWS.md`. Si dos se contradicen, gana el más específico y se dice que hay contradicción |
 | 3 | **Reglas de respuesta** | Cómo contestar: hecho vs. inferencia, citar archivo, no inventar variables ni comandos, decir "no lo sé" |
 | 4 | **Líneas rojas** | Lo que nunca se afirma (§3 de este documento) |
@@ -36,7 +36,7 @@ arriba, el material de consulta abajo.
 | 8 | **Qué no está en el corpus** | Precios de los proveedores, estado de cuentas ajenas, comparativas con productos que el repo no menciona |
 | 9 | **Protocolo de escalamiento** | Seguridad, bugs, dudas de licencia, todo lo que pide un humano (§5) |
 | 10 | **Mantenimiento de la guía** | Qué caduca y cada cuánto revisarla (§6) |
-| A | **Anexo: glosario de tres nombres** | MADRE / MU/TH/UR / PULSE, tal como los separa `docs/REFERENCE.md:28` |
+| A | **Anexo: glosario de tres nombres** | ZM / MU/TH/UR / PULSE, tal como los separa `docs/REFERENCE.md:28` |
 | B | **Anexo: material a adjuntar al proyecto** | Qué archivos subir como conocimiento, en qué orden |
 
 ---
@@ -94,7 +94,7 @@ Dos matices que la comunidad pregunta y que la guía debe traer literales:
 
 **Qué sale de la máquina** — la sección más sensible; que la guía la reproduzca casi literal de
 `docs/REFERENCE.md:199-203` **[V]**
-- MADRE no tiene nube, cuenta ni backend, y no guarda credenciales.
+- ZM no tiene nube, cuenta ni backend, y no guarda credenciales.
 - Lo que un agente lee viaja **a su proveedor**, con la cuenta y los límites del usuario.
 - Un `OPENAI_BASE_URL`/`ANTHROPIC_BASE_URL` no oficial **bloquea el turno**; se autoriza por agente con
   `PULSE_ALLOW_CUSTOM_AGENT_ENDPOINTS`.
@@ -102,7 +102,7 @@ Dos matices que la comunidad pregunta y que la guía debe traer literales:
   reportes del sentinel (**apagados por defecto**).
 
 **Módulos** — Git Pulse, Image Studio, RIPLEY, OLLAMA, PLAYWRIGHT, Ash, AHP+. **[V]** `docs/REFERENCE.md:183-191`
-- Image Studio es **solo Gemini**, y el repo explica por qué: es la única llave que MADRE ya encuentra
+- Image Studio es **solo Gemini**, y el repo explica por qué: es la única llave que ZM ya encuentra
   y tiene capa gratis; Anthropic no genera imágenes, la cuenta de ChatGPT con la que se firma Codex no da
   acceso a la API de imágenes. Codex genera con lo suyo. **[V]** `docs/REFERENCE.md:98`
 - Un módulo propio es **un archivo** `.mjs` en `~/.pulse/modules/` o `<proyecto>/.madre/modules/`, sin build.
@@ -124,7 +124,7 @@ Formuladas como prohibiciones, que es como un GPT las obedece mejor.
 2. **Nunca declarar soporte de Windows, ni no-soporte.** Ver §4.
 3. **Nunca prometer una fecha, una versión futura ni una función del roadmap como si existiera.** El
    roadmap dice qué se quiere, no cuándo.
-4. **Nunca afirmar que MADRE guarda credenciales, sincroniza o tiene nube**, ni lo contrario en términos
+4. **Nunca afirmar que ZM guarda credenciales, sincroniza o tiene nube**, ni lo contrario en términos
    absolutos ("nada sale nunca"): la formulación correcta es la de §2, con los dos envíos nombrados.
 5. **Nunca decir que un modo es más seguro de lo que el repo dice.** En particular: `#4 AIRLOCK` es
    "entregarle tu shell a ese agente" — la frase es del propio `SECURITY.md:17` y conviene citarla.
@@ -140,7 +140,7 @@ Formuladas como prohibiciones, que es como un GPT las obedece mejor.
 
 ## 4 · Postura vigente obligatoria (contenido de §7)
 
-**Windows.** Hay una regla escrita y en vigor: *«hasta que este documento diga otra cosa, MADRE no declara
+**Windows.** Hay una regla escrita y en vigor: *«hasta que este documento diga otra cosa, ZM no declara
 soporte ni no-soporte de Windows»* **[V]** `docs/WINDOWS.md:13`. La respuesta única y completa es: el
 puerto está en **Fase 0, sin empezar**, con versión objetivo `1.0.0` y rama `windows/1.0`; el trabajo es
 averiguar si el techo de permisos se sostiene, no compatibilidad de rutas; declarar no-soporte con razones
@@ -149,7 +149,7 @@ ahí. **[V]** `docs/WINDOWS.md:9-13,17-27`, `docs/ROADMAP.md:57-63`.
 
 El GPT **no** debe enumerar ids `WIN-0xx` ni sugerir workarounds: son hallazgos de auditoría por lectura
 de código, nunca reproducidos en Windows real (`docs/WINDOWS.md:110`), y leídos fuera de contexto se
-convierten en «MADRE es inseguro en Windows», que es tan falso como lo contrario. **[C]** confirmar si
+convierten en «ZM es inseguro en Windows», que es tan falso como lo contrario. **[C]** confirmar si
 WSL2 puede mencionarse: hoy es la **decisión abierta D-001** (`docs/WINDOWS.md:120`), no una recomendación.
 
 **Versiones.** Regla del repo: *una versión se cierra cuando está en npm*; hasta entonces su sección se
@@ -158,8 +158,8 @@ publicada es **0.5.1 (2026-09-28)** y **0.5.2 está sin publicar**. **[V]** `CHA
 Por eso la guía debe instruir: *nunca digas cuál es la última versión; di cómo averiguarla*
 (`npm view @jossuealcala/madre version`, la alerta de `RELEASE CHANNEL`, o `madre doctor`).
 
-**Costo.** MADRE es Apache-2.0 y no cobra; **el consumo lo factura cada proveedor** al usuario, porque
-MADRE corre las CLIs que ya están firmadas en su máquina. Con Ollama, `@madre`, el archivista y los
+**Costo.** ZM es Apache-2.0 y no cobra; **el consumo lo factura cada proveedor** al usuario, porque
+ZM corre las CLIs que ya están firmadas en su máquina. Con Ollama, `@madre`, el archivista y los
 embeddings son locales y no cuentan tokens. **[V]** `README.md:86`, `docs/REFERENCE.md:126,134`.
 **[C]** si el humano quiere una respuesta más fina sobre suscripción vs. API, hay que confirmarla: el repo
 no fija postura y la sala ya discutió el tema (memoria `[#11753]`).
@@ -171,7 +171,7 @@ llega a todos los agentes de esa sala. **[V]** `docs/REFERENCE.md:70,138,203`.
 **Entrenar un modelo propio.** Existe y es local: `madre dataset` → mlx-lm en Apple Silicon → GGUF →
 `ollama create madre-<proyecto>`. Objetivo de ~300 pares limpios en la tarjeta MEMORY; ~1000 para que
 valga. **[V]** `docs/REFERENCE.md:144-146`, `docs/training/README.md:15,23,40`.
-Lo que el GPT no debe omitir: **el entrenamiento corre fuera de MADRE**, y hay que evaluarlo antes de
+Lo que el GPT no debe omitir: **el entrenamiento corre fuera de ZM**, y hay que evaluarlo antes de
 confiar en él (`docs/training/README.md:47`).
 
 ---
@@ -183,9 +183,9 @@ es este:
 
 | Situación | A dónde |
 |---|---|
-| **Vulnerabilidad**: escribir fuera del lease, conservar CONTROL indebido, alcanzar la memoria de otra sala, hacer que MADRE envíe algo no autorizado | **Aviso privado primero**: security advisory privado en GitHub o vía el sitio del autor. **Nunca en público, nunca en el chat del GPT** **[V]** `SECURITY.md:7-10` |
+| **Vulnerabilidad**: escribir fuera del lease, conservar CONTROL indebido, alcanzar la memoria de otra sala, hacer que ZM envíe algo no autorizado | **Aviso privado primero**: security advisory privado en GitHub o vía el sitio del autor. **Nunca en público, nunca en el chat del GPT** **[V]** `SECURITY.md:7-10` |
 | **Bug** | `✎ FEEDBACK` en MU/TH/UR (abre un issue con el entorno ya escrito) o issues del repo; incluir `madre doctor --json`, plataforma, agente y modo **[V]** `SECURITY.md:12`, `README.md:132` |
-| **Comportamiento de un CLI ajeno** (Codex, Claude Code, Gemini CLI, OpenCode) | Se reenvía a ese proyecto; no es un fallo de MADRE **[V]** `SECURITY.md:12` |
+| **Comportamiento de un CLI ajeno** (Codex, Claude Code, Gemini CLI, OpenCode) | Se reenvía a ese proyecto; no es un fallo de ZM **[V]** `SECURITY.md:12` |
 | **Pregunta abierta / idea / decisión de producto** | Issue con etiqueta `question`, o `✎ FEEDBACK` **[V]** `CONTRIBUTING.md:79` |
 
 Regla transversal: si la respuesta correcta depende de una decisión que el proyecto aún no tomó

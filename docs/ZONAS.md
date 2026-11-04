@@ -1,4 +1,4 @@
-# MADRE · ZONAS Y SENTIMIENTO · memoria que sabe cómo aterrizó
+# ZM · ZONAS Y SENTIMIENTO · memoria que sabe cómo aterrizó
 
 Documento único de este trabajo. Todo lo que se decida, se construya o se descarte
 sobre reacciones, zonas, sentimiento y donación de corpus se anota aquí y en ningún
@@ -15,7 +15,7 @@ otro lado.
 
 ## 1 · Qué es esto y qué no
 
-MADRE ya recuerda. Lo que no sabe es **si lo que recuerda sirvió**.
+ZM ya recuerda. Lo que no sabe es **si lo que recuerda sirvió**.
 
 Hoy la destilación trata todos los intercambios igual: el archivista toma el lote
 más reciente sin destilar, lo resume en hasta cinco memorias y las guarda. Una
@@ -274,10 +274,10 @@ Lo que sigue no es un no; es lo que hay que resolver antes de que sea un sí.
 
 `docs/ROADMAP.md`, bajo «Fuera del alcance, a conciencia»:
 
-> «**Cualquier nube de MADRE.** Si algún día hay sincronización entre máquinas,
+> «**Cualquier nube de ZM.** Si algún día hay sincronización entre máquinas,
 > será por el ledger y con la llave del usuario.»
 
-Un corpus comunitario es una nube de MADRE. Esa decisión se revierte a propósito
+Un corpus comunitario es una nube de ZM. Esa decisión se revierte a propósito
 y por escrito, o no se hace (D-006).
 
 ### 6.2 · Lo que el código promete hoy

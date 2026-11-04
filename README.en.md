@@ -1,69 +1,52 @@
 <p align="center">
-  <a href="https://zm.run"><img src="https://raw.githubusercontent.com/jossuealcacao-exe/zm/main/docs/media/1.1/en/banner.png" alt="ZM · All your AIs in one chat · Codex, Claude Code, Gemini CLI, Cursor and OpenCode" width="100%"></a>
+  <img src="https://raw.githubusercontent.com/zarzmra/ZM-Studio/main/public/assets/brand/zm-app-512.png" alt="ZM Studio" width="100%">
 </p>
 
 <p align="center"><a href="README.md">Español</a> · <b>English</b></p>
 
-<p align="center">
-  <a href="https://www.npmjs.com/package/@jossuealcala/zm"><img alt="npm" src="https://img.shields.io/npm/v/@jossuealcala/zm?style=flat-square&label=npm&color=9bff66&labelColor=050605"></a>
-  <a href="https://github.com/jossuealcacao-exe/zm/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/jossuealcacao-exe/zm/ci.yml?style=flat-square&label=CI&color=9bff66&labelColor=050605"></a>
-  <img alt="systems" src="https://img.shields.io/badge/macOS%20·%20Linux%20·%20Windows%20(WSL2)-9bff66?style=flat-square&labelColor=050605">
-  <img alt="license" src="https://img.shields.io/badge/license-BSL%201.1-9bff66?style=flat-square&labelColor=050605">
-</p>
+# ZM Studio · All your AI assistants in one place.
 
-# All your AIs in one chat.
+**ZM Studio is a collaboration platform that brings your favorite AI tools into a single workspace.**
 
-**ZM is not another AI.** It is an app that runs on your computer and brings the AIs you already use (Codex, Claude Code, Gemini, Cursor and OpenCode) into one chat, inside your project. You write to them in your own words, each one reads what the others said, and you decide what they may change. What gets decided is kept.
+Work with Codex, Claude Code, Gemini CLI and OpenCode on your project at the same time. They all share a memory that you can see and control. You decide what each one may change. Everything that happens is recorded on your machine.
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/jossuealcacao-exe/zm/main/public/assets/news/1.1/en/chats.webp" alt="A project in ZM 1.1: chats on the left and OpenCode checking a shop's cart" width="100%">
-</p>
+## Key features
 
-## Install it
+- **Unified integration** - Reach several assistants from one interface
+- **Shared memory** - Agents see the project context and learn from every turn
+- **Full control** - Read-only by default, with granular permissions per message
+- **100% local** - Nothing leaves your machine without your permission
+- **Auditable history** - Every decision, change and permission is recorded
 
-**macOS and Linux.** Open the Terminal and type:
+## Install
 
+**macOS, Linux and Windows (WSL2).**
+
+```bash
+npx @zarzmr/app
 ```
-npx @jossuealcala/zm
-```
 
-**Windows.** Download the installer from [zm.run/en/windows](https://zm.run/en/windows) and open it with a double click. It turns on WSL2 (the Linux that comes with Windows) if needed, prepares ZM's Linux and leaves it in the Start menu, with no terminal. Prefer the terminal? Inside Ubuntu (WSL2), install Node 22 and `zstd`, and type `npx @jossuealcala/zm`.
+Requires Node.js 22.5 or newer and at least one AI assistant set up. There is no account to create. ZM Studio opens in your browser with a step-by-step guide.
 
-You need Node 22.5 or newer and at least one AI you are signed in to. There is no account to create. ZM opens in your browser and a welcome guides you step by step: it connects your AIs, adds your first project (or makes one to try), puts a free AI on your computer if it fits, and takes you to write your first message.
+## How it works
 
-## New in 1.1
-
-<table>
-  <tr>
-    <td width="50%"><img src="https://raw.githubusercontent.com/jossuealcacao-exe/zm/main/public/assets/news/1.1/en/home.webp" alt="Home: your projects, the Coordinator and what is waiting for you"><br><b>Home.</b> Your projects, the Coordinator and what is waiting for you, in one place.</td>
-    <td width="50%"><img src="https://raw.githubusercontent.com/jossuealcacao-exe/zm/main/public/assets/news/1.1/en/market.webp" alt="The Market: modules installed in one click"><br><b>The Market.</b> Notes, Reminders, Before you push and more, in one click.</td>
-  </tr>
-  <tr>
-    <td width="50%"><img src="https://raw.githubusercontent.com/jossuealcacao-exe/zm/main/public/assets/news/1.1/en/welcome.webp" alt="The welcome: connect your agents without the terminal"><br><b>A step-by-step welcome.</b> No terminal needed.</td>
-    <td width="50%"><img src="https://raw.githubusercontent.com/jossuealcacao-exe/zm/main/public/assets/news/1.1/en/permissions.webp" alt="Permissions: from #0 to #4"><br><b>You decide what changes.</b> From chat only to full access, with undo.</td>
-  </tr>
-</table>
-
-Also: chats to one side like in chat apps, Windows through WSL2, and project maps that grow with what they know. The details are in the [CHANGELOG](CHANGELOG.en.md).
-
-## If something fails
-
-Open **Diagnostics** and type what you see, like "Gemini does not answer". It tells you what is going on and gives you the button that fixes it. Without opening ZM, `npx @jossuealcala/zm doctor` checks your AIs. Common problems are in the [manual](https://zm.run/en/manual/#ayuda).
-
-## Your data
-
-- **It runs on your computer.** ZM has no account and no cloud: it opens on `127.0.0.1`.
-- **Your keys are not copied.** Each AI keeps its own sign-in.
-- **You know what leaves.** What an AI reads goes to its provider, with your account, just as in your Terminal. Two things go to zm.run, never what you write or your projects: a daily notice that the copy is still in use (a random identifier, the version, the system and Node), which is always on, and anonymous diagnostics (what failed and how much it is used), which you turn off in Settings. The details are in [what leaves the machine](docs/en/REFERENCE.md#what-leaves-the-machine).
+1. Connect your AI assistants (Codex, Claude Code, etc.)
+2. Open a project in ZM Studio
+3. Write instructions in plain language
+4. The assistants propose changes
+5. Approve, reject or edit each change
+6. The history stays on your machine
 
 ## License
 
-**Free for individuals and for teams of up to 10**, also when you use it to work for your clients. Anyone can try it. A larger organization using it in its work, or anyone who wants to offer ZM as a service, needs a commercial license: write to hola@jossuealcala.com.
+**Free for individuals and for teams of up to 10**, also when you use it to work for your clients.
 
-The code is public ([Business Source License 1.1](LICENSE)). It is not an open source license, but each version becomes [GNU AGPL v3](https://www.gnu.org/licenses/agpl-3.0.html) four years after it is published. Versions up to 1.0.5 keep the license they were released with. The ZM name and logo are trademarks of Jossue Alcalá ([TRADEMARKS.en.md](TRADEMARKS.en.md)).
+Larger organizations, or anyone who wants to offer ZM Studio as a service, need a commercial license: write to hola@jossuealcala.com.
+
+The code is public ([Business Source License 1.1](LICENSE)). It is not an open source license, but each version becomes [GNU AGPL v3](https://www.gnu.org/licenses/agpl-3.0.html) four years after it is published. Versions up to 1.0.5 keep the license they were released with. ZM Studio is **based on [MADRE](https://madre.run) by [Jossue Alcalá](https://jossuealcala.com)**. "MADRE" and its logo are trademarks of Jossue Alcalá ([TRADEMARKS.en.md](TRADEMARKS.en.md)).
 
 ---
 
-[Manual](https://zm.run/en/manual/) · [CHANGELOG](CHANGELOG.en.md) · [How each thing works](docs/REFERENCE.md) · [Writing a module](docs/SDK.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md) · [Issues](https://github.com/jossuealcacao-exe/zm/issues)
+[CHANGELOG](CHANGELOG.en.md) · [Documentation](docs/REFERENCE.md) · [Writing a module](docs/SDK.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md) · [Issues](https://github.com/zarzmra/ZM-Studio/issues)
 
 © 2026 [Jossue Alcalá](https://jossuealcala.com)

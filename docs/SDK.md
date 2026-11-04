@@ -1,6 +1,6 @@
-# MADRE SDK · escribe tus propios módulos
+# ZM SDK · escribe tus propios módulos
 
-Un módulo de MADRE es **un archivo**. Sin build, sin dependencias, sin registrarse en ningún lado. Lo copias a una carpeta, recargas los módulos desde «Crea tu módulo» en MÓDULOS y aparece en el tablero con su interruptor. Puedes escribirlo a mano o pedírselo a una IA con este documento como contexto.
+Un módulo de ZM es **un archivo**. Sin build, sin dependencias, sin registrarse en ningún lado. Lo copias a una carpeta, recargas los módulos desde «Crea tu módulo» en MÓDULOS y aparece en el tablero con su interruptor. Puedes escribirlo a mano o pedírselo a una IA con este documento como contexto.
 
 ## Dónde vive
 
@@ -9,11 +9,11 @@ Un módulo de MADRE es **un archivo**. Sin build, sin dependencias, sin registra
 | `~/.pulse/modules/*.mjs` | Todas tus salas |
 | `<proyecto>/.madre/modules/*.mjs` | Solo ese proyecto |
 
-Ningún agente puede escribir ahí: `.madre/` es zona prohibida en CONTROL y AIRLOCK, y `~/.pulse` está fuera de todo proyecto. Un módulo entra a MADRE solo porque tú lo pusiste.
+Ningún agente puede escribir ahí: `.madre/` es zona prohibida en CONTROL y AIRLOCK, y `~/.pulse` está fuera de todo proyecto. Un módulo entra a ZM solo porque tú lo pusiste.
 
 ## El archivo
 
-El `export default` es un objeto plano. MADRE lo envuelve con `defineModule`. Hay dos ejemplos
+El `export default` es un objeto plano. ZM lo envuelve con `defineModule`. Hay dos ejemplos
 completos, y los dos funcionan tal cual:
 
 | | qué enseña |
@@ -36,11 +36,11 @@ export default {
 };
 ```
 
-**Tu módulo no importa paquetes.** Ni a MADRE, ni al SDK, ni nada de npm. Antes de instalarlo, MADRE copia tu archivo a una carpeta temporal aparte y lo carga ahí —así revisa qué es sin que corra donde vive— y en esa carpeta no hay `node_modules`: un `import` por nombre de paquete no resuelve y la instalación falla.
+**Tu módulo no importa paquetes.** Ni a ZM, ni al SDK, ni nada de npm. Antes de instalarlo, ZM copia tu archivo a una carpeta temporal aparte y lo carga ahí —así revisa qué es sin que corra donde vive— y en esa carpeta no hay `node_modules`: un `import` por nombre de paquete no resuelve y la instalación falla.
 
 Los **builtins de Node sí**, siempre: `node:fs`, `node:url`, `node:tls`, `node:child_process`. Con eso alcanza para hablar cualquier protocolo. Lo que no hay es nada que instalar.
 
-Si necesitas `defineModule` —para calcular algo antes de definir el módulo, por ejemplo— **MADRE te lo entrega**: exporta una función y lo recibes como argumento.
+Si necesitas `defineModule` —para calcular algo antes de definir el módulo, por ejemplo— **ZM te lo entrega**: exporta una función y lo recibes como argumento.
 
 ```js
 export default ({ defineModule }) => defineModule({
@@ -50,55 +50,55 @@ export default ({ defineModule }) => defineModule({
 });
 ```
 
-> Los módulos que vienen con MADRE sí escriben `import { defineModule } from './sdk.mjs'`, porque viven dentro del paquete. **Si le pides a un agente que te escriba uno, va a leer esos archivos y copiar esa línea** — y no va a funcionar. Dile que exporte un objeto plano, o la función de arriba.
+> Los módulos que vienen con ZM sí escriben `import { defineModule } from './sdk.mjs'`, porque viven dentro del paquete. **Si le pides a un agente que te escriba uno, va a leer esos archivos y copiar esa línea** — y no va a funcionar. Dile que exporte un objeto plano, o la función de arriba.
 
 ## Lo que un módulo puede declarar
 
-Esta tabla es **el contrato completo**: 41 campos, ni uno más. Cualquier otro que escribas MADRE
+Esta tabla es **el contrato completo**: 41 campos, ni uno más. Cualquier otro que escribas ZM
 te lo dice al instalar («no entendí estos campos») en vez de ignorarlo en silencio. Una prueba de
 la suite compara esta tabla contra el código, así que si alguna vez se separan, es un fallo.
 
 
 | Campo | Qué es |
 |---|---|
-| `id`, `name`, `vendor`, `summary`, `creates`, `requires` | Su ficha en MODULES. `summary` es una frase: qué hace. `creates` y `requires` son líneas cortas, una idea cada una. `name` y `summary` —y en `slash`, `summary`, `usage` y `title`— pueden ir en los dos idiomas, `{ es, en }`: MADRE muestra el de la sala. Lo que tu módulo escribe al correr (la tarjeta de un comando, una página) va en `ctx.language`, `'es'` o `'en'`, el idioma en que habla la sala |
+| `id`, `name`, `vendor`, `summary`, `creates`, `requires` | Su ficha en MODULES. `summary` es una frase: qué hace. `creates` y `requires` son líneas cortas, una idea cada una. `name` y `summary` —y en `slash`, `summary`, `usage` y `title`— pueden ir en los dos idiomas, `{ es, en }`: ZM muestra el de la sala. Lo que tu módulo escribe al correr (la tarjeta de un comando, una página) va en `ctx.language`, `'es'` o `'en'`, el idioma en que habla la sala |
 | `version` | La tuya, y empieza en `1.0.0`. Si no la declaras, la ficha muestra la fecha del archivo |
-| `sdk` | El contrato del SDK para el que escribiste tu módulo, un número entero: `1` (hasta MADRE 1.0.5) o `2` (`ctx.t`, `ctx.services.ollama.generate` y un módulo de un solo archivo que no importa nada de MADRE). Sin él, es `1`. Una MADRE que no conoce tu contrato no lo carga y te dice por qué; el Mercado solo se lo ofrece a las que sí. El número cuenta lo que MADRE le da a un módulo, no la versión de MADRE: una MADRE nueva sigue entendiendo los contratos anteriores |
-| `tracks` | Si tu módulo envuelve algo de fuera, su versión no es la tuya: es la de esa cosa. Declara `{ name, npm }` o `{ name, github }` y devuelve la versión encontrada en `status(ctx)` como `runs: [{ name, version }]`. MADRE muestra esa versión y busca una más nueva sola, una vez al día, con el botón ↻ de la ficha para mirar ahora |
-| `updatePlan(ctx, { latest })` | Cómo se trae esa versión nueva a esta computadora: `{ command, args, display, note, after }`. MADRE enseña `display` y no corre nada hasta que la humana lo leyó; la salida cae en la sala línea por línea. Sin comando, devuelve `{ command: null, note, download }` y la ficha manda a descargarlo |
-| `updates` | `{ url }` https donde publicas **tu propio módulo**. Con eso su ficha trae un botón que va por el archivo, lo verifica igual que una instalación y lo reemplaza si pasa. Si lo instalaste desde un archivo, MADRE recuerda cuál y no necesitas declarar nada: edítalo y pide una copia nueva |
-| `settings` | Valores por defecto. Viven en `~/.pulse/config.json` bajo `modules.<idEnCamelCase>`; `enabled` es el interruptor para todos los proyectos, y `rooms` guarda lo que dijo cada proyecto, que gana. MADRE lo resuelve por ti: `ctx.settings.enabled` ya es el de este proyecto |
+| `sdk` | El contrato del SDK para el que escribiste tu módulo, un número entero: `1` (hasta ZM 1.0.5) o `2` (`ctx.t`, `ctx.services.ollama.generate` y un módulo de un solo archivo que no importa nada de ZM). Sin él, es `1`. Una ZM que no conoce tu contrato no lo carga y te dice por qué; el Mercado solo se lo ofrece a las que sí. El número cuenta lo que ZM le da a un módulo, no la versión de ZM: una ZM nueva sigue entendiendo los contratos anteriores |
+| `tracks` | Si tu módulo envuelve algo de fuera, su versión no es la tuya: es la de esa cosa. Declara `{ name, npm }` o `{ name, github }` y devuelve la versión encontrada en `status(ctx)` como `runs: [{ name, version }]`. ZM muestra esa versión y busca una más nueva sola, una vez al día, con el botón ↻ de la ficha para mirar ahora |
+| `updatePlan(ctx, { latest })` | Cómo se trae esa versión nueva a esta computadora: `{ command, args, display, note, after }`. ZM enseña `display` y no corre nada hasta que la humana lo leyó; la salida cae en la sala línea por línea. Sin comando, devuelve `{ command: null, note, download }` y la ficha manda a descargarlo |
+| `updates` | `{ url }` https donde publicas **tu propio módulo**. Con eso su ficha trae un botón que va por el archivo, lo verifica igual que una instalación y lo reemplaza si pasa. Si lo instalaste desde un archivo, ZM recuerda cuál y no necesitas declarar nada: edítalo y pide una copia nueva |
+| `settings` | Valores por defecto. Viven en `~/.pulse/config.json` bajo `modules.<idEnCamelCase>`; `enabled` es el interruptor para todos los proyectos, y `rooms` guarda lo que dijo cada proyecto, que gana. ZM lo resuelve por ti: `ctx.settings.enabled` ya es el de este proyecto |
 | `status(ctx)` | Qué muestra la tarjeta: `{ status: { installed, detail }, preflight: { ok, problems }, install: { display } }`. `install` se devuelve desde aquí; no es un campo superior del módulo |
-| `status(ctx)` → `runs` | Lo que tu módulo maneja y no es MADRE: `[{ name, version, target }]`. `version` es lo que encontraste en esta computadora (`null` si no está), `target` lo que instalarías. Si coincide con `tracks.name`, esa es la versión de la ficha |
+| `status(ctx)` → `runs` | Lo que tu módulo maneja y no es ZM: `[{ name, version, target }]`. `version` es lo que encontraste en esta computadora (`null` si no está), `target` lo que instalarías. Si coincide con `tracks.name`, esa es la versión de la ficha |
 | `toggle(ctx, payload)` | Sustituye el interruptor por defecto; `confirm: 'texto'` pide confirmación antes de encender |
 | `onToggle(ctx, enabled)` | Reacciona al interruptor |
 | `ready(ctx)` | Lo que pides antes de encender, en un proyecto o en todos (desde el Mercado también): `null` si está listo, `{ status, body: { error } }` si no. Apagar nunca lo pregunta |
-| `footer` | Hasta dos teclas junto a la versión de MADRE, abajo a la derecha, mientras tu módulo está encendido: `[{ icon: 'heart' \| 'star' \| 'link', label, text, action, url }]`. Los textos pueden ser una frase o `{ es, en }`; `url` tiene que ser https y se abre en otra pestaña. MADRE la dibuja: al pasar el ratón muestra `text` y un botón con `action` |
-| `credit` | De quién fue la idea, si no fue tuya: un nombre. MADRE lo dice en la ficha del módulo y en el Mercado («Idea de …») |
-| `icon` | El ícono de tu módulo: `{ svg, color }`. `svg` es el dibujo —sus formas (`<path d="…"/>`) o un `<svg>` entero, en la cuadrícula que quieras— y `color` el de su mosaico, `#rrggbb`. MADRE lo ajusta solo para que se vea como los suyos: lo centra y lo escala al mismo cuadro, lo pinta en blanco y de un solo color, usa el color de MADRE más parecido al tuyo y quita lo que no sea dibujo (scripts, imágenes, enlaces, estilos, degradados). Sin `icon`, tu módulo lleva la pieza de rompecabezas en gris. Hasta 8000 caracteres |
+| `footer` | Hasta dos teclas junto a la versión de ZM, abajo a la derecha, mientras tu módulo está encendido: `[{ icon: 'heart' \| 'star' \| 'link', label, text, action, url }]`. Los textos pueden ser una frase o `{ es, en }`; `url` tiene que ser https y se abre en otra pestaña. ZM la dibuja: al pasar el ratón muestra `text` y un botón con `action` |
+| `credit` | De quién fue la idea, si no fue tuya: un nombre. ZM lo dice en la ficha del módulo y en el Mercado («Idea de …») |
+| `icon` | El ícono de tu módulo: `{ svg, color }`. `svg` es el dibujo —sus formas (`<path d="…"/>`) o un `<svg>` entero, en la cuadrícula que quieras— y `color` el de su mosaico, `#rrggbb`. ZM lo ajusta solo para que se vea como los suyos: lo centra y lo escala al mismo cuadro, lo pinta en blanco y de un solo color, usa el color de ZM más parecido al tuyo y quita lo que no sea dibujo (scripts, imágenes, enlaces, estilos, degradados). Sin `icon`, tu módulo lleva la pieza de rompecabezas en gris. Hasta 8000 caracteres |
 | `slash` | Comandos `/nombre` que corren en el servidor con tu `ctx` y devuelven `{ ok, title, text, link }`. La sala los muestra como tarjeta y los agentes los leen. `link` es opcional: `{ href, label }` con una ruta tuya (`/api/x/<id>/…`), y la tarjeta la ofrece como botón que abre otra pestaña; una dirección fuera de tus rutas se ignora |
-| `toolsForTurn(ctx, turn)` | Servidores MCP para el turno de un agente: `[{ name, command, args, env, tools, sends, brief }]`. MADRE los adjunta a la CLI en su corrida aislada y describe `brief` al agente. `turn` trae el agente, el modo, el arriendo, la carpeta, el puerto y `turn.turn`: el id de la respuesta que ese turno escribirá. Si tu servidor llama de vuelta a la sala en nombre del turno, manda ese id; `ctx.room.runningTurn(id)` dice si sigue corriendo y para qué agente |
+| `toolsForTurn(ctx, turn)` | Servidores MCP para el turno de un agente: `[{ name, command, args, env, tools, sends, brief }]`. ZM los adjunta a la CLI en su corrida aislada y describe `brief` al agente. `turn` trae el agente, el modo, el arriendo, la carpeta, el puerto y `turn.turn`: el id de la respuesta que ese turno escribirá. Si tu servidor llama de vuelta a la sala en nombre del turno, manda ese id; `ctx.room.runningTurn(id)` dice si sigue corriendo y para qué agente |
 | `toolsForTurn` → `sends` | Cuáles de tus herramientas **mandan algo fuera**. El núcleo las retira por debajo de `#4` AIRLOCK: ni se le cuenta al modelo que existen. Ver abajo |
-| `reaches` | A dónde llega tu módulo, en las mismas cuatro respuestas que da MADRE de las suyas. Ver abajo |
-| `secrets` | Las llaves que necesitas, declaradas en vez de dibujadas: `[{ name, label, note, where }]`. MADRE pinta el campo, la guarda en su bodega bajo tu id y te la devuelve por `ctx.vault`. Ver abajo |
+| `reaches` | A dónde llega tu módulo, en las mismas cuatro respuestas que da ZM de las suyas. Ver abajo |
+| `secrets` | Las llaves que necesitas, declaradas en vez de dibujadas: `[{ name, label, note, where }]`. ZM pinta el campo, la guarda en su bodega bajo tu id y te la devuelve por `ctx.vault`. Ver abajo |
 | `routes` | Rutas HTTP propias: `{ method, path, handler(ctx, { payload, params, url, request, viaPhone }) }` → `{ status, body }`. `viaPhone` es `true` cuando la petición llega desde un teléfono emparejado: niégalo tú si tu ruta es de la Mac |
 | `onEvent(ctx, event)` | Cada evento del ledger de cada conversación viva de la sala, mientras tu módulo está encendido. `ctx.room` y `ctx.chat` son los de esa conversación y `ctx.record` escribe en ella. Corre aparte: lo que tarde o falle no detiene a la sala. Como siempre, un módulo no fabrica mensajes ni turnos |
-| `controls` | Los ajustes de tu módulo, declarados en vez de dibujados: `[{ key, label, type: 'select' \| 'switch' \| 'text', options, choices, note, invert }]`. MADRE los pinta en la ficha y los guarda en tu bloque de `config.json`. En un `select`, `choices: [{ value, label }]` dice qué frase lee la persona por cada valor que se guarda (si lo das, `options` sale de ahí); sin él, la persona lee el valor tal cual |
+| `controls` | Los ajustes de tu módulo, declarados en vez de dibujados: `[{ key, label, type: 'select' \| 'switch' \| 'text', options, choices, note, invert }]`. ZM los pinta en la ficha y los guarda en tu bloque de `config.json`. En un `select`, `choices: [{ value, label }]` dice qué frase lee la persona por cada valor que se guarda (si lo das, `options` sale de ahí); sin él, la persona lee el valor tal cual |
 | `onSettings(ctx, settings)` | Te avisa cuando la humana cambió uno de tus `controls`, por si algo vivo tiene que enterarse |
 | `conditions` | Entradas para el catálogo de MU/TH/UR, con remedio por plataforma |
-| `kind` | `'builtin'` (por defecto) cambia cómo se comporta MADRE y vive en `config.json`; `'installer'` escribe en el proyecto con un comando que la humana confirma antes de que corra |
+| `kind` | `'builtin'` (por defecto) cambia cómo se comporta ZM y vive en `config.json`; `'installer'` escribe en el proyecto con un comando que la humana confirma antes de que corra |
 | `configKey` | Tu bloque en `config.json`. Por defecto es tu `id` en camelCase; decláralo solo si quieres otro |
-| `card` | Qué tarjeta dibuja MADRE. Un módulo tuyo deja el valor por defecto: las tarjetas con nombre son las que MADRE trae pintadas para los suyos |
+| `card` | Qué tarjeta dibuja ZM. Un módulo tuyo deja el valor por defecto: las tarjetas con nombre son las que ZM trae pintadas para los suyos |
 | `models` | Los modelos entre los que elige tu módulo, si envuelve algo que los tiene. Salen en la ficha |
 | `package` | El paquete de npm que instala lo que tu módulo maneja, si lo hay |
 | `confirm` | Un texto. Si está, encender el interruptor pide confirmación y no se enciende hasta que la humana la da |
 | `toggledEvent`, `toggledBody` | Lo que se añade al evento `extension.toggled` y al aviso que ve la sala cuando tu módulo se enciende o se apaga |
 | `preflight(ctx)`, `detect(ctx)`, `installCommand(ctx)` | **Herencia**, de cuando un módulo solo podía ser un instalador. Siguen funcionando; para algo nuevo, devuelve `preflight` desde `status(ctx)` como arriba |
-| `describe(ctx)` | Lo arma MADRE con todo lo anterior. **No lo declares**: está en la lista porque el objeto lo lleva, no porque tengas que escribirlo |
+| `describe(ctx)` | Lo arma ZM con todo lo anterior. **No lo declares**: está en la lista porque el objeto lo lleva, no porque tengas que escribirlo |
 
 ### ¿Se puede conectar con *X*?
 
-No depende de MADRE. Un módulo puede hacer lo que pueda hacer un proceso de Node en tu
+No depende de ZM. Un módulo puede hacer lo que pueda hacer un proceso de Node en tu
 computadora: hablar TLS, levantar un servidor, guardar una llave. **Depende de cómo ese servicio
 deja que un humano entregue su propia credencial**, y eso cae en tres peldaños:
 
@@ -121,7 +121,7 @@ línea de la ficha. El catálogo largo y por qué, en
 ### Un archivo que también es servidor
 
 `toolsForTurn` devuelve `args` que apuntan a un archivo, y tú solo tienes uno. No hacen falta dos:
-**el tuyo es la ficha cuando MADRE lo importa y el servidor MCP cuando MADRE lo ejecuta.** Sabe
+**el tuyo es la ficha cuando ZM lo importa y el servidor MCP cuando ZM lo ejecuta.** Sabe
 cuál de las dos cosas es al final del archivo.
 
 ```js
@@ -136,7 +136,7 @@ if ((await real(process.argv[1])) === (await real(SELF))) serve();
 ```
 
 **Resuelve las dos rutas antes de compararlas.** `process.argv[1] === SELF` parece lo mismo y casi
-siempre lo es: cuando MADRE lo lanza, le pasa el mismo `SELF` que ya resolvió el cargador de Node.
+siempre lo es: cuando ZM lo lanza, le pasa el mismo `SELF` que ya resolvió el cargador de Node.
 Pero en cuanto **corres el archivo tú a mano para probarlo** —`node ~/.pulse/modules/tuyo.mjs`, o
 cualquier ruta que pase por `/tmp`, que en macOS es un enlace a `/private/tmp`— `argv[1]` conserva
 lo que tecleaste y `SELF` no. La comparación da falso, `serve()` nunca corre, el proceso arranca,
@@ -161,7 +161,7 @@ reaches: [{
 }]
 ```
 
-Las cuatro respuestas son las mismas que da MADRE de las suyas, y por la misma razón: quien
+Las cuatro respuestas son las mismas que da ZM de las suyas, y por la misma razón: quien
 lee el registro merece saber qué viaja, cuándo, a dónde y dónde se apaga. Tu declaración se
 guarda **aparte** de las del núcleo y marcada con tu `id`, porque quién prometió qué es parte
 de la promesa. Se reconstruye en cada carga: desinstalar tu módulo se lleva su destino.
@@ -172,7 +172,7 @@ que ya no usas.
 
 ### Si tu módulo necesita una llave
 
-Decláralas y no las pidas tú. MADRE dibuja un campo de contraseña en el piso `LLAVES` de tu
+Decláralas y no las pidas tú. ZM dibuja un campo de contraseña en el piso `LLAVES` de tu
 ficha, acepta el valor **solo desde esta computadora** (`127.0.0.1`), lo guarda en
 `~/.pulse/credentials/<tu-id>.json` con permisos `0600` dentro de un directorio `0700`, y anota
 en el ledger que se guardó una y **con qué nombre y qué longitud, jamás el valor**.
@@ -220,7 +220,7 @@ Si *todas* las herramientas de un servidor mandan, el servidor entero no viaja p
 viene corto. Y lo que decides comprobar, compruébalo **en tu servidor y no en el `brief`**: un
 prompt es una sugerencia.
 
-**¿Se puede conectar con *X*?** La respuesta no depende de MADRE sino de cómo ese servicio deja
+**¿Se puede conectar con *X*?** La respuesta no depende de ZM sino de cómo ese servicio deja
 que un humano entregue su propia llave, y está mapeada en tres peldaños —con catálogo— en
 [§6 de `CONECTORES.md`](https://github.com/jossuealcacao-exe/madre/blob/main/docs/CONECTORES.md#6--qu%C3%A9-alcanza-un-m%C3%B3dulo-y-de-qui%C3%A9n-es-el-muro), en el repositorio.
 Léela antes de escribir nada: ahorra descubrir a la mitad que el servicio exige una revisión
@@ -234,13 +234,13 @@ terminando, y mientras tanto solo se activa a propósito con `PULSE_LABS=correo`
 
 ## Publicarlo
 
-La ficha de un módulo tuyo trae **GET A NEWER FILE**: MADRE va por el archivo —a la `url` que declaraste o al archivo desde el que lo instalaste—, lo verifica en una copia aparte y solo reemplaza al instalado si carga, respeta las reglas de la casa y dice una versión distinta. Verificar no instala nada.
+La ficha de un módulo tuyo trae **GET A NEWER FILE**: ZM va por el archivo —a la `url` que declaraste o al archivo desde el que lo instalaste—, lo verifica en una copia aparte y solo reemplaza al instalado si carga, respeta las reglas de la casa y dice una versión distinta. Verificar no instala nada.
 
-Y en la cabecera de MODULES hay **+ ADD A MODULE** para instalar el `.mjs` de alguien más. Pasa por la misma puerta que todo lo demás. Dicho claro, porque es lo que es: un módulo corre **dentro de MADRE, con los permisos de quien la abre**. MADRE comprueba que cargue y que no se salga de su corral —id propio, rutas solo bajo `/api/x/<id>/`, jamás encima de un módulo de MADRE—; lo que el código *pretende* no lo puede comprobar nadie más que tú.
+Y en la cabecera de MODULES hay **+ ADD A MODULE** para instalar el `.mjs` de alguien más. Pasa por la misma puerta que todo lo demás. Dicho claro, porque es lo que es: un módulo corre **dentro de ZM, con los permisos de quien la abre**. ZM comprueba que cargue y que no se salga de su corral —id propio, rutas solo bajo `/api/x/<id>/`, jamás encima de un módulo de ZM—; lo que el código *pretende* no lo puede comprobar nadie más que tú.
 
 ### En el Mercado, para todos
 
-Un módulo tuyo puede estar en el Mercado de MADRE, gratis, con tu nombre. Es curado: el autor de MADRE lee el código, lo firma y lo publica; nada llega al Mercado sin que una persona lo lea.
+Un módulo tuyo puede estar en el Mercado de ZM, gratis, con tu nombre. Es curado: el autor de ZM lee el código, lo firma y lo publica; nada llega al Mercado sin que una persona lo lea.
 
 1. En la ficha de tu módulo, **Enviar al Mercado › Preparar**. Escribe lo que mostrará el Mercado —nombre, una línea y qué hace, en español y en inglés—, el estante, tu nombre y tu usuario de GitHub, y la licencia de tu código.
 2. **Revisar** lo comprueba igual que lo comprobará el Mercado: que cargue como carga cualquier módulo, que la entrada diga el mismo id y la misma versión, y qué alcanza su código (comandos, la red, archivos, variables de entorno). Si habla con la red, declara `reaches`.
@@ -253,7 +253,7 @@ Desde la terminal, la misma revisión: `npx @jossuealcala/madre check-module --f
 
 ## La ficha
 
-No dibujas nada: declaras, y MADRE arma tu módulo igual que los suyos. En MÓDULOS cada módulo es una tarjeta del tablero y, al tocarla, una ficha con los mismos bloques que AJUSTES. Por eso el tuyo se lee igual que los que trae MADRE.
+No dibujas nada: declaras, y ZM arma tu módulo igual que los suyos. En MÓDULOS cada módulo es una tarjeta del tablero y, al tocarla, una ficha con los mismos bloques que AJUSTES. Por eso el tuyo se lee igual que los que trae ZM.
 
 **La tarjeta del tablero** lleva un ícono, tu `name`, una línea con tu `summary` y su interruptor si es un módulo que se enciende. Un módulo tuyo lleva la etiqueta «Tuyo».
 
@@ -268,7 +268,7 @@ No dibujas nada: declaras, y MADRE arma tu módulo igual que los suyos. En MÓDU
 | Comandos | lo que agrega a la caja de texto | `commands` o `slash` |
 | Tuyo | traer un archivo más nuevo y quitarlo | el archivo que instalaste, `updates` |
 
-Un módulo que se instala en el proyecto en vez de encenderse conserva su tarjeta de instalación, con el comando a la vista antes de correr nada, dentro del bloque «Qué hace». Las cifras al inicio de la ficha y la ventana propia son de los módulos de MADRE que guardan una lectura (Ash, Intenciones, Ollama); no hace falta declarar nada para ellas.
+Un módulo que se instala en el proyecto en vez de encenderse conserva su tarjeta de instalación, con el comando a la vista antes de correr nada, dentro del bloque «Qué hace». Las cifras al inicio de la ficha y la ventana propia son de los módulos de ZM que guardan una lectura (Ash, Intenciones, Ollama); no hace falta declarar nada para ellas.
 
 ## El `ctx`
 
@@ -280,7 +280,7 @@ ctx = {
   readConfig(), updateConfig(patch),
   record(type, payload),           // escribe un evento en el ledger; tipo "algo.algo", nunca message.* ni agent.*
   language, t(text, vars),         // el idioma de la sala, 'es' o 'en', y tus palabras en él (sdk: 2):
-                                   // una frase en inglés que MADRE ya conoce, o la tuya en { es, en }
+                                   // una frase en inglés que ZM ya conoce, o la tuya en { es, en }
   services: { history, imageKey, ollama: { state, generate }, … }, // lo que el servidor ofrece;
                                    // ollama.generate({ system, prompt, json }) contesta con el modelo local (sdk: 2)
   vault: { get, held, keep, forget } // tus secretos, y solo los tuyos
@@ -315,26 +315,26 @@ Los textos llegan recortados a 600 caracteres. Es la base de un módulo que info
 - **No guardes credenciales.** Usa las sesiones que ya viven en la máquina.
 - **No escribas en el proyecto** desde un módulo; para eso están los modos de los agentes. Un módulo que instala algo en el proyecto es `kind: 'installer'` y muestra el comando antes de correrlo.
 - **Falla suave.** Una excepción en `toolsForTurn` entrega nada; en un comando, la tarjeta dice el error. Nunca rompas el turno de un agente.
-- **Voz MADRE.** Rótulos en mayúsculas cortos, notas que digan qué no sale de la máquina, `MU/TH/UR › ` cuando hables en un aviso.
+- **Voz ZM.** Rótulos en mayúsculas cortos, notas que digan qué no sale de la máquina, `MU/TH/UR › ` cuando hables en un aviso.
 
 ## Que lo construya tu IA, en la sala
 
-Escribe `/module <lo que debe hacer>` en el compositor. Es la entrada explícita al flujo guiado: si `#2 CREATE` no está activo, MADRE te pide elegirlo y conserva intacta tu petición. Con `#2` activo, mantiene el agente que elegiste y le entrega el contrato del SDK y el ejemplo. El agente debe escribir **un solo archivo** llamado `<id>.module.mjs` en su carpeta de borrador; no puede instalarlo por su cuenta. Ese archivo trae su `icon`: el agente lo dibuja junto con el resto del módulo y MADRE lo ajusta al mosaico.
+Escribe `/module <lo que debe hacer>` en el compositor. Es la entrada explícita al flujo guiado: si `#2 CREATE` no está activo, ZM te pide elegirlo y conserva intacta tu petición. Con `#2` activo, mantiene el agente que elegiste y le entrega el contrato del SDK y el ejemplo. El agente debe escribir **un solo archivo** llamado `<id>.module.mjs` en su carpeta de borrador; no puede instalarlo por su cuenta. Ese archivo trae su `icon`: el agente lo dibuja junto con el resto del módulo y ZM lo ajusta al mosaico.
 
-MADRE reconoce ese nombre y pone una tarjeta en la sala: `INSTALL FOR EVERY ROOM` o `INSTALL FOR THIS PROJECT`. Léelo, decide, un clic. MADRE lo valida en una copia, lo guarda como `<id>.mjs` en la carpeta que elegiste y aparece en MÓDULOS con la etiqueta «Tuyo». También puedes pedir lo mismo en lenguaje natural mientras estés en `#2` o más; `/module` hace explícito el formato y no concede permisos por sí solo.
+ZM reconoce ese nombre y pone una tarjeta en la sala: `INSTALL FOR EVERY ROOM` o `INSTALL FOR THIS PROJECT`. Léelo, decide, un clic. ZM lo valida en una copia, lo guarda como `<id>.mjs` en la carpeta que elegiste y aparece en MÓDULOS con la etiqueta «Tuyo». También puedes pedir lo mismo en lenguaje natural mientras estés en `#2` o más; `/module` hace explícito el formato y no concede permisos por sí solo.
 
 Los agentes nunca escriben en `~/.pulse/modules` ni en `.madre/modules`: proponen, tú instalas.
 
-Un módulo tuyo lleva la etiqueta «Tuyo» y se quita desde su ficha con «Quitar» —también desde «Crea tu módulo», en la lista de los tuyos—. MADRE confirma el archivo exacto, borra ese archivo y su registro de origen para actualizaciones, y lo retira de la sala sin reiniciarla. No borra archivos que el módulo haya creado ni sus ajustes guardados. Los módulos que vienen con MADRE no muestran ese botón: no se quitan, se apagan.
+Un módulo tuyo lleva la etiqueta «Tuyo» y se quita desde su ficha con «Quitar» —también desde «Crea tu módulo», en la lista de los tuyos—. ZM confirma el archivo exacto, borra ese archivo y su registro de origen para actualizaciones, y lo retira de la sala sin reiniciarla. No borra archivos que el módulo haya creado ni sus ajustes guardados. Los módulos que vienen con ZM no muestran ese botón: no se quitan, se apagan.
 
 ## Lo que un módulo no puede tocar
 
-Un módulo corre dentro del proceso de MADRE con tus permisos: instala solo lo que leíste. MADRE, por su parte, protege su núcleo así:
+Un módulo corre dentro del proceso de ZM con tus permisos: instala solo lo que leíste. ZM, por su parte, protege su núcleo así:
 
-- Sus rutas HTTP viven bajo `/api/x/<id>/`; un módulo con rutas fuera de ahí no carga, así ninguno puede suplantar `/api/state`, `/api/messages` o cualquier ruta propia de MADRE.
+- Sus rutas HTTP viven bajo `/api/x/<id>/`; un módulo con rutas fuera de ahí no carga, así ninguno puede suplantar `/api/state`, `/api/messages` o cualquier ruta propia de ZM.
 - No puede usar el `id` de un módulo integrado ni de otro ya cargado.
 - `record()` rechaza los tipos de evento reservados (`message.*`, `agent.*`); no puede fabricar turnos ni mensajes.
-- No recibe credenciales de nadie; usa, como MADRE, las sesiones que ya viven en la máquina.
+- No recibe credenciales de nadie; usa, como ZM, las sesiones que ya viven en la máquina.
 - Un error en `toolsForTurn` entrega nada; en un comando, la tarjeta dice el error; al cargar, el tablero avisa cuántos no cargaron y «Crea tu módulo» dice qué archivo y por qué. Nada de eso detiene la sala.
 
 ## Probarlo
@@ -344,4 +344,4 @@ Un módulo corre dentro del proceso de MADRE con tus permisos: instala solo lo q
 3. Enciéndelo con su interruptor. Escribe `/tu-comando` en el compositor.
 4. Cambia el archivo y vuelve a recargar: no hace falta reiniciar la sala.
 
-Con una IA: pásale este documento y `hello-module.mjs`, describe lo que quieres y pídele un solo archivo `.mjs` con `export default { … }`. Lo demás lo hace MADRE.
+Con una IA: pásale este documento y `hello-module.mjs`, describe lo que quieres y pídele un solo archivo `.mjs` con `export default { … }`. Lo demás lo hace ZM.

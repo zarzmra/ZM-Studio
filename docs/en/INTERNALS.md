@@ -1,10 +1,10 @@
-# MADRE under the hood
+# ZM under the hood
 
 What the README does not need to tell you to use the room, but anyone who wants to understand it, run it under unusual conditions or write a module does. Every claim here corresponds to code in `src/` and has a test in `test/`.
 
 ## The ledger
 
-Each project has a stable room under `PULSE_HOME` (by default `~/.pulse/rooms/<sala>/`). Its source of truth is `events.jsonl`: one event per line, increasing sequence, append-only for the room. MADRE rebuilds the conversation window from there even if it restarts or is opened from another IDE.
+Each project has a stable room under `PULSE_HOME` (by default `~/.pulse/rooms/<sala>/`). Its source of truth is `events.jsonl`: one event per line, increasing sequence, append-only for the room. ZM rebuilds the conversation window from there even if it restarts or is opened from another IDE.
 
 Writes are serialized across local processes with an on-disk lock, so two IDEs on the same room never produce repeated sequences. The only operation that rewrites the ledger is the privacy purge, under the same lock, atomic (temporary file and rename), preserving sequences.
 
@@ -14,7 +14,7 @@ An agent's errors are stored, bounded, in `message.failed`: one line of up to 50
 
 ## The stream
 
-`/api/events` is fed from the ledger, not from the process's memory: events that another MADRE process adds to the same room reach the open pages. Polling reads only the new bytes every 500 ms (`PULSE_BROADCAST_INTERVAL_MS`); a file that shrinks, after a purge, resets the offset. Each frame carries `id: <secuencia>`, so a client that reconnects asks from where it left off. A client that stops consuming is disconnected once it accumulates 1 MiB undrained (`PULSE_SSE_MAX_BUFFERED_BYTES`). GHOST events have no sequence: they reach the open pages and never the ledger.
+`/api/events` is fed from the ledger, not from the process's memory: events that another ZM process adds to the same room reach the open pages. Polling reads only the new bytes every 500 ms (`PULSE_BROADCAST_INTERVAL_MS`); a file that shrinks, after a purge, resets the offset. Each frame carries `id: <secuencia>`, so a client that reconnects asks from where it left off. A client that stops consuming is disconnected once it accumulates 1 MiB undrained (`PULSE_SSE_MAX_BUFFERED_BYTES`). GHOST events have no sequence: they reach the open pages and never the ledger.
 
 The context window an agent receives is 16,000 characters (`PULSE_CONTEXT_MAX_CHARS`); older messages are omitted before recent ones. A message of more than 20,000 characters (`PULSE_MAX_MESSAGE_CHARS`) is recorded and rejected without invoking the agent.
 
@@ -22,7 +22,7 @@ The context window an agent receives is 16,000 characters (`PULSE_CONTEXT_MAX_CH
 
 `memory.sqlite` lives next to the ledger and is derived from it: if it is missing or its schema changed, it is rebuilt from `events.jsonl`. It contains:
 
-- `entries` with trigram FTS5: every message, failure and command card outside GHOST, with its sequence. MADRE's canned replies (`synthetic`) are not included.
+- `entries` with trigram FTS5: every message, failure and command card outside GHOST, with its sequence. ZM's canned replies (`synthetic`) are not included.
 - `memories` with FTS5: the distilled notes, typed (`decision`, `fact`, `preference`, `question`), with the sequences that support them, who wrote them and their origin (`distilled` or `noted`).
 - `entry_vectors` and `memory_vectors`: 768-dimension embeddings, computed in the background and never on a turn's critical path.
 
@@ -58,21 +58,21 @@ All three are measured **against a control**: inside a room everything talks abo
 
 Each sphere in the bar carries a ring. It shows the provider's real limit when the CLI publishes it, otherwise the local window.
 
-- **Codex** writes in each session rollout (`~/.codex/sessions`) its account windows, 5-hour and weekly, with percentage used and reset time. MADRE reads the most recent one; there is no network involved.
-- **Claude Code** publishes `/usage` on Anthropic's OAuth endpoint. With `PULSE_CLAUDE_USAGE=1`, MADRE queries it with the token Claude Code stores in the keychain or in `~/.claude/.credentials.json`; the token only travels to `api.anthropic.com`, as the CLI itself does. It is optional because it involves reading a credential. `PULSE_OFFICIAL_QUOTA=0` disables all provider reads.
+- **Codex** writes in each session rollout (`~/.codex/sessions`) its account windows, 5-hour and weekly, with percentage used and reset time. ZM reads the most recent one; there is no network involved.
+- **Claude Code** publishes `/usage` on Anthropic's OAuth endpoint. With `PULSE_CLAUDE_USAGE=1`, ZM queries it with the token Claude Code stores in the keychain or in `~/.claude/.credentials.json`; the token only travels to `api.anthropic.com`, as the CLI itself does. It is optional because it involves reading a credential. `PULSE_OFFICIAL_QUOTA=0` disables all provider reads.
 - **Gemini and OpenCode** do not publish anything locally: their ring is the local window.
 
 The local window is a soft budget per agent (500,000 tokens) over a rolling 5-hour window; turns drop out of the count as they age, cache reads weigh one tenth and `@madre`'s tokens weigh zero. It warns at 80, 90 and 100% and suggests other agents. A window whose reset time has already passed counts as empty; the monitor rereads the sources every minute and announces `limit.cleared` when a full window goes back to normal.
 
-A quota reader implements `{ id, agent, read() }` and `read()` returns `null` or `{ usedPercent, resetAt, windows?, stale? }`. MADRE never infers the provider's quota from local tokens.
+A quota reader implements `{ id, agent, read() }` and `read()` returns `null` or `{ usedPercent, resetAt, windows?, stale? }`. ZM never infers the provider's quota from local tokens.
 
 ## The adapters
 
-Each agent runs as a process in its own group, with an isolated home that receives only its existing credentials. If it does not respond before the timeout (180 s by default), MADRE terminates the whole tree: SIGTERM and, after a grace period, SIGKILL.
+Each agent runs as a process in its own group, with an isolated home that receives only its existing credentials. If it does not respond before the timeout (180 s by default), ZM terminates the whole tree: SIGTERM and, after a grace period, SIGKILL.
 
 - **Codex**: read-only query; `-C <carpeta> --sandbox workspace-write` in CREATE; in CONTROL, a write sandbox over the project. It generates images with `image_generation` using its ChatGPT account.
-- **Claude Code**: local read tools, non-persistent sessions, MCP limited to MADRE's servers. In CREATE, `--allowedTools Write(//<carpeta>/**),Edit(//<carpeta>/**)` under `dontAsk`: the double slash is the absolute form; with a single one, Claude reads the path as relative to the project and denies every write. In CONTROL, writing allowed in the project and denied in the forbidden zones.
-- **Gemini CLI**: Plan Mode and an ephemeral read-only policy, extended in CREATE with `allow` rules for `write_file` and `edit` whose `file_path` starts with the folder. It runs with a temporary `GEMINI_CLI_HOME`: OAuth tokens and `~/.gemini/.env` yes; hooks, extensions, MCP servers and memory from the real `~/.gemini` no. Gemini reads `@algo` as a file to include, so MADRE escapes each mention as `\@nombre` and unescapes it in the reply. Under 503 or 429, the CLI retries with backoff for minutes and only writes to stderr: MADRE reads it live, cuts off after `PULSE_GEMINI_IDLE_MS`, retries once with `PULSE_GEMINI_FALLBACK_MODEL` and, if that fails too, says so with the name and the model tried.
+- **Claude Code**: local read tools, non-persistent sessions, MCP limited to ZM's servers. In CREATE, `--allowedTools Write(//<carpeta>/**),Edit(//<carpeta>/**)` under `dontAsk`: the double slash is the absolute form; with a single one, Claude reads the path as relative to the project and denies every write. In CONTROL, writing allowed in the project and denied in the forbidden zones.
+- **Gemini CLI**: Plan Mode and an ephemeral read-only policy, extended in CREATE with `allow` rules for `write_file` and `edit` whose `file_path` starts with the folder. It runs with a temporary `GEMINI_CLI_HOME`: OAuth tokens and `~/.gemini/.env` yes; hooks, extensions, MCP servers and memory from the real `~/.gemini` no. Gemini reads `@algo` as a file to include, so ZM escapes each mention as `\@nombre` and unescapes it in the reply. Under 503 or 429, the CLI retries with backoff for minutes and only writes to stderr: ZM reads it live, cuts off after `PULSE_GEMINI_IDLE_MS`, retries once with `PULSE_GEMINI_FALLBACK_MODEL` and, if that fails too, says so with the name and the model tried.
 - **OpenCode**: ephemeral permissions injected per run, without touching the global configuration; per-pattern `permission.edit` in CREATE and CONTROL. If your configuration does not set a model, `run` picks the default provider, which may not be the one with a session: `PULSE_OPENCODE_MODEL=proveedor/modelo` sets it.
 - **@madre**: it is not a CLI. It is a local adapter on top of Ollama that receives the recent transcript, what the memory recalls about the question and the question; never the CLIs' briefing. With an 8,192-token window, because the default 4,096 one truncates the system prompt. What it can resolve without a model, it resolves: identity, orders that are not its to take, requests to save memory and the round table, which is a plan written by the room with one step per online CLI and its wrap-up turn.
 
@@ -86,7 +86,7 @@ In a plan, each step's mode is the minimum of what the orchestrator asked for (`
 
 ## CONTROL under the hood
 
-Before the turn, MADRE snapshots the project as a real commit under `refs/madre/checkpoints/` with a temporary index (in a project without git, in a shadow repository under the system's temporary directory, with the project as the working tree): it includes untracked files, respects `.gitignore`, does not touch your branch, your index or your stash, and works in repositories with no commits. While the turn lasts, `.env*`, `.pulse/`, `.madre/` and `.claude/settings.local.json` are read-only at the file-system level and get their permissions back when it ends. Afterwards, `git diff` against the checkpoint gives the list of changes; any write into a forbidden zone that got through is reverted from the checkpoint and named. `UNDO` restores the full checkpoint.
+Before the turn, ZM snapshots the project as a real commit under `refs/madre/checkpoints/` with a temporary index (in a project without git, in a shadow repository under the system's temporary directory, with the project as the working tree): it includes untracked files, respects `.gitignore`, does not touch your branch, your index or your stash, and works in repositories with no commits. While the turn lasts, `.env*`, `.pulse/`, `.madre/` and `.claude/settings.local.json` are read-only at the file-system level and get their permissions back when it ends. Afterwards, `git diff` against the checkpoint gives the list of changes; any write into a forbidden zone that got through is reverted from the checkpoint and named. `UNDO` restores the full checkpoint.
 
 ## Commands that come back and the copilot
 
@@ -96,7 +96,7 @@ The copilot is a server window (`/api/copilot`), in memory like the passes: the 
 
 ## Operational recovery
 
-If MADRE stops in the middle of a turn, on startup it detects the `agent.started` events with no close and records a recovered `message.failed` for each one. When closing with Ctrl+C or `SIGTERM`, it interrupts the agent processes in progress, records those turns as failed, delivers the pending events to the open pages and exits. Plans run in sequence and delegates do not delegate. The orchestrator reviews the replies and can open another stretch, up to three per request; `STOPALL` cuts off anything in progress.
+If ZM stops in the middle of a turn, on startup it detects the `agent.started` events with no close and records a recovered `message.failed` for each one. When closing with Ctrl+C or `SIGTERM`, it interrupts the agent processes in progress, records those turns as failed, delivers the pending events to the open pages and exits. Plans run in sequence and delegates do not delegate. The orchestrator reviews the replies and can open another stretch, up to three per request; `STOPALL` cuts off anything in progress.
 
 ## Packaging and tests
 

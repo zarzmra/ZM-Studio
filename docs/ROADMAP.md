@@ -1,6 +1,6 @@
-# MADRE · ROADMAP
+# ZM · ROADMAP
 
-Dónde va MADRE después de la beta 0.2. Tres líneas, en orden de dependencia, y una regla para que el núcleo no crezca hacia un monstruo: **el modelo es reemplazable; la sala, el ledger, la autoridad y la memoria del proyecto no.**
+Dónde va ZM después de la beta 0.2. Tres líneas, en orden de dependencia, y una regla para que el núcleo no crezca hacia un monstruo: **el modelo es reemplazable; la sala, el ledger, la autoridad y la memoria del proyecto no.**
 
 ## 0 · Disciplina de versiones (ya)
 
@@ -16,7 +16,7 @@ Antes de más superficie:
 - **CONTROL con Codex** · hecho en parte: `.env`, `.pulse/`, `.madre/` y `settings.local.json` en solo lectura durante el turno (`src/room/guard.mjs`); `.git/` sigue por restauración.
 - **Catálogo y sentinel** siguen absorbiendo cada condición que aparezca en manos ajenas.
 
-## 2 · MADRE AI · la destilación que aprende (0.3)
+## 2 · ZM AI · la destilación que aprende (0.3)
 
 Hoy la destilación produce notas. La idea: que produzca **una inteligencia propia del proyecto**, local, con Ollama, que crezca con cada intercambio. Tres capas, cada una útil por sí sola y base de la siguiente:
 
@@ -27,7 +27,7 @@ Hoy la destilación produce notas. La idea: que produzca **una inteligencia prop
 
 ### 2b · `@madre`, el quinto agente · hecho en `src/adapters/madre.mjs`
 - Un adaptador Ollama que responde **desde la memoria de la sala y los archivos del proyecto** (RAG sobre `memory.sqlite` + lectura del proyecto). No delega, no escribe, solo sabe.
-- Crece solo: cada nota destilada y cada intercambio indexado amplían lo que `@madre` puede contestar. Es la "IA de MADRE" visible desde el primer día, sin entrenar nada.
+- Crece solo: cada nota destilada y cada intercambio indexado amplían lo que `@madre` puede contestar. Es la "IA de ZM" visible desde el primer día, sin entrenar nada.
 - Sirve como juez barato: ¿esta petición ya se resolvió? ¿contradice una decisión?
 
 ### 2c · Destilación real: un modelo por proyecto · dataset y receta hechos (`madre dataset`, `docs/training/`); el entrenamiento corre fuera, `@madre` toma `madre-<proyecto>`
@@ -46,7 +46,7 @@ defineModule({
   id, name, vendor, summary,
   settings: { key: default },          // en config.json, con interruptor en MODULES
   detect(),                            // ¿está disponible en este proyecto?
-  routes: { 'GET /api/x': handler },   // rutas propias, ya autenticadas por MADRE
+  routes: { 'GET /api/x': handler },   // rutas propias, ya autenticadas por ZM
   card(state),                         // su tarjeta en MODULES
   conditions: [ ... ],                 // lo que MU/TH/UR debe saber de él
   hooks: { onEvent(event), onTurn(ctx) }
@@ -57,9 +57,9 @@ Con eso RIPLEY, Git Pulse, Image Studio, Ash, el sentinel y el futuro Ollama se 
 
 ## 4 · Windows (WSL2 desde 1.1.0)
 
-MADRE nació en POSIX y su promesa central —«leen por defecto, escriben cuando tú lo dices»— descansa hoy en tres mecanismos que Windows no tiene iguales: el bit de escritura del sistema de archivos, los grupos de proceso y el sandbox que cada CLI monta sobre seatbelt o Landlock. El puerto no es una compatibilidad de rutas: es averiguar si ese techo de permisos se sostiene en Windows, y declarar con razones lo que se sostiene y lo que no.
+ZM nació en POSIX y su promesa central —«leen por defecto, escriben cuando tú lo dices»— descansa hoy en tres mecanismos que Windows no tiene iguales: el bit de escritura del sistema de archivos, los grupos de proceso y el sandbox que cada CLI monta sobre seatbelt o Landlock. El puerto no es una compatibilidad de rutas: es averiguar si ese techo de permisos se sostiene en Windows, y declarar con razones lo que se sostiene y lo que no.
 
-Cuatro fases —medir, que arranque, que confine, que se explique— con trazabilidad por id, en la rama `windows/1.0`. **Desde 1.1.0 (2026-10-28) MADRE funciona en Windows dentro de WSL2.** Windows nativo, después y solo si hay demanda; nada lo promete antes.
+Cuatro fases —medir, que arranque, que confine, que se explique— con trazabilidad por id, en la rama `windows/1.0`. **Desde 1.1.0 (2026-10-28) ZM funciona en Windows dentro de WSL2.** Windows nativo, después y solo si hay demanda; nada lo promete antes.
 
 El documento único es **`docs/WINDOWS.md`**: hallazgos con id permanente, decisiones abiertas, fases, versiones y bitácora. Nada sobre Windows se decide fuera de ahí.
 
@@ -71,10 +71,10 @@ declarar a dónde llega— está hecho. Lo que falta por decidir, y el primer co
 está en [`docs/CONECTORES.md`](CONECTORES.md).
 
 Sigue siendo cierto lo de abajo: un conector habla desde esta máquina con un servicio del
-usuario, con sus credenciales. No hay nube de MADRE en medio.
+usuario, con sus credenciales. No hay nube de ZM en medio.
 
 ## Fuera del alcance, a conciencia
 
 - Navegador general, pestañas, historial fuera del proyecto.
 - Una terminal interactiva dentro de la sala. Los comandos que un agente necesita debajo de AIRLOCK los pide con `pulse-run` y los corre el humano, uno por línea y sin shell (módulo Runs, 0.7.2). Una consola con PTY pediría dependencias nativas y reinterpretaría lo que el humano aprueba.
-- Cualquier nube de MADRE. Si algún día hay sincronización entre máquinas, será por el ledger y con la llave del usuario.
+- Cualquier nube de ZM. Si algún día hay sincronización entre máquinas, será por el ledger y con la llave del usuario.

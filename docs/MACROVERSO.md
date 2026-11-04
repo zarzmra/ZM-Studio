@@ -1,4 +1,4 @@
-# MADRE · SALAS EN ESCRITORIO Y MACROVERSO
+# ZM · SALAS EN ESCRITORIO Y MACROVERSO
 
 Documento único de este trabajo, como `docs/MOBILE.md` y `docs/WINDOWS.md`: lo que se
 decida, se construya o se descarte sobre Salas, los enlaces entre salas y el Macroverso
@@ -26,7 +26,7 @@ se anota aquí. Lo que toca procesos o rutas sigue además las reglas de `docs/W
    **manual, automático o híbrido**.
 4. El Macroverso **solo se entra desde Salas y solo en escritorio**. En el teléfono, una
    versión simple que no sature.
-5. Mantener el estilo de MADRE: coherencia visual, navegación y usabilidad primero.
+5. Mantener el estilo de ZM: coherencia visual, navegación y usabilidad primero.
 
 Ampliado el 2026-10-08, después de ver las fases 1 y 2:
 
@@ -73,7 +73,7 @@ Cada hallazgo tiene id permanente (`S-0xx`); un id no se reusa.
 | **S-002** | La ruta del proyecto no se guarda: una sala cerrada no se puede volver a abrir desde Salas | `src/server.mjs:214` | 1 | ARREGLADO |
 | **S-003** | No hay cierre por HTTP: Salas no puede cerrar una sala | — | 1 | ARREGLADO |
 | **S-004** | Salas de pruebas sin proyecto se mezclarían con las reales | `~/.pulse/rooms` | 1 | ARREGLADO |
-| **S-005** | Una sala con una MADRE anterior no tiene las rutas nuevas: Salas debe decirlo en vez de fallar | — | 1 | ARREGLADO |
+| **S-005** | Una sala con una ZM anterior no tiene las rutas nuevas: Salas debe decirlo en vez de fallar | — | 1 | ARREGLADO |
 | **S-006** | Dos `madre start` a la vez pueden tomar el mismo puerto libre; hoy el segundo recibe `EADDRINUSE` y avanza. Se conserva | `bin/madre.mjs` | — | SIN CAMBIO |
 | **S-007** | Los módulos escribían en `config.json` todo su bloque `modules` tal como lo tenían en memoria: un cambio de otra sala a otro módulo se perdía. Ahora cada uno escribe solo su clave | `src/modules/*.mjs` | 1 | ARREGLADO |
 | **S-008** | `memory_note` guardaba notas sin pasar por el guardia de privacidad (`openMemory` no llamaba a `attachPrivacy`); una nota así podría cruzar un enlace. Ahora `openMemory` arma el mismo `Privacy` que la sala, desde el `config.json` de la Mac (`PULSE_HOME`), y lo adjunta antes de abrir la base; la respuesta de la herramienta repite la nota como quedó guardada | `src/mcp/memory-server.mjs` | 3b | ARREGLADO |
@@ -88,7 +88,7 @@ Cada hallazgo tiene id permanente (`S-0xx`); un id no se reusa.
 | **S-017** | El NOSTROMO de la sala no tiene tope de densidad ni pausa al ocultar la pestaña (el navegador ya no entrega cuadros a una pestaña oculta). Medido a 1440×900 y densidad 2 con 171 memorias y 338 venas: 5.4 ms de mediana por cuadro antes de la extracción, 5.8-6.0 después (A/B síncrono en el mismo minuto, 300 ticks por corrida; la versión anterior dio 6.9-7.2). Ni tope ni pausa hacen falta | `public/nostromo-engine.js` | 3a | MEDIDO · SIN CAMBIO |
 | **S-018** | `docs/INTERNALS.md:83` dice que varios turnos `#2` corren a la vez; el código deja un solo escritor por proyecto | `src/room/control.mjs:12-16` | — | ANOTADO |
 | **S-019** | La purga reinsertaba notas sin zona, refutación, contradicción ni historial de recall: un hecho refutado volvía a circular, incluso tras reabrir. Con la excepción autorizada por el humano, la reinserción conserva todas las columnas de la nota y solo redacta el contenido privado. Prueba de hecho expulsado, aberración en enfermería e historial de recall antes y después de reabrir | `src/memory.mjs` (`purge`), `test/memory.test.mjs` | — | ARREGLADO |
-| **S-020** | La llave del canal (`~/.pulse/credentials/enlaces.json`) prueba «un proceso de MADRE en esta Mac», no qué sala pide: el `asking` de la petición es la palabra de quien llama. Es el límite [I] que el encargo pedía anotar (§4B); una sala que mienta sobre su id solo obtiene lo que un contrato ya deja leer a esa otra sala | `src/enlaces.mjs`, `src/server.mjs` (sección ENLACES) | 3b | ANOTADO |
+| **S-020** | La llave del canal (`~/.pulse/credentials/enlaces.json`) prueba «un proceso de ZM en esta Mac», no qué sala pide: el `asking` de la petición es la palabra de quien llama. Es el límite [I] que el encargo pedía anotar (§4B); una sala que mienta sobre su id solo obtiene lo que un contrato ya deja leer a esa otra sala | `src/enlaces.mjs`, `src/server.mjs` (sección ENLACES) | 3b | ANOTADO |
 | **S-021** | `enlace.received` no decía qué agente ni qué turno pidió la lectura. Con la autorización del humano («completo, priorizando lógica, permisos y coherencia»): la sala registra sus turnos vivos (`Room.runningTurn(id)`: agente y modo, por el id de la respuesta que escribirán); `toolsForTurn` y `bishopForTurn` reciben ese id; `pulse-enlaces` lleva `PULSE_ENLACES_AGENT` y `PULSE_ENLACES_TURN` y los manda en cada lectura; `POST /api/enlace/ask` **no lee** si ese turno no está corriendo en la sala, para ese agente y arriba de GHOST (409, antes de decir si el enlace existe), y anota la lectura en la conversación de ese turno. `enlace.received` y la línea de `enlaces.jsonl` llevan `agent` y `turn`; la sala que entrega guarda el agente como palabra de la otra (S-020) en `enlace.read`; Salas dice quién leyó al último; bajo cada respuesta, «leyó N notas de gumball». Una mutación que quita la comprobación hace fallar la prueba | `src/room.mjs`, `src/server.mjs`, `src/enlaces.mjs`, `src/modules/enlaces.mjs`, `src/modules/bishop.mjs`, `public/app.js`, `public/salas-mac.js` | 3e | ARREGLADO |
 | **S-022** | `--help` después de un comando se ignoraba: `madre start --help` abría la sala, y `madre salas --help` la habría abierto también. Ahora `parseArgs` toma `--help` o `-h` en cualquier posición como la ayuda; un valor nunca empieza por `-`, así que ninguna opción pierde el suyo | `src/cli-args.mjs` | 3d | ARREGLADO |
 | **S-023** | Abrir la sala de Salas deja `.pulse/mother.env` dentro del cuaderno, como en cualquier proyecto: es el sello del canal de MU/TH/UR, que el núcleo escribe en `<proyecto>/.pulse/`. El CLI crea el cuaderno vacío y no escribe nada; lo que sí escribe es la sala, igual que en toda sala, y el checkpoint ya excluye `.pulse/` (`FORBIDDEN`). Las pruebas fijan que eso es lo único que aparece dentro | `src/server.mjs` (`MotherChannel`), `src/checkpoint.mjs:21` | 3d | ANOTADO · SIN CAMBIO |
@@ -138,7 +138,7 @@ demás). Que `madre` abra Salas sin ninguna sala abierta es la decisión **D-S02
 - S-002: la sala guarda `project.json` (ruta, nombre, última apertura) junto a su registro.
 - S-003: `/api/room/close`.
 - S-004: sin `project.json`, una carpeta no se ofrece para iniciar.
-- S-005: una sala que no conoce la ruta nueva se muestra con «Actualiza MADRE en esta sala».
+- S-005: una sala que no conoce la ruta nueva se muestra con «Actualiza ZM en esta sala».
 
 ---
 
@@ -146,7 +146,7 @@ demás). Que `madre` abra Salas sin ninguna sala abierta es la decisión **D-S02
 
 Solo en escritorio y solo desde Salas. **Fase 2 solo muestra; no enlaza.**
 
-- **Qué es.** Cada sala es un universo: un sol del color de MADRE con su halo de memorias
+- **Qué es.** Cada sala es un universo: un sol del color de ZM con su halo de memorias
   (cuántas de cada tipo, cuántas viajan). Los proyectos dormidos, apagados. Más adelante,
   los enlaces serán corrientes de plasma entre soles.
 - **Imponente sin cargar la GPU.**
@@ -581,9 +581,9 @@ Una línea por cambio de estado. Se añade al final, nunca se reescribe.
   verificado en pantalla: el aviso de alto dentro de la tarjeta (solo en pruebas del servidor).
 - `2026-10-09` · Cuarta ronda de UX, pedida por el humano con capturas: (1) una segunda barra en la
   sala, en la Mac (`#bar-home`, `homeBar()`): Salas con ícono de casa, Recargar y Ajustes con un
-  engrane dibujado para MADRE; esas tres teclas salen de la barra que se acomoda y su catálogo, y la
+  engrane dibujado para ZM; esas tres teclas salen de la barra que se acomoda y su catálogo, y la
   barra de la sala cede el ancho medido de la segunda (`--home-w`); con ella, el pulso compacto toma
-  el lugar de la palabra MADRE a 1160 px en vez de 1040; el teléfono conserva una barra. (2) BISHOP en
+  el lugar de la palabra ZM a 1160 px en vez de 1040; el teléfono conserva una barra. (2) BISHOP en
   la sala de un proyecto habla con su burbuja: `BRANDS.bishop` (un robot celeste), `renderBishopOrder`
   y `renderBishopAnswer` como filas de agente; `/bishop` se pinta como el mensaje del humano a
   BISHOP (`renderBishopAsk`) y su acuse ya no se ve. (3) Los chips sobre esas burbujas son los de
@@ -597,7 +597,7 @@ Una línea por cambio de estado. Se añade al final, nunca se reescribe.
   delegados 1 con punteado más visible, líneas de la sala 0 planas; misma escalera en grises en el
   tema oscuro; (3) la casa se sacude y el engrane gira al pasar el puntero, y el engrane es un solo
   trazo con su hueco recortado (`evenodd`), así que al abrir Ajustes se ilumina y su centro queda
-  hueco; (4) Memoria en Ajustes lleva un chip dibujado para MADRE en lugar del foco. Verificado en
+  hueco; (4) Memoria en Ajustes lleva un chip dibujado para ZM en lugar del foco. Verificado en
   pantalla a 1280 px en la sala pulse, tema claro y oscuro (este, cambiando el atributo en la página,
   sin tocar el ajuste guardado). No verificado: la animación en pantalla (el panel del navegador
   estaba oculto) ni el teléfono.

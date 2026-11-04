@@ -1,4 +1,4 @@
-# MADRE · INTEGRATIONS · bringing a service into the project
+# ZM · INTEGRATIONS · bringing a service into the project
 
 The single document for this work. Everything decided, built, or discarded about
 integrations —what brings data in from outside and what sends something out— is written down here and
@@ -25,7 +25,7 @@ image models) and the memory server (the project's archive) already do.
 needs lives; and what ceremony is required when an integration **sends** something instead of just
 reading.
 
-**Out of scope:** any MADRE cloud. An integration talks from *this* machine to
+**Out of scope:** any ZM cloud. An integration talks from *this* machine to
 a service of the *user's*, with the user's credentials. There is no intermediary.
 
 ---
@@ -62,7 +62,7 @@ Now a module declares `reaches: [{ id, host, to, what, when, where }]`, in the s
 shape and answering the same questions. And:
 
 - **It is stored separately from the core's and marked with `module`.** Who promised what is
-  part of the promise: MADRE answers for its own list and only *reports* a module's.
+  part of the promise: ZM answers for its own list and only *reports* a module's.
 - **It is rebuilt on every module load**, never accumulated: uninstalling an integration
   takes its destination with it.
 
@@ -70,10 +70,10 @@ shape and answering the same questions. And:
 
 There is a real tension here with a written promise. Today `src/credentials.mjs` writes a
 key **only where that CLI looks for it** (`~/.gemini/.env`, OpenCode's `auth.json`), with
-`0600`, and the module page says "MADRE keeps no copy". For an integration **there is no CLI**: the
-MADRE module needs the token itself.
+`0600`, and the module page says "ZM keeps no copy". For an integration **there is no CLI**: the
+ZM module needs the token itself.
 
-In other words: an integration forces a decision on whether **MADRE starts storing secrets**. That's D-001 and it isn't
+In other words: an integration forces a decision on whether **ZM starts storing secrets**. That's D-001 and it isn't
 taken lightly.
 
 ### CN-003 · Sending is not reading — **done**
@@ -82,7 +82,7 @@ An integration that reads is reversible: in the worst case it brought in somethi
 that **sends** —an email, a message, a record in a system— is not. And what goes out
 carries the user's name.
 
-MADRE already had the ladder: in `#4` FULL ACCESS the rule is *"before anything goes out, say it in
+ZM already had the ladder: in `#4` FULL ACCESS the rule is *"before anything goes out, say it in
 one line: exactly what goes out and where, and then do it"*. An integration that sends lives there.
 
 The core enforces it in `toolsForTurn`, not each module: a tool declared in `sends`
@@ -119,7 +119,7 @@ how a message cuts itself off halfway.
 **A hole that showed up while doing it:** `defineModule` never carried `reaches` to the
 module object, so `declareDestinations` in `modules/index.mjs` —written in CN-001— never received
 anything. CN-001 had been half-done ever since it was marked as done. Fixed, and now the
-`outbound` test demands from each module the same four answers it demands from MADRE.
+`outbound` test demands from each module the same four answers it demands from ZM.
 
 **What it does NOT do, said here so it isn't discovered by using it:** attachments, HTML, CC/BCC, queues,
 retries. A plain-text message, or nothing.
@@ -137,13 +137,13 @@ the ways out. `@madre`, with Ollama, doesn't leave the machine.
 
 ## 4 · Open decisions
 
-**D-001 · Does MADRE store secrets?** (CN-002) — **CLOSED 2026-10-02: (a), its own vault.**
+**D-001 · Does ZM store secrets?** (CN-002) — **CLOSED 2026-10-02: (a), its own vault.**
 Done in `src/vault.mjs`. The reasoning: the user is still local, so a
 vault on their machine doesn't move the secret anywhere new — it just puts it where it's
 needed, because an integration has no CLI to hand it to. The terms are written in
 the file's header and tested: `0600` inside `0700`, only from `127.0.0.1`, the
 ledger notes that one was saved and with what name but never the value, and `summary()` —the
-only thing that leaves there for the rest of MADRE— carries name and length, never the secret.
+only thing that leaves there for the rest of ZM— carries name and length, never the secret.
 
 **D-002 · What ceremony does an integration that sends require?** (CN-003) — **CLOSED 2026-10-02: `#4`.**
 Sending lives in FULL ACCESS and on no rung below it. The core enforces it, not the module's good
@@ -201,7 +201,7 @@ mean the same thing in all three.
 
 1. ~~**Send first, over SMTP with an app password.**~~ **Done** (CN-005). The
    estimate was "~150 lines without dependencies"; it came out as 122 of SMTP client plus 189 of
-   MCP server plus 107 of module, without dependencies. The immediate value ("MADRE, send this
+   MCP server plus 107 of module, without dependencies. The immediate value ("ZM, send this
    to X") and the case that really matters: what goes out doesn't come back.
 2. **Read later.** Still pending and now **D-004**. D-001 is already resolved, so
    the "by then the vault will be there" came true: what remains is choosing between the
@@ -211,7 +211,7 @@ mean the same thing in all three.
 
 ## 6 · What a module can reach, and whose wall it is
 
-Running into Gmail was useful for something: it showed where the real limit is. **It isn't MADRE's.**
+Running into Gmail was useful for something: it showed where the real limit is. **It isn't ZM's.**
 
 ### The SDK is not the limit
 
@@ -228,7 +228,7 @@ That's the only question that decides whether an integration is possible, and it
 
 The service gives the human a static credential in minutes —personal token, API key,
 app password—, revocable on its own, without registering any app and without anyone reviewing
-anything. **An integration here works the day it's written, for anyone who installs MADRE.**
+anything. **An integration here works the day it's written, for anyone who installs ZM.**
 It's CORREO's tier and it's where almost everything useful lives:
 
 | | with which key |
@@ -249,7 +249,7 @@ It's CORREO's tier and it's where almost everything useful lives:
 OAuth 2.0 where the permissions are **not** restricted and the service doesn't require review for personal
 use. It's possible, but signing up stops being "paste this key" and becomes "create an
 app, copy two values, authorize in the browser". And there's a cost on this side:
-**MADRE has never written an OAuth flow.** `auth-probe.mjs` and `quota-sources.mjs` *read* tokens
+**ZM has never written an OAuth flow.** `auth-probe.mjs` and `quota-sources.mjs` *read* tokens
 that other CLIs already obtained; starting a local redirect, exchanging a code, and refreshing it are
 pieces that would have to be written from scratch and maintained.
 
@@ -272,16 +272,16 @@ product that asks for that doesn't have an integration: it has homework.
 
 ### What a module can't do, even if the service lets it
 
-These fences are MADRE's and no provider moves them:
+These fences are ZM's and no provider moves them:
 
-- Routes only under `/api/x/<id>/`. Never on top of a MADRE route, never with another's id.
+- Routes only under `/api/x/<id>/`. Never on top of a ZM route, never with another's id.
 - It doesn't write `message.*` or `agent.*` events: the account of what happened in the project isn't edited
   from outside.
 - It doesn't read another module's secret. The id is sealed inside the SDK: it isn't that it's forbidden, it's
   that it can't be written.
 - It doesn't widen its own permission. What it sends is withdrawn below `#4` by the core.
 - If it falls, it falls alone. A failure of its own doesn't stop a turn or the project.
-- It runs with the permissions of whoever opened MADRE. That isn't a fence: it's the reason installing
+- It runs with the permissions of whoever opened ZM. That isn't a fence: it's the reason installing
   someone else's module is a decision and not a click.
 
 ### The rule for deciding whether it's worth it
@@ -314,6 +314,6 @@ They don't copy it.
 | 2026-10-14 | **Connect MCP** (`src/modules/mcp-connect.mjs`, `src/mcp/connect.mjs`, `src/mcp/proxy.mjs`): MCP servers the person adds to a project from their Settings, by command or by address (token or OAuth with dynamic registration and PKCE). It inherits the three pieces from 2026-10-02: secrets in the vault (`mcp` module), tools that act under the `sends` rule when they're chosen for `#4`, and the sign-in destination declaration, which the module makes on the spot because the person chooses the host. What's new is the intermediary: the four CLIs start the same process, which reads the secrets, filters `tools/list`, and rejects calls outside the list, so no secret is left in an argv. A server is checked (handshake + `tools/list`) before it enters a turn. |
 | 2026-10-02 | **SDK closed and communicated.** The contract is 36 fields, all documented, with a test that compares the guide against the code in both directions. An integration example that works as is, and the question "can it be done with X?" answered inside the guide. In the project: the development card says what a module is and leaves a button to the text box; `/modules` finds `/module` and offers four instructions for editing. In the README, the statement in plain language — and the promise "doesn't store your credentials" corrected, since it stopped being accurate the day the vault came into being. |
 | 2026-10-02 | **D-004 closed: reading isn't done yet**, and the wall got mapped in §6. Gmail for reading is a restricted scope with an annual CASA assessment and a cap of ~100 unverified users, so there's no integration that works on install: each user would have to be asked for their own Google Cloud project. Out of that came what was really needed: a module's limit isn't the SDK, it's how each service lets a human hand over their own key. Three tiers, with the catalog of what falls into each. |
-| 2026-10-02 | **D-003 closed and phase 2 complete: CORREO sends.** SMTP+TLS without dependencies (418 lines, 278 of tests). With it, three new core pieces that any future integration inherits: `ctx.vault` scoped to the module by construction, declared `secrets` that MADRE draws on its own, and `reaches` validated in `defineModule`. Found and fixed along the way: `reaches` never reached the module object, so CN-001 had gone without declaring anything since its commit. 386/386 tests. |
+| 2026-10-02 | **D-003 closed and phase 2 complete: CORREO sends.** SMTP+TLS without dependencies (418 lines, 278 of tests). With it, three new core pieces that any future integration inherits: `ctx.vault` scoped to the module by construction, declared `secrets` that ZM draws on its own, and `reaches` validated in `defineModule`. Found and fixed along the way: `reaches` never reached the module object, so CN-001 had gone without declaring anything since its commit. 386/386 tests. |
 | 2026-10-02 | **D-001 closed: its own vault** (`src/vault.mjs`) and **D-002 closed: sending only in `#4`**, enforced by the core. With this, phase 1 is complete: declaring the destination, storing the key, and the sending ladder. |
 | 2026-10-02 | Document opened. **CN-001 done**: a module declares its destinations (`reaches`), they are stored separately from the core's and marked, and they are rebuilt on every load. D-001 (where the key lives), D-002 (ceremony for sending), and D-003 (the first integration) open. Measured: the two integrations that already exist weigh 202 and 221 lines. |

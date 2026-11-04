@@ -1,4 +1,4 @@
-# MADRE AI · train the project's model
+# ZM AI · train the project's model
 
 Roadmap 2c. The project exports what it remembers as chat pairs; you train a small model with them on your machine; Ollama serves it; `@madre` uses it as soon as it exists. All local.
 
@@ -49,10 +49,10 @@ Ollama reads GGUF. For Llama and Mistral `mlx_lm.fuse` accepts `--export-gguf`; 
 ```
 git clone --depth 1 https://github.com/ggml-org/llama.cpp && pip install -r llama.cpp/requirements.txt
 python3 llama.cpp/convert_hf_to_gguf.py fused --outfile madre.gguf --outtype q8_0
-cp <MADRE folder>/docs/training/Modelfile . && ollama create madre-<project> -f Modelfile
+cp <ZM folder>/docs/training/Modelfile . && ollama create madre-<project> -f Modelfile
 ```
 
-The name matters: `madre-<project>` in lowercase, with hyphens. At the next **RECHECK** in Modules › Local AI, `@madre` switches to that model and What it remembers says so. The `Modelfile` comes in `docs/training/` of the MADRE repository and of the npm package.
+The name matters: `madre-<project>` in lowercase, with hyphens. At the next **RECHECK** in Modules › Local AI, `@madre` switches to that model and What it remembers says so. The `Modelfile` comes in `docs/training/` of the ZM repository and of the npm package.
 
 ## 4 · Evaluate before trusting
 
