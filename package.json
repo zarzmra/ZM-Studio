@@ -1,5 +1,5 @@
 {
-  "name": "@zmstudio/app",
+  "name": "@zarzmr/app",
   "version": "2.0.0",
   "description": "ZM Studio · AI collaboration platform that integrates Codex, Claude Code, Gemini CLI, and OpenCode into a unified workspace with shared memory, permission controls, and full local execution. All intelligence stays on your machine.",
   "keywords": [

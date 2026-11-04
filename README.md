@@ -23,7 +23,7 @@ Trabaja con Codex, Claude Code, Gemini CLI y OpenCode simultáneamente en tu pro
 **macOS, Linux y Windows (WSL2).**
 
 ```bash
-npx @zmstudio/app
+npx @zarzmr/app
 ```
 
 Requiere Node.js 22.5 o superior y al menos un asistente de IA configurado. No hay cuentas que crear. ZM Studio se abre en tu navegador con una guía paso a paso.
